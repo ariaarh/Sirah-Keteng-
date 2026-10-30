@@ -175,7 +175,49 @@
     { id: 'TUTUP LIGHTBOX', jv: 'TUTUP LIGHTBOX' },
     { id: 'Kirim Permohonan via Email', jv: 'Kintun Panyuwunan lumantar Email' },
     { id: 'Salin Teks', jv: 'Turun Seratan' },
-    { id: 'Buka Email', jv: 'Bikak Email' }
+    { id: 'Buka Email', jv: 'Bikak Email' },
+
+    // Tambahan UI Desain Stitch Botanical Minimalist & Kinetic Slide Deck
+    { id: 'ARSIP DIGITAL LITIK & EKSPLORASI 3D', jv: 'ARSIP DIGITAL SELA & PANYELIDIKAN 3D' },
+    { id: 'Koleksi Terbuka', jv: 'Koleksi Kabuka' },
+    { id: 'BAGIAN', jv: 'PERANGAN' },
+    { id: 'Gulir / Klik:', jv: 'Gulir / Klik:' },
+    { id: 'Arsip Preservasi 2026', jv: 'Arsip Pangreksa 2026' },
+    { id: 'SITUS CAGAR BUDAYA', jv: 'SITUS CAGAR BUDAYA' },
+    { id: 'PILIH MODEL 3D GLB:', jv: 'PILIH MODHÈL 3D GLB:' },
+    { id: 'Model 3: Wisata', jv: 'Modhèl 3: Wisata' },
+    { id: 'SKALA 1:1 • FOTOGRAMETRI', jv: 'SKALA 1:1 • FOTOGRAMETRI' },
+    { id: 'Geser Putar 360° • Scroll Zoom', jv: 'Geser Puter 360° • Scroll Zoom' },
+    { id: 'JELAJAH LINGKUNGAN 3D', jv: 'JELAJAH PASRAWUNGAN 3D' },
+    { id: 'PARAMETER ARKEOLOGIS SITUS & METADATA TERVERIFIKASI', jv: 'UKURAN ARKEOLOGI SITUS & METADATA KASUNYATAN' },
+    { id: 'RISET LAPANGAN MAN 2 PONOROGO • SEPTEMBER 2026', jv: 'PANALITEN LAPANGAN MAN 2 PONOROGO • SEPTEMBER 2026' },
+    { id: 'Netra Terbelalak', jv: 'Netra Ambalalak' },
+    { id: 'Mulut Pancuran Air', jv: 'Cangkem Pancuran Toya' },
+    { id: 'Ukiran Mahkota Kembang', jv: 'Tatahan Makutha Sekar' },
+    { id: 'Dekonstruksi Ikonografi Kalamakara Beji Sirah Keteng', jv: 'Wedharan Tatah Kalamakara Beji Sirah Keteng' },
+    { id: 'Eksplorasi Lini Masa →', jv: 'Mriksani Lampahing Sejarah →' },
+    { id: 'Kronik Peradaban Beji Sirah Keteng (1204 M – 2026)', jv: 'Lampahing Peradaban Beji Sirah Keteng (1204 M – 2026)' },
+    { id: 'Buka Cerita Rakyat (3 Versi) →', jv: 'Bukak Crita Rakyat (3 Rumpun) →' },
+    { id: 'Putar Pak Jarno', jv: 'Muter Pak Jarno' },
+    { id: 'Kidung & Aura ✨', jv: 'Kidung & Aura ✨' },
+    { id: 'Monolit Utama: Kajian Litologi, Konservasi & Aksesibilitas 3D', jv: 'Sela Monolit Utama: Kajian Litologi, Pangreksa & Aksesibilitas 3D' },
+    { id: 'Penerjemah Bahasa Isyarat 3D (BISINDO)', jv: 'Panyalin Basa Isyarat 3D (BISINDO)' },
+    { id: 'Buka Penerjemah 3D BISINDO →', jv: 'Bukak Panyalin 3D BISINDO →' },
+    { id: 'Buka Mode Walkthrough 3D →', jv: 'Bukak Modhe Walkthrough 3D →' },
+    { id: 'Aktifkan Aura ✨', jv: 'Uripaken Aura ✨' },
+    { id: 'Galeri Dokumentasi Lapangan & Catatan Konservasi Hidrologis', jv: 'Galeri Dokumèn Lapangan & Cathetan Pangreksa Toya' },
+    { id: 'Semua Arsip (40)', jv: 'Sedaya Arsip (40)' },
+    { id: 'Pahatan Monolit (12)', jv: 'Ukiran Reca (12)' },
+    { id: 'Sendang Mata Air (5)', jv: 'Sendang Tuk Tirta (5)' },
+    { id: 'Lingkungan Sekitar (13)', jv: 'Rona Lingkungan (13)' },
+    { id: 'Video Lapangan (2)', jv: 'Video Lapangan (2)' },
+    { id: 'Permohonan Data Mentah 3D', jv: 'Panyuwunan Dhata Mentah 3D' },
+    { id: 'Unduh Foto', jv: 'Undhuh Foto' },
+    { id: '01 → 02 • ANATOMI KALAMAKARA', jv: '01 → 02 • WUJUD TATAH KALAMAKARA' },
+    { id: '02 → 03 • LINI MASA 1204 M – 2026', jv: '02 → 03 • LAMPAHING SEJARAH 1204 M – 2026' },
+    { id: '03 → 04 • TUTUR LISAN & FOLKLOR', jv: '03 → 04 • CRITA TUTUR & FOLKLOR' },
+    { id: '04 → 05 • LITOLOGI & INKLUSIVITAS 3D', jv: '04 → 05 • KAJIAN SELA & INKLUSIVITAS 3D' },
+    { id: '05 → 06 • GALERI 38 FOTO & 2 VIDEO', jv: '05 → 06 • GALERI 38 FOTO & 2 VIDEO' }
   ];
 
   // =========================================================================
@@ -186,7 +228,7 @@
 
     const modalHtml = `
     <div id="credit-location-modal" class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/75 backdrop-blur-sm transition-all duration-300 opacity-0 pointer-events-none" style="z-index: 9999;">
-      <div id="credit-modal-box" class="relative w-full max-w-4xl bg-surface border border-outline-variant/60 shadow-2xl flex flex-col max-h-[92vh] transition-transform duration-300 scale-95 overflow-hidden">
+      <div id="credit-modal-box" class="relative w-full max-w-4xl bg-surface border border-outline-variant/60 rounded-2xl shadow-2xl flex flex-col max-h-[92vh] transition-transform duration-300 scale-95 overflow-hidden">
         
         <!-- Header Modal -->
         <div class="flex items-center justify-between px-5 sm:px-6 py-3.5 border-b border-outline-variant/30 bg-surface-container-low shrink-0">
@@ -442,15 +484,15 @@
   }
 
   // =========================================================================
-  // SISTEM NAVIGASI MOBILE (HAMBURGER DRAWER & OVERFLOW FIX)
+  // SISTEM NAVIGASI MOBILE & MODUL KINETIK (DRAWER 01–06)
   // =========================================================================
   const NAV_ITEMS = [
-    { href: 'index.html', num: '01', id: 'Pengantar 3D', jv: 'Pambuka 3D', icon: 'view_in_ar' },
-    { href: 'elemen-kalamakara.html', num: '02', id: 'Elemen Kalamakara', jv: 'Reroncen Kalamakara', icon: 'account_tree' },
-    { href: 'lini-masa-sejarah.html', num: '03', id: 'Lini Masa Sejarah', jv: 'Lampahing Sejarah', icon: 'history_edu' },
-    { href: 'cerita-rakyat.html', num: '04', id: 'Cerita Rakyat (3 Versi)', jv: 'Crita Rakyat (3 Rumpun)', icon: 'auto_stories' },
-    { href: 'monolit-utama.html', num: '05', id: 'Monolit Utama', jv: 'Sela Monolit Utama', icon: 'architecture' },
-    { href: 'galeri-dokumentasi.html', num: '06', id: 'Galeri Dokumentasi', jv: 'Pasarean Dokumèn', icon: 'photo_library' }
+    { href: 'index.html#sec-0', secIdx: 0, num: '01', id: 'Pengantar 3D', jv: 'Pambuka 3D', icon: 'view_in_ar' },
+    { href: 'index.html#sec-1', secIdx: 1, num: '02', id: 'Elemen Kalamakara', jv: 'Reroncen Kalamakara', icon: 'account_tree' },
+    { href: 'index.html#sec-2', secIdx: 2, num: '03', id: 'Lini Masa Sejarah', jv: 'Lampahing Sejarah', icon: 'history_edu' },
+    { href: 'index.html#sec-3', secIdx: 3, num: '04', id: 'Cerita Rakyat (3 Versi)', jv: 'Crita Rakyat (3 Rumpun)', icon: 'auto_stories' },
+    { href: 'index.html#sec-4', secIdx: 4, num: '05', id: 'Monolit Utama', jv: 'Sela Monolit Utama', icon: 'architecture' },
+    { href: 'index.html#sec-5', secIdx: 5, num: '06', id: 'Galeri Dokumentasi', jv: 'Pasarean Dokumèn', icon: 'photo_library' }
   ];
 
   function injectMobileNavStyles() {
@@ -522,26 +564,26 @@
       }
     }
 
-    // Tentukan halaman aktif saat ini
+    // Tentukan halaman/bagian aktif saat ini
     const currentPath = window.location.pathname;
     const currentFile = currentPath.substring(currentPath.lastIndexOf('/') + 1) || 'index.html';
+    const isOnIndex = (currentFile === '' || currentFile === '/' || currentFile.toLowerCase().includes('index'));
+    const initialSecIdx = window.kineticNav ? window.kineticNav.currentIndex : 0;
 
     const linksHtml = NAV_ITEMS.map(item => {
-      const isCurrent = (currentFile === item.href) || 
-                        ((currentFile === '' || currentFile === '/') && item.href === 'index.html') ||
-                        (currentFile.includes('index') && item.href === 'index.html');
+      const isCurrent = isOnIndex && (item.secIdx === initialSecIdx);
       
       const activeClass = isCurrent 
         ? 'bg-primary text-white font-bold shadow-xs' 
         : 'text-on-surface hover:bg-surface-container-high transition-colors font-medium';
       
       const badgeHtml = isCurrent 
-        ? '<span class="ml-auto text-[9px] font-mono px-1.5 py-0.5 bg-white/20 text-white uppercase tracking-wider">AKTIF</span>'
-        : '';
+        ? '<span class="drawer-active-badge ml-auto text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-white/20 text-white uppercase tracking-wider">AKTIF</span>'
+        : '<span class="drawer-active-badge hidden ml-auto text-[9px] font-mono px-1.5 py-0.5 rounded-full bg-white/20 text-white uppercase tracking-wider">AKTIF</span>';
 
       return `
-        <a href="${item.href}" class="mobile-nav-link flex items-center gap-2.5 px-3.5 py-2.5 text-[12px] uppercase tracking-wider ${activeClass} border border-outline-variant/20 transition-all" data-page="${item.href}">
-          <span class="material-symbols-outlined text-[18px] ${isCurrent ? 'text-white' : 'text-primary'}">${item.icon}</span>
+        <a href="${item.href}" class="mobile-nav-link rounded-xl flex items-center gap-2.5 px-3.5 py-2.5 text-[12px] uppercase tracking-wider ${activeClass} border border-outline-variant/20 transition-all" data-page="${item.href}" data-sec-idx="${item.secIdx}">
+          <span class="drawer-nav-icon material-symbols-outlined text-[18px] ${isCurrent ? 'text-white' : 'text-primary'}">${item.icon}</span>
           <span class="mobile-nav-text font-mono">${item.num}. ${item.id}</span>
           ${badgeHtml}
         </a>
@@ -715,11 +757,45 @@
       }, 250);
     });
 
-    // Close drawer when any nav link is tapped
-    drawer.querySelectorAll('.mobile-nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        closeDrawer();
+    function syncDrawerActiveSection(activeIdx) {
+      drawer.querySelectorAll('.mobile-nav-link').forEach(link => {
+        const idx = parseInt(link.getAttribute('data-sec-idx'), 10);
+        const isCurrent = (idx === activeIdx);
+        const icon = link.querySelector('.drawer-nav-icon');
+        const badge = link.querySelector('.drawer-active-badge');
+        if (isCurrent) {
+          link.classList.add('bg-primary', 'text-white', 'font-bold', 'shadow-xs');
+          link.classList.remove('text-on-surface', 'hover:bg-surface-container-high', 'font-medium');
+          if (icon) { icon.classList.add('text-white'); icon.classList.remove('text-primary'); }
+          if (badge) badge.classList.remove('hidden');
+        } else {
+          link.classList.remove('bg-primary', 'text-white', 'font-bold', 'shadow-xs');
+          link.classList.add('text-on-surface', 'hover:bg-surface-container-high', 'font-medium');
+          if (icon) { icon.classList.remove('text-white'); icon.classList.add('text-primary'); }
+          if (badge) badge.classList.add('hidden');
+        }
       });
+    }
+
+    // Navigate smoothly via KineticNavigator on index.html or normal href on subpages
+    drawer.querySelectorAll('.mobile-nav-link').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const idx = parseInt(link.getAttribute('data-sec-idx'), 10);
+        if (window.kineticNav && !Number.isNaN(idx)) {
+          e.preventDefault();
+          closeDrawer();
+          window.kineticNav.goTo(idx);
+          syncDrawerActiveSection(idx);
+        } else {
+          closeDrawer();
+        }
+      });
+    });
+
+    window.addEventListener('kinetic:sectionchange', (e) => {
+      if (e && e.detail && typeof e.detail.index === 'number') {
+        syncDrawerActiveSection(e.detail.index);
+      }
     });
 
     updateMobileNavLanguage(window.BejiLang ? window.BejiLang.getCurrent() : 'id');
@@ -775,10 +851,10 @@
 
     const isJv = (window.BejiLang ? window.BejiLang.getCurrent() : 'id') === 'jv';
     const html = `
-      <a href="lingkungan-3d.html" id="header-btn-lingkungan-3d" class="hidden xl:flex items-center gap-1.5 px-space-sm py-1 bg-gradient-to-r from-secondary/15 via-surface-container-low to-amber-500/10 hover:from-secondary hover:to-secondary hover:text-white text-secondary border border-secondary/40 transition-all text-[11px] font-semibold shadow-xs select-none cursor-pointer" title="Jelajahi Rekonstruksi Lingkungan Virtual 3D Beji Sirah Keteng (Mode Jalan Kaki & Drone Orbit)">
-        <span class="material-symbols-outlined text-[16px] text-secondary">explore</span>
+      <a href="lingkungan-3d.html" id="header-btn-lingkungan-3d" class="hidden xl:flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container/45 hover:bg-primary hover:text-white text-primary border border-primary/25 transition-all text-[11px] font-mono font-semibold shadow-xs select-none cursor-pointer" title="Jelajahi Rekonstruksi Lingkungan Virtual 3D Beji Sirah Keteng (Mode Jalan Kaki & Drone Orbit)">
+        <span class="material-symbols-outlined text-[15px]">explore</span>
         <span id="header-lingkungan-text">${isJv ? 'Pasrawungan 3D' : 'Lingkungan 3D'}</span>
-        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
       </a>
     `;
     audioBtn.insertAdjacentHTML('beforebegin', html);
@@ -788,17 +864,19 @@
     if (document.getElementById('fab-lingkungan-3d')) return;
     if (window.location.pathname.toLowerCase().endsWith('lingkungan-3d.html')) return;
 
+    const hasKineticBar = !!document.getElementById('bottom-kinetic-bar');
+    const bottomCls = hasKineticBar ? 'bottom-16 md:bottom-3.5' : 'bottom-4 sm:bottom-6';
     const isJv = (window.BejiLang ? window.BejiLang.getCurrent() : 'id') === 'jv';
     const fabHtml = `
       <!-- Floating Action Button: Jelajah Lingkungan 3D -->
-      <a href="lingkungan-3d.html" id="fab-lingkungan-3d" class="fixed left-3.5 bottom-4 sm:left-6 sm:bottom-6 z-[9960] flex items-center gap-2 sm:gap-2.5 px-3.5 py-2 sm:px-4 sm:py-2.5 bg-gradient-to-r from-primary to-primary-container text-white rounded-full shadow-[0_6px_22px_rgba(158,58,43,0.38)] hover:shadow-[0_8px_28px_rgba(158,58,43,0.5)] border border-white/25 transition-all duration-300 hover:scale-105 active:scale-95 group cursor-pointer select-none" style="transition: bottom 0.3s ease, transform 0.2s ease;" title="Jelajahi Rekonstruksi Lingkungan Virtual 3D Beji Sirah Keteng (Mode Orang Pertama & Drone Orbit)">
+      <a href="lingkungan-3d.html" id="fab-lingkungan-3d" class="fixed left-3.5 ${bottomCls} sm:left-6 z-[9960] flex items-center gap-2 sm:gap-2.5 px-3.5 py-2 sm:px-4 sm:py-2 bg-gradient-to-r from-primary to-primary-container text-white rounded-full shadow-[0_6px_22px_rgba(54,72,37,0.34)] hover:shadow-[0_10px_28px_rgba(54,72,37,0.48)] border border-white/25 transition-all duration-300 hover:scale-105 active:scale-95 group cursor-pointer select-none" style="transition: bottom 0.3s ease, transform 0.2s ease;" title="Jelajahi Rekonstruksi Lingkungan Virtual 3D Beji Sirah Keteng (Mode Orang Pertama & Drone Orbit)">
         <span class="relative flex h-2.5 w-2.5">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400"></span>
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-300"></span>
         </span>
-        <span class="material-symbols-outlined text-[18px] sm:text-[20px] text-amber-300 group-hover:rotate-12 transition-transform">explore</span>
+        <span class="material-symbols-outlined text-[18px] sm:text-[19px] text-secondary-container group-hover:rotate-12 transition-transform">explore</span>
         <span id="fab-lingkungan-text" class="text-[11px] sm:text-xs font-serif font-bold tracking-wide">${isJv ? 'Jelajah Pasrawungan 3D' : 'Jelajah Lingkungan 3D'}</span>
-        <span class="hidden md:inline text-[9px] font-mono uppercase px-1.5 py-0.5 bg-white/20 rounded-full font-semibold">Walkthrough</span>
+        <span class="hidden lg:inline text-[9px] font-mono uppercase px-1.5 py-0.5 bg-white/20 rounded-full font-semibold">Walkthrough</span>
       </a>
     `;
     document.body.insertAdjacentHTML('beforeend', fabHtml);
@@ -807,9 +885,11 @@
   function updateFabPosition() {
     const fab = document.getElementById('fab-lingkungan-3d');
     const player = document.getElementById('beji-audio-player');
+    const hasKineticBar = !!document.getElementById('bottom-kinetic-bar');
     if (!fab) return;
     if (player && !player.classList.contains('hidden')) {
-      fab.style.bottom = 'calc(75px + 0.75rem)';
+      const isMobile = window.innerWidth < 768;
+      fab.style.bottom = (hasKineticBar && isMobile) ? 'calc(118px + 0.5rem)' : 'calc(72px + 0.75rem)';
     } else {
       fab.style.bottom = '';
     }
@@ -1199,7 +1279,7 @@
       <div id="audio-options-backdrop" class="fixed inset-0 bg-black/45 backdrop-blur-xs z-[9990] opacity-0 pointer-events-none transition-opacity duration-200"></div>
 
       <!-- Kotak Dialog Pilihan Audio -->
-      <div id="audio-options-modal" class="fixed inset-x-3 top-16 sm:inset-x-auto sm:top-20 sm:right-6 md:right-16 lg:right-24 max-w-[420px] w-[calc(100vw-24px)] sm:w-[420px] bg-surface/98 backdrop-blur-md border border-outline-variant/70 shadow-[0_20px_50px_rgba(43,38,35,0.3)] z-[9995] rounded-sm p-4 sm:p-5 opacity-0 scale-95 pointer-events-none transition-all duration-200 text-on-surface" style="transform-origin: top right;">
+      <div id="audio-options-modal" class="fixed inset-x-3 top-16 sm:inset-x-auto sm:top-20 sm:right-6 md:right-16 lg:right-24 max-w-[420px] w-[calc(100vw-24px)] sm:w-[420px] bg-surface/98 backdrop-blur-md border border-outline-variant/70 shadow-[0_20px_50px_rgba(15,23,42,0.18)] z-[9995] rounded-2xl p-4 sm:p-5 opacity-0 scale-95 pointer-events-none transition-all duration-200 text-on-surface" style="transform-origin: top right;">
         
         <!-- Header Popover -->
         <div class="flex items-center justify-between pb-3 mb-3 border-b border-outline-variant/30">
@@ -1972,12 +2052,23 @@
     const btnId = document.getElementById('lang-btn-id');
     const btnJv = document.getElementById('lang-btn-jv');
     if (btnId && btnJv) {
-      if (isJv) {
-        btnJv.className = 'text-primary font-bold cursor-default transition-colors';
-        btnId.className = 'text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors';
+      const isPill = btnId.dataset.pill === 'true' || btnJv.dataset.pill === 'true';
+      if (isPill) {
+        if (isJv) {
+          btnJv.className = 'px-2 py-0.5 rounded-full bg-primary text-white shadow-xs transition-all cursor-default';
+          btnId.className = 'px-2 py-0.5 rounded-full text-text-muted hover:text-text-main transition-all cursor-pointer';
+        } else {
+          btnId.className = 'px-2 py-0.5 rounded-full bg-primary text-white shadow-xs transition-all cursor-default';
+          btnJv.className = 'px-2 py-0.5 rounded-full text-text-muted hover:text-text-main transition-all cursor-pointer';
+        }
       } else {
-        btnId.className = 'text-primary font-bold cursor-default transition-colors';
-        btnJv.className = 'text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors';
+        if (isJv) {
+          btnJv.className = 'text-primary font-bold cursor-default transition-colors';
+          btnId.className = 'text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors';
+        } else {
+          btnId.className = 'text-primary font-bold cursor-default transition-colors';
+          btnJv.className = 'text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors';
+        }
       }
     }
 
@@ -2052,6 +2143,8 @@
     } catch (e) {
       console.warn('Gagal menyimpan ke localStorage:', e);
     }
+
+    window.dispatchEvent(new CustomEvent('beji:langchange', { detail: { lang: targetLang } }));
   }
 
   // Inisialisasi awal
@@ -2102,15 +2195,30 @@
     init();
   }
 
+  function getActiveLang() {
+    try {
+      return localStorage.getItem(STORAGE_KEY) || 'id';
+    } catch (e) {
+      return 'id';
+    }
+  }
+
   window.BejiLang = {
     switchTo: traverseAndTranslate,
-    getCurrent: function () {
-      try {
-        return localStorage.getItem(STORAGE_KEY) || 'id';
-      } catch (e) {
-        return 'id';
-      }
-    }
+    getCurrent: getActiveLang,
+    get: getActiveLang
+  };
+
+  window.BejiAudio = {
+    openModal: openAudioOptionsModal,
+    playWawancara: function (idx) {
+      playWawancaraChannel(typeof idx === 'number' ? idx : currentWawancaraIndex, true);
+    },
+    playTembang: function () {
+      playTembangChannel(true);
+    },
+    toggle: toggleAudioPlayback,
+    stop: stopAndClosePlayer
   };
 
 })();

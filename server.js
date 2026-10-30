@@ -25,18 +25,12 @@ const MIME_TYPES = {
   '.aac': 'audio/aac',
   '.m4a': 'audio/mp4',
   '.ogg': 'audio/ogg',
-  '.wav': 'audio/wav'
+  '.wav': 'audio/wav',
+  '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
 };
 
 const server = http.createServer((req, res) => {
   // Decode URL (handles spaces like '9_25_2026 (1).glb')
-  if (req.url.startsWith('/log?') || req.url === '/log') {
-    const logData = decodeURIComponent(req.url.substring(5));
-    fs.appendFileSync(path.join(PUBLIC_DIR, 'overflow_log.txt'), logData + '\n');
-    res.writeHead(200, { 'Content-Type': 'text/plain', 'Access-Control-Allow-Origin': '*' });
-    res.end('ok');
-    return;
-  }
   let safePath = decodeURIComponent(req.url.split('?')[0]);
   if (safePath === '/' || safePath === '') {
     safePath = '/index.html';
