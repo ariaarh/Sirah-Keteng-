@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="web_standard" name="shell-type" />
+  <title>05. Monolit Utama Arca Megalitik | Beji Sirah Keteng</title>
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+
+  <!-- Three.js + GLTFLoader + OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-tint": "#835425",
+            "secondary-container": "#ff5a55",
+            "tertiary-fixed": "#ffddba",
+            "primary-fixed": "#ffdcc1",
+            "on-secondary-fixed": "#410003",
+            "primary-container": "#8b5a2b",
+            "surface-dim": "#e2d8d3",
+            "surface-variant": "#ebe0db",
+            "secondary": "#b52426",
+            "on-tertiary-fixed-variant": "#5f401a",
+            "outline": "#837469",
+            "on-primary-fixed": "#2e1500",
+            "tertiary": "#664620",
+            "on-surface": "#1f1b18",
+            "outline-variant": "#d5c3b6",
+            "on-secondary-container": "#600008",
+            "on-tertiary": "#ffffff",
+            "surface": "#fff8f5",
+            "inverse-primary": "#f9ba82",
+            "surface-bright": "#fff8f5",
+            "on-surface-variant": "#51443a",
+            "inverse-surface": "#352f2c",
+            "on-error": "#ffffff",
+            "secondary-fixed": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#f6ece7",
+            "surface-container-high": "#f0e6e1",
+            "primary": "#6f4315",
+            "on-primary-fixed-variant": "#683d0f",
+            "primary-fixed-dim": "#f9ba82",
+            "on-primary-container": "#ffddc2",
+            "secondary-fixed-dim": "#ffb3ad",
+            "error": "#ba1a1a",
+            "tertiary-fixed-dim": "#ecbe8e",
+            "surface-container-highest": "#ebe0db",
+            "on-secondary-fixed-variant": "#920212",
+            "inverse-on-surface": "#f9efea",
+            "on-tertiary-container": "#ffddbb",
+            "on-secondary": "#ffffff",
+            "surface-container-low": "#fcf2ec",
+            "on-primary": "#ffffff",
+            "error-container": "#ffdad6",
+            "background": "#fff8f5",
+            "on-tertiary-fixed": "#2b1700",
+            "tertiary-container": "#815e35",
+            "on-error-container": "#93000a",
+            "on-background": "#1f1b18"
+          },
+          borderRadius: {
+            "DEFAULT": "0px",
+            "none": "0px",
+            "sm": "0px",
+            "md": "0px",
+            "lg": "0px",
+            "xl": "0px",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-2xl": "4rem",
+            "space-3xl": "6rem",
+            "gutter": "1.5rem",
+            "margin": "4rem"
+          },
+          fontFamily: {
+            "serif": ["Playfair Display", "serif"],
+            "sans": ["Plus Jakarta Sans", "sans-serif"],
+            "mono": ["Courier Prime", "monospace", "ui-monospace"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    @layer base {
+      html {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-text-size-adjust: 100%;
+        touch-action: manipulation;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      button, a {
+        touch-action: manipulation;
+      }
+    }
+    .text-shadow-monumental {
+      text-shadow: 0 2px 10px rgba(139, 90, 43, 0.18), 0 1px 2px rgba(0, 0, 0, 0.08);
+    }
+    .text-shadow-epigraph {
+      text-shadow: 0 2px 8px rgba(111, 67, 21, 0.15), 0 1px 1px rgba(0, 0, 0, 0.05);
+    }
+    .stone-grid-bg {
+      background-size: 28px 28px;
+      background-image: radial-gradient(#1f1b18 1px, transparent 1px);
+    }
+    .javanese-frame-shadow {
+      box-shadow: 12px 16px 32px -4px rgba(43, 38, 35, 0.18), 4px 6px 12px -2px rgba(43, 38, 35, 0.12);
+    }
+  </style>
+</head>
+
+<body class="bg-surface font-sans text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen flex flex-col justify-between">
+
+  <!-- ==================== HEADER / ARCHIVAL VITRINE PLINTH ==================== -->
+  <header class="fixed top-0 inset-x-0 z-50 bg-surface/92 backdrop-blur-md border-b border-white/80 shadow-[0_1px_8px_rgba(43,38,35,0.04)]">
+    <div class="min-h-16 sm:min-h-20 xl:min-h-[84px] py-2 max-w-[1440px] mx-auto px-3 sm:px-6 xl:px-4 2xl:px-margin flex items-center justify-between gap-1 sm:gap-2 xl:gap-3">
+      <!-- Site Brand Emblem & Title -->
+      <a href="index.html" class="flex items-center gap-2 group shrink-0">
+        <div class="w-8 h-8 sm:w-11 sm:h-11 shrink-0 border border-primary-container/40 bg-surface-container/80 flex items-center justify-center p-1 shadow-xs group-hover:border-primary group-hover:shadow-sm transition-all overflow-hidden">
+          <img src="./logo-man2p.png" alt="Logo MAN 2 Ponorogo" class="w-full h-full object-contain drop-shadow-xs" />
+        </div>
+        <div class="flex flex-col">
+          <span class="font-serif text-[12px] sm:text-sm lg:text-[13px] xl:text-[13.5px] tracking-wide text-on-surface uppercase font-bold text-shadow-epigraph leading-tight">BEJI SIRAH KETENG</span>
+          <span class="hidden sm:block text-[8px] sm:text-[9px] lg:text-[8.5px] xl:text-[9px] tracking-widest text-on-surface-variant uppercase font-medium leading-normal">Arsip Digital &amp; Eksplorasi 3D</span>
+        </div>
+      </a>
+
+      <!-- Navigation Bar (05. Monolit Utama Active) -->
+      <nav class="hidden xl:flex items-stretch gap-1 p-1 bg-surface-container-low/90 backdrop-blur-sm border border-white/70 shadow-xs">
+        <a href="index.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors rounded-[2px] leading-tight min-h-[46px]">
+          01. Pengantar 3D
+        </a>
+        <a href="elemen-kalamakara.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors rounded-[2px] leading-tight min-h-[46px]">
+          02. Elemen Kalamakara
+        </a>
+        <a href="lini-masa-sejarah.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors rounded-[2px] leading-tight min-h-[46px]">
+          03. Lini Masa Sejarah
+        </a>
+        <a href="cerita-rakyat.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors rounded-[2px] leading-tight min-h-[46px]">
+          04. Cerita Rakyat (3 Versi)
+        </a>
+        <a href="monolit-utama.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider font-semibold bg-primary-container text-white shadow-xs rounded-[2px] leading-tight min-h-[46px]">
+          05. Monolit Utama
+        </a>
+        <a href="galeri-dokumentasi.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors rounded-[2px] leading-tight min-h-[46px]">
+          06. Galeri Dokumentasi
+        </a>
+      </nav>
+
+      <!-- Meta Utilities -->
+      <div class="flex items-center gap-1.5 sm:gap-space-md shrink-0">
+        <div id="btn-audio-guide" class="btn-audio-guide hidden md:flex items-center gap-space-xs px-space-sm py-1 bg-surface-container-low/90 backdrop-blur-sm border border-white/70 text-on-surface-variant cursor-pointer hover:bg-surface-container transition-colors shadow-xs" title="Putar Pemandu Audio Kuratorial (3 Rekaman Berurutan)">
+          <span class="material-symbols-outlined text-[16px] text-secondary">volume_up</span>
+          <span class="text-[11px] uppercase tracking-wider text-primary font-semibold">Pemandu Audio</span>
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+        </div>
+
+        <a href="penerjemah-bisindo.html" id="btn-bisindo-link" class="w-8 h-8 sm:w-8 sm:h-8 border border-outline-variant/60 bg-surface-container-low flex items-center justify-center text-primary hover:bg-surface-container transition-colors shadow-xs shrink-0" title="Penerjemah Bahasa Isyarat 3D (BISINDO) untuk Aksesibilitas Disabilitas Rungu" aria-label="Penerjemah Bahasa Isyarat 3D (BISINDO)">
+          <span class="material-symbols-outlined text-[17px] sm:text-[18px]">sign_language</span>
+        </a>
+
+        <div id="lang-switcher" class="flex items-center text-[10px] sm:text-[11px] tracking-wider uppercase text-on-surface-variant bg-surface-container-low/90 backdrop-blur-sm border border-white/70 px-2 sm:px-space-sm py-1 shadow-xs select-none">
+          <button id="lang-btn-id" type="button" class="text-primary font-bold cursor-default transition-colors" title="Bahasa Indonesia">ID</button>
+          <span class="mx-1 text-outline-variant">/</span>
+          <button id="lang-btn-jv" type="button" class="text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors" title="Basa Jawa">JV</button>
+        </div>
+
+        <div class="hidden 2xl:flex flex-col text-right">
+          <span class="text-[10px] text-on-surface-variant font-mono">07°58'48" S 111°29'22" E</span>
+          <span class="text-[10px] text-primary uppercase font-bold">Sambit, Ponorogo</span>
+        </div>
+
+        <button id="btn-profile-modal" type="button" class="w-8 h-8 sm:w-8 sm:h-8 rounded-full bg-primary flex items-center justify-center shadow-xs cursor-pointer hover:bg-primary-container transition-colors shrink-0" title="Informasi Kredit, Hak Cipta & Peta Lokasi" aria-label="Informasi Kredit, Hak Cipta & Peta Lokasi">
+          <span class="material-symbols-outlined text-white text-[16px] sm:text-[18px]">person</span>
+        </button>
+
+        <!-- Mobile Menu Toggle Button (Hamburger) -->
+        <button id="btn-mobile-menu-toggle" type="button" class="xl:hidden w-8 h-8 sm:w-8 sm:h-8 border border-outline-variant/60 bg-surface-container-low flex items-center justify-center text-primary hover:bg-surface-container transition-colors shadow-xs shrink-0" aria-label="Menu Navigasi Mobile" title="Buka Menu Navigasi">
+          <span class="material-symbols-outlined text-[18px] sm:text-[20px]">menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT CONTAINER ==================== -->
+  <main class="w-full pt-16 sm:pt-20 xl:pt-24 bg-surface min-h-screen relative z-10">
+    <!-- Local File (file:///) Protocol Alert Banner -->
+    <div id="file-protocol-banner" class="hidden w-full bg-[#8c1d18] text-white py-2.5 px-6 text-xs font-mono shadow-md z-40 border-b border-white/20">
+      <div class="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px] text-amber-300">warning</span>
+          <span><strong>Perhatian:</strong> Halaman dibuka via protokol lokal (<code class="bg-black/30 px-1 py-0.5 text-amber-200">file:///</code>). Browser membatasi fitur 3D karena kebijakan CORS.</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="http://localhost:3000/monolit-utama.html" target="_blank" class="px-3 py-1 bg-white text-[#8c1d18] font-bold text-[11px] uppercase tracking-wider hover:bg-surface-container transition-colors shadow-xs inline-flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">open_in_browser</span>
+            Buka di Server Lokal (Port 3000)
+          </a>
+          <button id="btn-banner-switch-2d" type="button" class="px-3 py-1 bg-amber-400 text-black font-bold text-[11px] uppercase tracking-wider hover:bg-amber-300 transition-colors shadow-xs inline-flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">photo_camera</span>
+            Beralih ke Foto 2D
+          </button>
+          <button id="btn-close-file-banner" type="button" class="text-white/80 hover:text-white px-2 py-0.5 font-bold" title="Tutup Banner">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Atmospheric Background Ambient Grid -->
+    <div class="fixed inset-0 pointer-events-none opacity-[0.035] stone-grid-bg z-0"></div>
+
+    <div class="relative z-10 flex flex-col w-full">
+
+      <!-- SECTION HEADER & TITLE -->
+      <section class="max-w-[1440px] w-full mx-auto px-4 sm:px-8 lg:px-margin pt-space-lg sm:pt-space-xl pb-space-md">
+        <div class="flex flex-col items-center text-center max-w-4xl mx-auto">
+          <!-- Catalog Registration Tag -->
+          <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-space-sm mb-space-sm">
+            <span class="inline-block w-2 h-2 bg-secondary shrink-0"></span>
+            <span class="text-[10px] sm:text-[11px] tracking-widest text-primary uppercase font-bold">Katalog Monolit Arkeologi No. BSK-01/KALAMAKARA</span>
+            <span class="text-[10px] sm:text-[11px] text-outline-variant font-mono">| MATARAM KUNO-KEDIRI TRANSISI</span>
+          </div>
+
+          <!-- Main Headline -->
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl text-on-surface tracking-tight uppercase font-serif font-bold text-shadow-monumental leading-tight">
+            Monolit Utama <span class="italic font-normal text-primary-container">Kalamakara</span> Sirah Keteng
+          </h1>
+
+          <p class="text-sm sm:text-base text-on-surface-variant max-w-2xl mt-space-sm leading-relaxed px-1">
+            Dokumentasi digital morfologi kepala raksasa andesit tunggal berkarakter transisi Jawa Kuno, memadukan fungsi sakral pelindung mata air dan ornamen apotropaik penolak bahaya.
+          </p>
+
+          <!-- Technical Status Badge Matrix -->
+          <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-space-md mt-space-md w-full">
+            <div class="bg-surface-container-high px-space-md py-1.5 flex items-center justify-center gap-space-xs border border-outline-variant/30 shadow-xs">
+              <span class="material-symbols-outlined text-primary text-[15px]">straighten</span>
+              <span class="text-[10px] sm:text-[11px] uppercase tracking-wider text-on-surface font-semibold">Dimensi: 110–120 × 80–90 × 40–50 cm</span>
+            </div>
+            <div class="bg-surface-container-high px-space-md py-1.5 flex items-center justify-center gap-space-xs border border-outline-variant/30 shadow-xs">
+              <span class="material-symbols-outlined text-secondary text-[15px]">scale</span>
+              <span class="text-[10px] sm:text-[11px] uppercase tracking-wider text-on-surface font-semibold">Massa: ~1.200 kg (1,2 Ton)</span>
+            </div>
+            <div class="bg-surface-container-high px-space-md py-1.5 flex items-center justify-center gap-space-xs border border-outline-variant/30 shadow-xs">
+              <span class="material-symbols-outlined text-primary text-[15px]">location_on</span>
+              <a href="https://maps.app.goo.gl/hzqQeifrmbhTNcTr7" target="_blank" class="text-[10px] sm:text-[11px] uppercase tracking-wider text-primary hover:underline font-bold inline-flex items-center gap-1">
+                <span>Krajan, Bedingin, Sambit (2FCQ+2RC)</span>
+                <span class="material-symbols-outlined text-[13px]">open_in_new</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== TRIPTYCH CURATORIAL LAYOUT ==================== -->
+      <!-- Left Column: Geologi & Kawi | Center Column: 3D Photogrammetry Hero | Right Column: Tata Kelola Air & Konservasi -->
+      <section class="max-w-[1440px] w-full mx-auto px-4 sm:px-8 lg:px-margin pb-space-2xl sm:pb-space-3xl">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+
+          <!-- ==================== LEFT COLUMN: KAJIAN LITOLOGI & TRANSLITERASI KAWI (Cols 1-3) ==================== -->
+          <div class="lg:col-span-3 flex flex-col gap-space-lg order-2 lg:order-1">
+            
+            <!-- Litologi & Petrografi Card -->
+            <div class="bg-surface-container-lowest p-space-lg shadow-xs border border-outline-variant/40 relative overflow-hidden">
+              <div class="flex items-center justify-between pb-space-sm mb-space-sm border-b border-outline-variant/20">
+                <span class="text-[11px] uppercase text-secondary font-bold tracking-widest flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 bg-secondary"></span>
+                  Bagian A • Geologi Kuno
+                </span>
+                <span class="text-[11px] text-outline font-mono font-semibold">01/LITO</span>
+              </div>
+
+              <h2 class="text-xl font-serif text-on-surface font-bold mb-space-xs leading-snug">
+                Kajian Litologi &amp; Petrografi
+              </h2>
+
+              <p class="text-[13px] text-on-surface-variant leading-relaxed mb-space-md">
+                Batuan penyusun merupakan <strong class="text-on-surface font-semibold">andesit porfiritik hipersten</strong> berdensitas tinggi (2,68 g/cm³) yang ditambang dari fasies proksimal lereng vulkanik purba Gunung Wilis. Karakteristik matriks mikrokristalin menghasilkan ketahanan luar biasa terhadap erosi hidrologis aliran mata air selama lebih dari 800 tahun.
+              </p>
+
+              <!-- Metric Specifications Data Grid -->
+              <div class="bg-surface-container-low p-space-md flex flex-col gap-space-xs mb-space-md border border-outline-variant/30">
+                <div class="flex justify-between items-center text-[13px] pb-1 border-b border-outline-variant/15">
+                  <span class="text-on-surface-variant">Bentang / Panjang</span>
+                  <span class="font-mono font-bold text-primary">110 – 120 cm</span>
+                </div>
+                <div class="flex justify-between items-center text-[13px] py-1 border-b border-outline-variant/15">
+                  <span class="text-on-surface-variant">Tinggi Arca</span>
+                  <span class="font-mono font-bold text-primary">80 – 90 cm</span>
+                </div>
+                <div class="flex justify-between items-center text-[13px] py-1 border-b border-outline-variant/15">
+                  <span class="text-on-surface-variant">Tebal Relief ke Belakang</span>
+                  <span class="font-mono font-bold text-primary">40 – 50 cm</span>
+                </div>
+                <div class="flex justify-between items-center text-[13px] pt-1">
+                  <span class="text-on-surface-variant">Estimasi Massa</span>
+                  <span class="font-mono font-bold text-primary">~1.200 kg (1,2 Ton)</span>
+                </div>
+              </div>
+
+              <div class="space-y-space-xs">
+                <span class="text-[11px] uppercase tracking-wider text-primary font-bold block">Teknik Pahat Cadas Monolitik:</span>
+                <p class="text-[13px] text-on-surface-variant leading-relaxed">
+                  Dikerjakan dengan teknik <em class="text-on-surface font-medium not-italic">tatah sungging monolit</em> tanpa sambungan paku atau pasak morse. Sisa jejak pukulan baji besi runcing berukuran 4 mm teridentifikasi pada area relung telinga dan bagian belakang sungut arca.
+                </p>
+              </div>
+            </div>
+
+            <!-- Kawi Transliteration Tablet -->
+            <div class="bg-surface-container-low p-space-lg relative border border-outline-variant/40 shadow-xs">
+              <div class="flex items-center gap-space-xs mb-space-xs">
+                <span class="material-symbols-outlined text-secondary text-[16px]">menu_book</span>
+                <span class="text-[10px] uppercase tracking-widest text-secondary font-bold">Epigraf Pelindung</span>
+              </div>
+
+              <h3 class="text-lg font-serif text-on-surface font-bold mb-space-xs">
+                Transliterasi Kawi Kuno
+              </h3>
+
+              <div class="bg-surface-container-lowest p-space-md my-space-xs border-l-3 border-secondary shadow-xs">
+                <p class="text-base text-primary tracking-wide italic font-serif leading-snug">
+                  "// svasti bhaṭāra kāla mahā-bhairava raksa jaladhāra //"
+                </p>
+              </div>
+
+              <p class="text-[13px] text-on-surface-variant mt-space-sm leading-relaxed">
+                <strong class="text-on-surface font-semibold">Makna Liturgis:</strong> Salam puja kepada Batara Kala penguasa waktu dan keabadian; tegakkan perlindungan mutlak bagi aliran air suci dari gangguan marabahaya roh bhuta dan kemunduran zaman.
+              </p>
+
+              <div class="mt-space-md pt-space-xs flex items-center justify-between border-t border-outline-variant/20">
+                <span class="text-[10px] text-outline-variant font-mono uppercase font-bold">PALEOGRAFI: KADIRI ABAD XII</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ==================== CENTER COLUMN: 3D PHOTOGRAMMETRY HERO VIEWER (Cols 4-9) ==================== -->
+          <div class="lg:col-span-6 flex flex-col items-center order-1 lg:order-2">
+            
+            <!-- Top Mode Switcher Bar -->
+            <div class="w-full max-w-[640px] mb-4 sm:mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 px-space-xs">
+              <div class="inline-flex items-center justify-center sm:justify-start gap-2 bg-surface-container-highest px-space-sm py-1 border border-outline-variant/40 shadow-xs">
+                <span class="w-2 h-2 rounded-full bg-secondary animate-pulse shrink-0" id="center-status-dot"></span>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-primary text-center sm:text-left" id="center-status-text">
+                  INTERAKTIF 3D ORBIT AKTIF • 360° Rotasi Morfologi
+                </span>
+              </div>
+
+              <!-- 2D Photo / 3D Viewer Mode Selector -->
+              <div class="flex items-center gap-1.5 w-full sm:w-auto">
+                <button id="btn-mode-3d" type="button" class="flex-1 sm:flex-none justify-center px-2.5 sm:px-3 py-2 sm:py-1.5 text-[10px] sm:text-[11px] font-mono uppercase font-bold bg-primary text-white shadow-xs transition-all cursor-pointer flex items-center gap-1.5" title="Tampilkan Fotogrametri 3D Scan Interaktif (Kalmakara.glb)">
+                  <span class="material-symbols-outlined text-[15px]">view_in_ar</span>
+                  <span>Fotogrametri 3D Scan</span>
+                </button>
+                <button id="btn-mode-2d" type="button" class="flex-1 sm:flex-none justify-center px-2.5 sm:px-3 py-2 sm:py-1.5 text-[10px] sm:text-[11px] font-mono uppercase font-bold bg-surface-container hover:bg-surface text-on-surface-variant transition-all cursor-pointer border border-outline-variant/30 flex items-center gap-1.5" title="Tampilkan Foto Asli Dokumentasi Lapangan">
+                  <span class="material-symbols-outlined text-[15px]">photo_camera</span>
+                  <span>Foto 2D Dokumentasi</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Relative Container with Architectural Offset Frame Setup -->
+            <div class="relative w-full max-w-[640px] mx-auto py-space-sm px-space-xs">
+              
+              <!-- Subtle luminous glow behind the 3D model -->
+              <div class="absolute inset-0 m-auto w-[92%] h-[90%] bg-gradient-to-tr from-on-primary-container/20 via-surface-container to-secondary-fixed/15 blur-2xl -z-10 rounded-full pointer-events-none"></div>
+
+              <!-- FOREGROUND OFFSET ARCHITECTURAL JAVANESE FRAME -->
+              <div class="hidden sm:block absolute -top-3 -right-3 -bottom-3 -left-3 pointer-events-none z-20 shadow-[10px_18px_36px_-6px_rgba(43,38,35,0.18),0_4px_12px_-2px_rgba(181,36,38,0.06)] bg-transparent">
+                <!-- Outer Javanese Floral / Kala motif hairline border styling via SVG -->
+                <svg class="w-full h-full text-primary-container" fill="none" preserveAspectRatio="none" viewBox="0 0 100 100">
+                  <rect height="98" stroke="currentColor" stroke-dasharray="2 1" stroke-opacity="0.6" stroke-width="0.75" width="98" x="1" y="1"></rect>
+                  <rect height="95" stroke="currentColor" stroke-opacity="0.4" stroke-width="0.35" width="95" x="2.5" y="2.5"></rect>
+                  <!-- Stylized corner motifs -->
+                  <path d="M 2 12 Q 12 12 12 2 M 2 7 Q 7 7 7 2 M 4 4 L 4 9 L 9 4 Z" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="0.5"></path>
+                  <path d="M 98 12 Q 88 12 88 2 M 98 7 Q 93 7 93 2 M 96 4 L 96 9 L 91 4 Z" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="0.5"></path>
+                  <path d="M 2 88 Q 12 88 12 98 M 2 93 Q 7 93 7 98 M 4 96 L 4 91 L 9 96 Z" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="0.5"></path>
+                  <path d="M 98 88 Q 88 88 88 98 M 98 93 Q 93 93 93 98 M 96 96 L 96 91 L 91 96 Z" fill="currentColor" fill-opacity="0.25" stroke="currentColor" stroke-width="0.5"></path>
+                  <!-- Registration Crosshairs -->
+                  <circle cx="50" cy="2" fill="#b52426" r="1"></circle>
+                  <circle cx="50" cy="98" fill="#b52426" r="1"></circle>
+                  <circle cx="2" cy="50" fill="#b52426" r="1"></circle>
+                  <circle cx="98" cy="50" fill="#b52426" r="1"></circle>
+                </svg>
+
+                <!-- Floating Archival Tag on the Offset Frame -->
+                <div class="absolute -top-3 left-6 bg-primary text-white px-space-sm py-0.5 text-[9px] uppercase tracking-widest font-mono shadow-sm">
+                  FOTOGRAMETRI 3D • RES 0.2mm
+                </div>
+                <div class="absolute -bottom-3 right-6 bg-surface-container-lowest text-on-surface px-space-sm py-0.5 text-[9px] uppercase font-mono shadow-sm border border-outline-variant/30">
+                  AXIS: UTM-49S // Z: +114m MDPL
+                </div>
+              </div>
+
+              <!-- PRIMARY PHOTOMETRIC CANVAS (Base Layer z-10) -->
+              <div class="relative z-10 w-full overflow-hidden bg-[#181412] group min-h-[380px] sm:min-h-[480px] lg:min-h-[520px] aspect-[4/5] sm:aspect-square lg:aspect-[4/5] shadow-inner select-none">
+                
+                <!-- Archaeological Metric Scale Graticule -->
+                <div class="absolute top-12 left-3 sm:top-4 sm:left-4 flex flex-col gap-1 pointer-events-none z-30">
+                  <span class="hidden sm:inline-block font-mono text-[9px] font-bold text-on-surface bg-surface/90 px-1.5 py-0.5 backdrop-blur-sm border border-outline-variant/30 shadow-xs">SKALA VERTIKAL</span>
+                  <div class="h-20 sm:h-28 w-1.5 bg-surface/90 flex flex-col justify-between py-0.5 shadow-xs">
+                    <div class="w-full h-0.5 bg-secondary"></div>
+                    <div class="w-full h-0.5 bg-primary"></div>
+                    <div class="w-full h-0.5 bg-secondary"></div>
+                    <div class="w-full h-0.5 bg-primary"></div>
+                  </div>
+                  <span class="font-mono text-[8.5px] sm:text-[9px] font-bold text-on-surface bg-surface/90 px-1.5 py-0.5 backdrop-blur-sm border border-outline-variant/30 shadow-xs">0 - 100 CM</span>
+                </div>
+
+                <!-- 3D Model Selector Pills (Top Right) -->
+                <div class="absolute top-2.5 right-2.5 sm:top-4 sm:right-4 z-30 flex items-center gap-1 bg-surface/90 backdrop-blur-md p-1 border border-outline-variant/40 shadow-xs pointer-events-auto">
+                  <button id="btn-model-2" class="px-2 py-1 sm:py-0.5 text-[8.5px] sm:text-[9px] font-mono uppercase font-bold bg-secondary text-white transition-all cursor-pointer" title="Muat Kalamakara (Kalmakara.glb)">
+                    Model 02: Kalamakara
+                  </button>
+                  <button id="btn-model-1" class="px-2 py-1 sm:py-0.5 text-[8.5px] sm:text-[9px] font-mono uppercase font-bold text-on-surface-variant hover:text-on-surface transition-all cursor-pointer" title="Muat Watu Pawukon (9_25_2026 (1).glb)">
+                    Model 01: Watu Pawukon
+                  </button>
+                </div>
+
+                <!-- Three.js Interactive 3D WebGL Canvas Container -->
+                <div id="threejs-canvas-monolit" class="w-full h-full absolute inset-0 z-10 cursor-grab active:cursor-grabbing"></div>
+
+                <!-- 2D High-Res Archival Photo View (Layer z-30 so it sits ABOVE loading overlay & canvas) -->
+                <div id="photo-2d-container" class="hidden absolute inset-0 z-30 w-full h-full overflow-hidden bg-surface-container-highest">
+                  <img id="img-detail-monolit" 
+                       src="./foto-detail-kalamakara.jpg" 
+                       alt="Foto Asli Dokumentasi Detail Pahatan Monolit Kalamakara Beji Sirah Keteng" 
+                       class="w-full h-full object-cover object-[center_50%] transition-transform duration-700 hover:scale-105"
+                       onerror="this.onerror=null; this.src='./dokumentasi/foto/Foto%20Detail%20Pahatan%20Monolit/WhatsApp%20Image%202026-10-14%20at%209.51.54%20AM.jpeg';" />
+
+                  <!-- Left & Bottom Ambient Vignette -->
+                  <div class="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-surface/60 to-transparent pointer-events-none"></div>
+                  <div class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-inverse-surface/80 via-transparent to-transparent pointer-events-none"></div>
+
+                  <!-- On-Image Badge -->
+                  <div class="absolute bottom-14 sm:bottom-16 left-3 sm:left-4 right-3 sm:right-auto z-20 flex flex-col gap-1 pointer-events-none max-w-[calc(100%-1.5rem)]">
+                    <span class="bg-surface/90 backdrop-blur-sm text-on-surface px-2 sm:px-2.5 py-1 font-mono text-[8.5px] sm:text-[9px] tracking-widest uppercase font-bold shadow-xs truncate">
+                      DOKUMENTASI FOTO ASLI LAPANGAN
+                    </span>
+                    <span class="bg-primary text-white px-2 sm:px-2.5 py-0.5 text-[8.5px] sm:text-[9px] uppercase font-bold shadow-xs truncate">
+                      FOTO DETAIL PAHATAN MONOLIT (WhatsApp Image 2026-10-14)
+                    </span>
+                  </div>
+
+                  <!-- Hotspot Interactive Visual Pin 1: Mata Melotot (Apotropaik) -->
+                  <div class="absolute top-[50%] left-[46%] z-30 group/pin cursor-pointer">
+                    <span class="relative flex h-5 w-5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-5 w-5 bg-secondary text-white items-center justify-center font-mono text-[9px] font-bold shadow-md">1</span>
+                    </span>
+                    <div class="absolute left-6 -top-2 w-48 bg-surface p-space-sm shadow-md border border-outline-variant/40 opacity-0 pointer-events-none group-hover/pin:opacity-100 group-hover/pin:pointer-events-auto transition-opacity duration-200">
+                      <span class="text-[10px] uppercase text-secondary font-bold block">Netra Ageng</span>
+                      <p class="text-[12px] text-on-surface leading-tight mt-1">Sepasang mata membelalak penuh penegasan fungsi apotropaik (pengusir roh jahat).</p>
+                    </div>
+                  </div>
+
+                  <!-- Hotspot Interactive Visual Pin 2: Rongga Jaladwara -->
+                  <div class="absolute top-[58%] left-[50%] z-30 group/pin cursor-pointer">
+                    <span class="relative flex h-5 w-5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-5 w-5 bg-primary text-white items-center justify-center font-mono text-[9px] font-bold shadow-md">2</span>
+                    </span>
+                    <div class="absolute left-6 -top-2 w-48 bg-surface p-space-sm shadow-md border border-outline-variant/40 opacity-0 pointer-events-none group-hover/pin:opacity-100 group-hover/pin:pointer-events-auto transition-opacity duration-200">
+                      <span class="text-[10px] uppercase text-primary font-bold block">Mulut Pancuran</span>
+                      <p class="text-[12px] text-on-surface leading-tight mt-1">Saluran debit air sakral petirtaan kuno terhubung langsung dengan akuifer hulu.</p>
+                    </div>
+                  </div>
+
+                  <!-- Hotspot Interactive Visual Pin 3: Altar Batu Andesit -->
+                  <div class="absolute top-[68%] left-[48%] z-30 group/pin cursor-pointer">
+                    <span class="relative flex h-5 w-5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-5 w-5 bg-secondary text-white items-center justify-center font-mono text-[9px] font-bold shadow-md">3</span>
+                    </span>
+                    <div class="absolute left-6 -top-2 w-48 bg-surface p-space-sm shadow-md border border-outline-variant/40 opacity-0 pointer-events-none group-hover/pin:opacity-100 group-hover/pin:pointer-events-auto transition-opacity duration-200">
+                      <span class="text-[10px] uppercase text-secondary font-bold block">Altar Batu Andesit</span>
+                      <p class="text-[12px] text-on-surface leading-tight mt-1">Susunan balok andesit berundak penopang kepala arca megalitikum.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 3D Loading Overlay Spinner & Fallback Helper -->
+                <div id="monolit-loading-overlay" class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-surface/95 backdrop-blur-md p-6 text-center transition-opacity duration-300">
+                  <div id="loading-spinner-box" class="flex flex-col items-center">
+                    <div class="w-10 h-10 border-4 border-outline-variant/40 border-t-secondary rounded-full animate-spin"></div>
+                    <p id="monolit-loading-text" class="mt-3 text-[11px] font-mono text-primary font-bold tracking-wider">Memuat 3D Monolit Utama...</p>
+                  </div>
+
+                  <!-- Local File / CORS Notice Box (Shown on file:/// or on fetch error) -->
+                  <div id="local-cors-notice" class="hidden mt-3 max-w-sm p-4 bg-surface-container border border-outline-variant/50 shadow-md flex flex-col items-center text-center">
+                    <span class="material-symbols-outlined text-secondary text-2xl mb-1">lock</span>
+                    <h3 class="text-xs font-bold text-on-surface uppercase tracking-wider mb-1">Keamanan Browser Membatasi 3D Lokal</h3>
+                    <p class="text-[11px] text-on-surface-variant mb-3 leading-relaxed">
+                      Pemuatan file 3D (<code class="font-mono text-primary font-bold">Kalmakara.glb</code>) diblokir oleh browser saat dibuka langsung via <code class="font-mono text-primary">file:///</code>.
+                    </p>
+                    <div class="flex flex-col gap-2 w-full">
+                      <a href="http://localhost:3000/monolit-utama.html" target="_blank" class="px-3 py-2 bg-primary text-white text-[11px] font-mono font-bold uppercase tracking-wider shadow-xs hover:bg-primary-container transition-colors inline-flex items-center justify-center gap-1.5">
+                        <span class="material-symbols-outlined text-[15px]">open_in_browser</span>
+                        Buka di Localhost:3000
+                      </a>
+                      <button type="button" id="btn-cors-switch-2d" class="px-3 py-1.5 bg-secondary text-white text-[11px] font-mono font-bold uppercase tracking-wider shadow-xs hover:bg-secondary/90 transition-colors inline-flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span class="material-symbols-outlined text-[15px]">photo_camera</span>
+                        Beralih ke Foto 2D Sekarang
+                      </button>
+                    </div>
+                    <div class="mt-2.5 pt-2 border-t border-outline-variant/30 w-full flex items-center justify-center gap-1.5">
+                      <span class="text-[10px] text-on-surface-variant font-mono">Atau pilih file manual:</span>
+                      <label for="input-manual-glb" class="cursor-pointer text-[10px] font-mono font-bold text-primary underline hover:text-secondary">
+                        Kalmakara.glb
+                      </label>
+                      <input type="file" id="input-manual-glb" accept=".glb,.gltf" class="hidden" />
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Soft Bleed Gradients -->
+                <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent opacity-80 pointer-events-none z-20"></div>
+                <div class="absolute inset-0 bg-gradient-to-b from-surface/60 via-transparent to-transparent opacity-60 pointer-events-none z-20"></div>
+                <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-surface via-surface/60 to-transparent pointer-events-none z-20"></div>
+
+                <!-- Interactive Photogrammetry HUD Controls Bar -->
+                <div class="absolute bottom-2.5 sm:bottom-3 inset-x-2 sm:inset-x-3 z-30 flex flex-col sm:flex-row items-stretch sm:items-center justify-between text-on-surface px-space-sm sm:px-space-md py-1.5 sm:py-space-xs bg-surface/92 backdrop-blur-md border border-outline-variant/30 gap-1.5 sm:gap-2 pointer-events-auto shadow-md">
+                  <div class="flex items-center gap-space-xs min-w-0">
+                    <span class="w-2 h-2 rounded-full bg-secondary animate-pulse shrink-0"></span>
+                    <span class="text-[9.5px] sm:text-[10px] uppercase font-bold tracking-wider text-on-surface truncate" id="hud-model-label">Model 3D: Kalamakara</span>
+                  </div>
+
+                  <div class="flex items-center justify-between sm:justify-end gap-1 sm:gap-space-sm text-[9.5px] sm:text-[10px] font-mono pt-1 sm:pt-0 border-t sm:border-t-0 border-outline-variant/20">
+                    <button id="btn-toggle-auto-rotate" class="uppercase text-primary hover:text-secondary flex items-center gap-1 font-bold px-1.5 sm:px-2 py-1 sm:py-0.5 hover:bg-surface-container transition-colors cursor-pointer" title="Jeda/Lanjutkan Rotasi">
+                      <span class="material-symbols-outlined text-[13px] sm:text-[14px]">360</span>
+                      <span id="rotate-label">360° Rotasi</span>
+                    </button>
+                    <span class="text-outline-variant">|</span>
+                    <button id="btn-toggle-wireframe" class="uppercase text-primary hover:text-secondary flex items-center gap-1 font-bold px-1.5 sm:px-2 py-1 sm:py-0.5 hover:bg-surface-container transition-colors cursor-pointer" title="Mode Jaring Poligon">
+                      <span class="material-symbols-outlined text-[13px] sm:text-[14px]">layers</span>
+                      <span id="wireframe-label">Wireframe</span>
+                    </button>
+                    <span class="text-outline-variant">|</span>
+                    <button id="btn-reset-view" class="uppercase text-primary hover:text-secondary flex items-center gap-1 font-bold px-1.5 sm:px-2 py-1 sm:py-0.5 hover:bg-surface-container transition-colors cursor-pointer" title="Kembalikan Orientasi Kamera">
+                      <span class="material-symbols-outlined text-[13px] sm:text-[14px]">restart_alt</span>
+                      <span>Reset</span>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Subtle bottom caption below the offset frame -->
+              <div class="mt-space-md flex flex-col sm:flex-row sm:items-center justify-between px-space-xs gap-1">
+                <span class="text-[10px] sm:text-[11px] text-on-surface-variant font-mono">ARCA SIRAH KETENG • DUKUH KRAJAN, DESA BEDINGIN, KEC. SAMBIT</span>
+                <span class="text-[10px] sm:text-[11px] text-primary uppercase font-bold tracking-wider shrink-0">Pemindaian 2026</span>
+              </div>
+            </div>
+
+            <!-- Inline Visual Data Chart: Integritas Fisik Struktur -->
+            <div class="w-full max-w-[640px] bg-surface-container-low p-space-md mt-space-md flex items-center justify-between border border-outline-variant/30 shadow-xs">
+              <div class="flex items-center gap-space-md">
+                <svg class="w-10 h-10 text-primary flex-shrink-0" viewBox="0 0 36 36">
+                  <path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+                  <path class="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="88, 100" stroke-linecap="square" stroke-width="3.5"></path>
+                  <text class="font-mono text-[9px] fill-current text-on-surface font-bold text-center" text-anchor="middle" x="18" y="21">88%</text>
+                </svg>
+                <div class="flex flex-col">
+                  <span class="text-[13px] font-bold text-on-surface leading-tight">Integritas Fisik Struktur</span>
+                  <span class="text-[11px] text-on-surface-variant">12% degradasi mikro-rekahan pada sisi labial bawah &amp; taring kiri</span>
+                </div>
+              </div>
+              <span class="text-[10px] font-mono text-secondary bg-secondary-fixed px-space-sm py-1 font-bold shadow-xs">
+                STATUS: STABIL
+              </span>
+            </div>
+
+          </div>
+
+          <!-- ==================== RIGHT COLUMN: FUNGSI JALADWARA & KONSERVASI (Cols 10-12) ==================== -->
+          <div class="lg:col-span-3 flex flex-col gap-space-lg order-3">
+            
+            <!-- Hidrologi & Tirta Sacredness Card -->
+            <div class="bg-surface-container-lowest p-space-lg shadow-xs border border-outline-variant/40 relative overflow-hidden">
+              <div class="flex items-center justify-between pb-space-sm mb-space-sm border-b border-outline-variant/20">
+                <span class="text-[11px] uppercase text-primary font-bold tracking-widest flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 bg-primary"></span>
+                  Bagian B • Tata Kelola Air
+                </span>
+                <span class="text-[11px] text-outline font-mono font-semibold">02/JALA</span>
+              </div>
+
+              <h2 class="text-xl font-serif text-on-surface font-bold mb-space-xs leading-snug">
+                Fungsi Jaladwara &amp; Sakralitas Tirta
+              </h2>
+
+              <p class="text-[13px] text-on-surface-variant leading-relaxed mb-space-md">
+                Monolit ini bukan sekadar arca peringatan, melainkan <strong class="text-on-surface font-semibold">jaladwara (saluran pancuran air suci)</strong> aktif. Rongga silindris di dasar tenggorokan kala terhubung langsung dengan akuifer mata air vulkanik yang dialirkan menuju bilik pemandian pemurnian (<em>patirthan amritha</em>).
+              </p>
+
+              <!-- Hydrology Flow Diagram Visual -->
+              <div class="bg-surface-container-low p-space-md mb-space-md border border-outline-variant/30">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-[10px] uppercase font-bold text-primary tracking-wider">Dinamika Debit Purba</span>
+                  <span class="font-mono text-[11px] text-secondary font-bold">42 Liter/Menit</span>
+                </div>
+                <svg class="w-full h-12 text-primary" fill="none" viewBox="0 0 200 40">
+                  <path d="M0 20 Q 25 5, 50 20 T 100 20 T 150 20 T 200 20" fill="none" stroke="currentColor" stroke-opacity="0.8" stroke-width="2"></path>
+                  <path d="M0 26 Q 25 15, 50 26 T 100 26 T 150 26 T 200 26" fill="none" stroke="#b52426" stroke-dasharray="3 3" stroke-width="1.2"></path>
+                  <circle cx="50" cy="20" fill="#6f4315" r="3"></circle>
+                  <circle cx="150" cy="20" fill="#b52426" r="3"></circle>
+                </svg>
+                <div class="flex justify-between text-[10px] text-on-surface-variant font-mono mt-1">
+                  <span>Hulu: Candi Sendang</span>
+                  <span>Hilir: Saluran Sirah</span>
+                </div>
+              </div>
+
+              <p class="text-[13px] text-on-surface-variant leading-relaxed">
+                Secara kosmologis masyarakat agraris kuno Wengker (Ponorogo purba), air yang keluar melewati mulut Kala dianggap telah terbebas dari racun duniawi (<em>sarwa visa hara</em>), siap menyuburkan sawah karesian.
+              </p>
+            </div>
+
+            <!-- Bioconservation Protocol Card -->
+            <div class="bg-surface-container-high p-space-lg relative border border-outline-variant/40 shadow-xs">
+              <div class="flex items-center gap-space-xs mb-space-xs">
+                <span class="material-symbols-outlined text-secondary text-[16px]">biotech</span>
+                <span class="text-[10px] uppercase tracking-widest text-secondary font-bold">Laboratorium Cagar Budaya</span>
+              </div>
+
+              <h3 class="text-lg font-serif text-on-surface font-bold mb-space-xs">
+                Protokol Konservasi Biologis
+              </h3>
+
+              <p class="text-[13px] text-on-surface-variant leading-relaxed mb-space-md">
+                Penanganan mikroorganisme pelapuk (<em>biodeteriorasi</em>) pada matriks andesit yang terpapar kelembapan nisbi 82%:
+              </p>
+
+              <!-- List with minimal crimson indicators -->
+              <div class="flex flex-col gap-space-sm">
+                <div class="flex items-start gap-space-sm">
+                  <span class="w-1.5 h-1.5 bg-secondary mt-1.5 flex-shrink-0"></span>
+                  <div class="flex flex-col">
+                    <span class="text-[12px] font-bold text-on-surface">Pembersihan Mekanis Kering</span>
+                    <span class="text-[11px] text-on-surface-variant">Sikat ijuk halus bebas kawat untuk lumut kerak (<em>Lichenes crustaceous</em>).</span>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-space-sm">
+                  <span class="w-1.5 h-1.5 bg-primary mt-1.5 flex-shrink-0"></span>
+                  <div class="flex flex-col">
+                    <span class="text-[12px] font-bold text-on-surface">Aplikasi Biosida Minyak Atsiri</span>
+                    <span class="text-[11px] text-on-surface-variant">Formulasi cengkeh (<em>Syzygium aromaticum</em>) 2,5% tanpa senyawa klorin aktif.</span>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-space-sm">
+                  <span class="w-1.5 h-1.5 bg-secondary mt-1.5 flex-shrink-0"></span>
+                  <div class="flex flex-col">
+                    <span class="text-[12px] font-bold text-on-surface">Monitoring Dealkalisasi</span>
+                    <span class="text-[11px] text-on-surface-variant">Uji pH permukaan air berkala di ambang netral 6,8 - 7,2.</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-space-md pt-space-sm bg-surface-container-lowest p-space-sm flex items-center justify-between border border-outline-variant/30">
+                <span class="text-[10px] text-on-surface font-mono font-bold">AGENSI: BPK WILAYAH XI JATIM</span>
+                <span class="text-[10px] text-primary font-bold">AUDIT: Q3-2024</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==================== COMPARATIVE EXCAVATION & MEASUREMENT BAR ==================== -->
+      <section class="w-full bg-surface-container-low py-space-lg sm:py-space-xl border-t border-outline-variant/30">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-margin">
+          
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md pb-space-md">
+            <div>
+              <span class="text-[10px] sm:text-[11px] uppercase tracking-widest text-secondary font-bold block mb-1">Arsip Komparasi Arkeologi</span>
+              <h3 class="text-xl sm:text-2xl font-serif text-on-surface font-bold">Penampang Relung &amp; Analisis Spasial Monolit Sirah Keteng</h3>
+            </div>
+            <div class="w-full sm:w-auto">
+              <button onclick="downloadSpecReport()" class="w-full sm:w-auto justify-center bg-primary text-white px-space-md py-2.5 text-[11px] uppercase tracking-wider font-bold shadow-sm hover:bg-primary-container transition-colors flex items-center gap-1.5 cursor-pointer">
+                <span class="material-symbols-outlined text-[16px]">file_download</span>
+                <span>Unduh Laporan Litologi (PDF)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 3-Column Comparative Metrics Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter pt-space-sm">
+            
+            <!-- Comparative Tile 1 -->
+            <div class="bg-surface-container-lowest p-space-md flex flex-col justify-between border border-outline-variant/30 shadow-xs">
+              <div>
+                <div class="flex justify-between items-center text-[10px] text-outline font-mono mb-space-xs font-semibold">
+                  <span>KOMPARASI A</span>
+                  <span>CANDI BELAHAN</span>
+                </div>
+                <h4 class="text-base font-serif font-bold text-on-surface">Kalamakara Belahan (Pasuruan)</h4>
+                <p class="text-[13px] text-on-surface-variant mt-space-xs leading-relaxed">
+                  Karakter pahatan lebih halus bergaya Airlangga abad XI. Rahang bawah hilang dengan mulut menyemburkan air lurus ke kolam permaisuri.
+                </p>
+              </div>
+              <div class="mt-space-md pt-space-xs flex justify-between items-center text-[11px] font-mono text-primary font-bold border-t border-outline-variant/20">
+                <span>Andesit Halus</span>
+                <span>Massa: 3.2 Ton</span>
+              </div>
+            </div>
+
+            <!-- Comparative Tile 2 (Current Subject) -->
+            <div class="bg-surface-container-highest p-space-md flex flex-col justify-between relative shadow-md border-2 border-primary-container">
+              <div class="absolute -top-2.5 right-4 bg-secondary text-white px-space-sm py-0.5 text-[9px] uppercase font-mono font-bold shadow-xs">
+                ARTEFAK SAAT INI
+              </div>
+              <div>
+                <div class="flex justify-between items-center text-[10px] text-secondary font-mono mb-space-xs font-bold">
+                  <span>SUBJEK UTAMA</span>
+                  <span>BEJI SIRAH KETENG</span>
+                </div>
+                <h4 class="text-base font-serif font-bold text-on-surface">Kalamakara Sirah Keteng (Ponorogo)</h4>
+                <p class="text-[13px] text-on-surface-variant mt-space-xs leading-relaxed">
+                  Ekspresi arkaik peralihan dengan taring ganda melengkung ke atas, hidung singa membulat, dan integrasi lubang vertikal saluran irigasi karesian kuno.
+                </p>
+              </div>
+              <div class="mt-space-md pt-space-xs flex justify-between items-center text-[11px] font-mono text-primary font-bold border-t border-outline-variant/20">
+                <span>Andesit Porfiritik</span>
+                <span>Massa: ~1,2 Ton</span>
+              </div>
+            </div>
+
+            <!-- Comparative Tile 3 -->
+            <div class="bg-surface-container-lowest p-space-md flex flex-col justify-between border border-outline-variant/30 shadow-xs">
+              <div>
+                <div class="flex justify-between items-center text-[10px] text-outline font-mono mb-space-xs font-semibold">
+                  <span>KOMPARASI B</span>
+                  <span>CANDI JAGO</span>
+                </div>
+                <h4 class="text-base font-serif font-bold text-on-surface">Kala Singhasari (Malang)</h4>
+                <p class="text-[13px] text-on-surface-variant mt-space-xs leading-relaxed">
+                  Detail ornamen sulur-suluran lebih padat dan geometris. Berfungsi murni sebagai hiasan ambang pintu candi (<em>lintel</em>), tanpa fungsi saluran air.
+                </p>
+              </div>
+              <div class="mt-space-md pt-space-xs flex justify-between items-center text-[11px] font-mono text-primary font-bold border-t border-outline-variant/20">
+                <span>Andesit Keras</span>
+                <span>Massa: 2.1 Ton</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Next Step Navigation Plinth -->
+      <section class="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-margin py-space-lg sm:py-space-xl relative z-10">
+        <div class="bg-surface-container-high p-4 sm:p-6 lg:p-space-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-space-lg border border-outline-variant/40 shadow-xs">
+          <div class="flex items-start sm:items-center gap-3 sm:gap-space-md">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-secondary text-white flex items-center justify-center shrink-0 shadow-xs">
+              <span class="material-symbols-outlined text-[22px] sm:text-[28px]">museum</span>
+            </div>
+            <div>
+              <span class="text-[10px] uppercase tracking-widest text-primary font-bold block mb-0.5">Eksplorasi Tahap Lanjutan</span>
+              <h4 class="text-base sm:text-lg text-on-surface font-serif font-bold">Lanjutkan Menjelajahi Galeri Dokumentasi</h4>
+              <p class="text-[12.5px] sm:text-[13px] text-on-surface-variant leading-relaxed">Arsip visual ekskavasi, foto udara drone fotogrametri, dan rekaman lisan.</p>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-space-sm w-full md:w-auto shrink-0">
+            <a href="cerita-rakyat.html" class="w-full sm:w-auto text-center px-4 py-2.5 bg-surface text-primary border border-outline-variant/60 font-semibold text-[11px] uppercase tracking-wider hover:bg-surface-container transition-colors shadow-xs">
+              ← 04. Cerita Rakyat (3 Versi)
+            </a>
+            <a href="galeri-dokumentasi.html" class="w-full sm:w-auto text-center px-4 py-2.5 bg-primary-container text-white font-semibold text-[11px] uppercase tracking-wider hover:bg-primary transition-colors shadow-xs">
+              06. Galeri Dokumentasi →
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ==================== MUSEUM FOOTER ==================== -->
+  <footer class="w-full bg-surface-container-low/90 backdrop-blur-md border-t border-outline-variant/40 shadow-[0_-1px_8px_rgba(43,38,35,0.03)] relative z-10">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-margin py-space-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg">
+      <div class="flex flex-col gap-space-xs">
+        <div class="flex flex-wrap items-center gap-space-sm">
+          <span class="inline-block w-2 h-2 bg-secondary"></span>
+          <span class="text-[12px] uppercase tracking-widest text-on-surface font-bold">Situs Cagar Budaya Beji Sirah Keteng</span>
+        </div>
+        <p class="text-[13px] text-on-surface-variant max-w-xl leading-relaxed">
+          Dokumentasi fotogrametri 3D, rekaman lisan, dan eksplorasi visual situs megalitikum dan petirtaan Beji Sirah Keteng oleh Tim Riset MAN 2 Ponorogo.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-space-xl">
+        <div class="flex flex-col items-start md:items-end">
+          <span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">Metode Preservasi</span>
+          <span class="text-base font-serif text-primary font-bold">Fotogrametri 3D Lapangan</span>
+        </div>
+        <div class="h-8 w-[1px] bg-outline-variant hidden md:block"></div>
+        <div class="flex flex-wrap items-center gap-space-xs">
+          <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Koordinat Grid:</span>
+          <span class="text-[11px] text-primary font-mono bg-surface px-space-sm py-1 border border-outline-variant/40">E: 552140 N: 9130280 UTM-49S</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-surface-container/90 backdrop-blur-sm py-space-sm border-t border-outline-variant/20">
+      <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-margin flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] text-on-surface-variant">
+        <span>&copy; 2026 MAN 2 Ponorogo. Tim Riset Fotogrametri &amp; Arsip Digital Beji Sirah Keteng.</span>
+        <span class="flex items-center gap-space-xs">
+          <span class="w-2 h-2 bg-primary"></span>
+          <span>Arsip Terbuka Riset Terkurasi</span>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== THREE.JS ENGINE & INTERACTION SCRIPT ==================== -->
+  <script>
+    function downloadSpecReport() {
+      alert('Dokumentasi Karakteristik Arkeologi Beji Sirah Keteng (Tim Riset Fotogrametri MAN 2 Ponorogo).');
+    }
+
+    // Available 3D Models
+    const modelSources = {
+      model1: {
+        name: "Watu Pawukon",
+        path: "./9_25_2026 (1).glb"
+      },
+      model2: {
+        name: "Kalamakara",
+        path: "./Kalmakara.glb"
+      }
+    };
+    let currentModelKey = 'model2';
+
+    // Three.js Core Objects
+    const container = document.getElementById('threejs-canvas-monolit');
+    const loadingOverlay = document.getElementById('monolit-loading-overlay');
+    const loadingText = document.getElementById('monolit-loading-text');
+    const hudModelLabel = document.getElementById('hud-model-label');
+    const rotateLabel = document.getElementById('rotate-label');
+    const wireframeLabel = document.getElementById('wireframe-label');
+
+    let scene, camera, renderer, controls;
+    let currentModelObject = null;
+    let autoRotate = true;
+    let isWireframe = false;
+    let animFrameId = null;
+
+    function initScene() {
+      const width = container.clientWidth || 640;
+      const height = container.clientHeight || 520;
+
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x181412);
+      scene.fog = new THREE.FogExp2(0x181412, 0.08);
+
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+      camera.position.set(0, 0.7, 4.0);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.25;
+
+      container.innerHTML = '';
+      container.appendChild(renderer.domElement);
+
+      // OrbitControls
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.06;
+      controls.autoRotate = autoRotate;
+      controls.autoRotateSpeed = 1.2;
+      controls.minDistance = 1.2;
+      controls.maxDistance = 7.5;
+      controls.maxPolarAngle = Math.PI / 2 + 0.1;
+
+      // Museum Rig Lighting
+      const ambientLight = new THREE.AmbientLight(0xfff4eb, 1.5);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xfffdf6, 2.4);
+      dirLight.position.set(4, 5, 4);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 1024;
+      dirLight.shadow.mapSize.height = 1024;
+      scene.add(dirLight);
+
+      const rimLight = new THREE.DirectionalLight(0xd49b6a, 1.4);
+      rimLight.position.set(-4, -1, -3);
+      scene.add(rimLight);
+
+      const fillLight = new THREE.PointLight(0x8b5a2b, 1.2, 10);
+      fillLight.position.set(0, -1, 3);
+      scene.add(fillLight);
+
+      // Floor Shadow Receiver
+      const shadowPlaneGeo = new THREE.PlaneGeometry(12, 12);
+      const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.28 });
+      const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
+      shadowPlane.rotation.x = -Math.PI / 2;
+      shadowPlane.position.y = -1.25;
+      shadowPlane.receiveShadow = true;
+      scene.add(shadowPlane);
+
+      // Resize Observer
+      const resizeObserver = new ResizeObserver(() => {
+        if (!container.clientWidth || !container.clientHeight) return;
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      });
+      resizeObserver.observe(container);
+
+      // Load initial model
+      loadGLTFModel(modelSources[currentModelKey].path);
+
+      // Start Render Loop
+      function renderLoop() {
+        animFrameId = requestAnimationFrame(renderLoop);
+        if (controls) controls.update();
+        if (renderer && scene && camera) {
+          renderer.render(scene, camera);
+        }
+      }
+      renderLoop();
+    }
+
+    const gltfLoader = new THREE.GLTFLoader();
+
+    function setupLoadedModel(gltf) {
+      const model = gltf.scene;
+      currentModelObject = model;
+
+      let triangleCount = 0;
+      model.traverse(function (child) {
+        if (child.isMesh) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+          if (child.geometry && child.geometry.index) {
+            triangleCount += child.geometry.index.count / 3;
+          } else if (child.geometry && child.geometry.attributes && child.geometry.attributes.position) {
+            triangleCount += child.geometry.attributes.position.count / 3;
+          }
+          if (child.material) {
+            child.material.roughness = THREE.MathUtils.clamp(child.material.roughness || 0.85, 0.7, 1.0);
+            child.material.wireframe = isWireframe;
+          }
+        }
+      });
+
+      // Normalize and center
+      const box = new THREE.Box3().setFromObject(model);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+
+      const maxDim = Math.max(size.x, size.y, size.z) || 1;
+      const targetScale = 2.4 / maxDim;
+      model.scale.set(targetScale, targetScale, targetScale);
+
+      model.position.x = -center.x * targetScale;
+      model.position.y = -center.y * targetScale;
+      model.position.z = -center.z * targetScale;
+
+      scene.add(model);
+
+      if (hudModelLabel) {
+        hudModelLabel.textContent = `Model 3D: ${modelSources[currentModelKey].name}`;
+      }
+
+      if (loadingOverlay) {
+        loadingOverlay.style.opacity = '0';
+        setTimeout(() => {
+          loadingOverlay.classList.add('hidden');
+          loadingOverlay.style.display = 'none';
+        }, 300);
+      }
+
+      camera.position.set(0, 0.6, 3.8);
+      controls.target.set(0, 0, 0);
+      controls.update();
+    }
+
+    function loadGLTFModel(src, isBlob = false) {
+      if (!loadingOverlay) return;
+      loadingOverlay.classList.remove('hidden');
+      loadingOverlay.style.display = 'flex';
+      loadingOverlay.style.opacity = '1';
+
+      const spinnerBox = document.getElementById('loading-spinner-box');
+      const corsNotice = document.getElementById('local-cors-notice');
+      if (spinnerBox) spinnerBox.classList.remove('hidden');
+      if (corsNotice) corsNotice.classList.add('hidden');
+
+      loadingText.textContent = isBlob ? "Memproses file GLB pilihan..." : `Mengunduh ${modelSources[currentModelKey].name}...`;
+
+      if (currentModelObject) {
+        scene.remove(currentModelObject);
+        currentModelObject = null;
+      }
+
+      gltfLoader.load(
+        src,
+        function (gltf) {
+          setupLoadedModel(gltf);
+        },
+        function (xhr) {
+          if (xhr.lengthComputable && xhr.total > 0) {
+            const percent = Math.round((xhr.loaded / xhr.total) * 100);
+            loadingText.textContent = `Mengunduh model: ${percent}% (${(xhr.loaded / (1024 * 1024)).toFixed(1)} MB)`;
+          } else {
+            loadingText.textContent = `Memproses geometri (${(xhr.loaded / (1024 * 1024)).toFixed(1)} MB)...`;
+          }
+        },
+        function (error) {
+          console.error("Gagal memuat GLB:", error);
+          if (spinnerBox) spinnerBox.classList.add('hidden');
+          if (corsNotice) corsNotice.classList.remove('hidden');
+        }
+      );
+    }
+
+    // Initialize 3D on load
+    initScene();
+
+    // Model Selector Buttons
+    const btnModel1 = document.getElementById('btn-model-1');
+    const btnModel2 = document.getElementById('btn-model-2');
+
+    btnModel1?.addEventListener('click', () => {
+      if (currentModelKey === 'model1') return;
+      currentModelKey = 'model1';
+      btnModel1.className = 'px-2 py-0.5 text-[9px] font-mono uppercase font-bold bg-secondary text-white transition-all cursor-pointer';
+      btnModel2.className = 'px-2 py-0.5 text-[9px] font-mono uppercase font-bold text-on-surface-variant hover:text-on-surface transition-all cursor-pointer';
+      loadGLTFModel(modelSources.model1.path);
+    });
+
+    btnModel2?.addEventListener('click', () => {
+      if (currentModelKey === 'model2') return;
+      currentModelKey = 'model2';
+      btnModel2.className = 'px-2 py-0.5 text-[9px] font-mono uppercase font-bold bg-secondary text-white transition-all cursor-pointer';
+      btnModel1.className = 'px-2 py-0.5 text-[9px] font-mono uppercase font-bold text-on-surface-variant hover:text-on-surface transition-all cursor-pointer';
+      loadGLTFModel(modelSources.model2.path);
+    });
+
+    // 2D Photo / 3D Mode Toggle
+    const btnMode3D = document.getElementById('btn-mode-3d');
+    const btnMode2D = document.getElementById('btn-mode-2d');
+    const photo2DContainer = document.getElementById('photo-2d-container');
+    const centerStatusText = document.getElementById('center-status-text');
+
+    btnMode3D?.addEventListener('click', () => {
+      photo2DContainer.classList.add('hidden');
+      container.classList.remove('hidden');
+      btnMode3D.className = 'px-3 py-1.5 text-[11px] font-mono uppercase font-bold bg-primary text-white shadow-xs transition-all cursor-pointer flex items-center gap-1.5';
+      btnMode2D.className = 'px-3 py-1.5 text-[11px] font-mono uppercase font-bold bg-surface-container hover:bg-surface text-on-surface-variant transition-all cursor-pointer border border-outline-variant/30 flex items-center gap-1.5';
+      if (centerStatusText) centerStatusText.textContent = 'INTERAKTIF 3D ORBIT AKTIF • 360° Rotasi Morfologi';
+      if (hudModelLabel) hudModelLabel.textContent = `Model 3D: ${modelSources[currentModelKey].name}`;
+
+      if (currentModelObject) {
+        loadingOverlay.classList.add('hidden');
+        loadingOverlay.style.display = 'none';
+      } else {
+        loadingOverlay.style.display = 'flex';
+        loadingOverlay.classList.remove('hidden');
+        loadGLTFModel(modelSources[currentModelKey].path);
+      }
+    });
+
+    btnMode2D?.addEventListener('click', () => {
+      container.classList.add('hidden');
+      photo2DContainer.classList.remove('hidden');
+      loadingOverlay.classList.add('hidden');
+      loadingOverlay.style.display = 'none';
+
+      btnMode2D.className = 'px-3 py-1.5 text-[11px] font-mono uppercase font-bold bg-secondary text-white shadow-xs transition-all cursor-pointer flex items-center gap-1.5';
+      btnMode3D.className = 'px-3 py-1.5 text-[11px] font-mono uppercase font-bold bg-surface-container hover:bg-surface text-on-surface-variant transition-all cursor-pointer border border-outline-variant/30 flex items-center gap-1.5';
+      if (centerStatusText) centerStatusText.textContent = 'MODE FOTO ARSIP 2D • Dokumentasi Asli Lapangan';
+      if (hudModelLabel) hudModelLabel.textContent = 'FOTO DETAIL: PAHATAN MONOLIT UTAMA';
+    });
+
+    // Wire local CORS switch button and banner switch button
+    document.getElementById('btn-cors-switch-2d')?.addEventListener('click', () => {
+      btnMode2D?.click();
+    });
+    document.getElementById('btn-banner-switch-2d')?.addEventListener('click', () => {
+      btnMode2D?.click();
+    });
+
+    // Manual File Picker fallback (reads local GLB into memory without CORS)
+    const inputManualGLB = document.getElementById('input-manual-glb');
+    inputManualGLB?.addEventListener('change', function(e) {
+      const file = e.target.files && e.target.files[0];
+      if (file) {
+        const blobUrl = URL.createObjectURL(file);
+        loadGLTFModel(blobUrl, true);
+      }
+    });
+
+    // Drag & drop GLB support onto viewport
+    container.addEventListener('dragover', (e) => e.preventDefault());
+    container.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        const file = e.dataTransfer.files[0];
+        const blobUrl = URL.createObjectURL(file);
+        loadGLTFModel(blobUrl, true);
+      }
+    });
+
+    // Detect file:/// protocol and display top advisory banner
+    if (window.location.protocol === 'file:') {
+      const banner = document.getElementById('file-protocol-banner');
+      if (banner) banner.classList.remove('hidden');
+      document.getElementById('btn-close-file-banner')?.addEventListener('click', () => {
+        banner.classList.add('hidden');
+      });
+    }
+
+    // Support URL param ?view=2d or #2d
+    if (window.location.hash === '#2d' || window.location.search.includes('view=2d')) {
+      setTimeout(() => {
+        btnMode2D?.click();
+      }, 150);
+    }
+
+    // HUD Actions
+    document.getElementById('btn-toggle-auto-rotate')?.addEventListener('click', () => {
+      autoRotate = !autoRotate;
+      if (controls) controls.autoRotate = autoRotate;
+      if (rotateLabel) rotateLabel.textContent = autoRotate ? '360° Rotasi' : 'Jeda Rotasi';
+    });
+
+    document.getElementById('btn-toggle-wireframe')?.addEventListener('click', () => {
+      isWireframe = !isWireframe;
+      if (currentModelObject) {
+        currentModelObject.traverse((child) => {
+          if (child.isMesh && child.material) {
+            child.material.wireframe = isWireframe;
+          }
+        });
+      }
+      if (wireframeLabel) wireframeLabel.textContent = isWireframe ? 'Batu Asli' : 'Wireframe';
+    });
+
+    document.getElementById('btn-reset-view')?.addEventListener('click', () => {
+      if (camera && controls) {
+        camera.position.set(0, 0.6, 3.8);
+        controls.target.set(0, 0, 0);
+        controls.update();
+      }
+    });
+  </script>
+  <script src="./lang.js"></script>
+</body>
+</html>

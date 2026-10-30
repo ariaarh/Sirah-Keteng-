@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Eksplorasi Lingkungan 3D • Kawasan Beji Sirah Keteng</title>
+
+  <!-- Google Fonts & Material Symbols -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#85532a',
+            'primary-container': '#a16838',
+            secondary: '#6e5b47',
+            accent: '#0284c7',
+            surface: '#151311',
+            'surface-container': '#201b17',
+            'surface-container-high': '#2c2520',
+            'on-surface': '#f3ede8',
+            'on-surface-variant': '#bfae9f',
+            'outline-variant': '#524338'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            serif: ['"Noto Serif"', 'serif'],
+            display: ['"Cinzel"', 'serif'],
+            mono: ['ui-monospace', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Three.js and Loaders -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    body {
+      touch-action: none;
+      overflow: hidden;
+      background-color: #12100e;
+    }
+    .hud-blur {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    /* Crosshair for first-person pointer lock */
+    #crosshair {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    #crosshair::before, #crosshair::after {
+      content: '';
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.75);
+    }
+    #crosshair::before {
+      top: 3px; left: -8px; width: 24px; height: 2px;
+    }
+    #crosshair::after {
+      top: -8px; left: 3px; width: 2px; height: 24px;
+    }
+    /* Virtual Joystick & Mobile Controls Styles */
+    #mobile-controls-container {
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    #joystick-container {
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    #touch-look-zone {
+      touch-action: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    /* Compass / Minimap Radar */
+    #radar-canvas {
+      width: 104px;
+      height: 104px;
+      border-radius: 50%;
+      background: rgba(21, 19, 17, 0.85);
+      border: 2px solid rgba(133, 83, 42, 0.7);
+    }
+  </style>
+</head>
+
+<body class="w-full h-full text-on-surface font-sans select-none relative">
+
+  <!-- ================= CANVAS 3D CONTAINER ================= -->
+  <div id="webgl-container" class="absolute inset-0 w-full h-full z-0 cursor-grab active:cursor-grabbing"></div>
+
+  <!-- Reticle / Crosshair (Desktop Walkthrough Mode) -->
+  <div id="crosshair" class="hidden opacity-0"></div>
+
+  <!-- ================= MOBILE TOUCH CONTROLLER INTERFACE ================= -->
+  <div id="mobile-controls-container" class="hidden fixed inset-0 pointer-events-none z-30 select-none overflow-hidden">
+    
+    <!-- Left Hand: Virtual Analog Joystick & Sprint Toggle -->
+    <div class="absolute bottom-6 left-4 sm:left-8 flex flex-col items-center gap-3 pointer-events-auto">
+      
+      <!-- Sprint Toggle Button -->
+      <button id="btn-mobile-sprint" type="button" class="px-3.5 py-1.5 rounded-full bg-surface-container-high/90 hud-blur border border-outline-variant/80 text-on-surface-variant text-[11px] font-semibold tracking-wide flex items-center gap-1.5 shadow-lg active:scale-95 transition-all" title="Mode Lari / Jalan">
+        <span class="material-symbols-outlined text-[17px] text-amber-500">directions_run</span>
+        <span id="sprint-label">Lari Cepat</span>
+      </button>
+
+      <!-- Glassmorphic Analog Joystick Base -->
+      <div id="joystick-container" class="relative w-[130px] h-[130px] rounded-full border-2 border-primary/60 bg-black/55 hud-blur shadow-[0_8px_32px_rgba(0,0,0,0.6)] flex items-center justify-center touch-none select-none">
+        <!-- Directional indicators -->
+        <span id="joy-arrow-up" class="absolute top-1.5 left-1/2 -translate-x-1/2 text-[10px] font-bold text-on-surface-variant/70 transition-colors pointer-events-none">▲</span>
+        <span id="joy-arrow-down" class="absolute bottom-1.5 left-1/2 -translate-x-1/2 text-[10px] font-bold text-on-surface-variant/70 transition-colors pointer-events-none">▼</span>
+        <span id="joy-arrow-left" class="absolute left-2 top-1/2 -translate-y-1/2 text-[10px] font-bold text-on-surface-variant/70 transition-colors pointer-events-none">◀</span>
+        <span id="joy-arrow-right" class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] font-bold text-on-surface-variant/70 transition-colors pointer-events-none">▶</span>
+        
+        <!-- Outer ring guideline -->
+        <div class="w-[84px] h-[84px] rounded-full border border-dashed border-white/20 pointer-events-none"></div>
+
+        <!-- Thumb knob -->
+        <div id="joystick-thumb" class="absolute w-[52px] h-[52px] rounded-full bg-gradient-to-br from-amber-100 via-amber-600 to-amber-900 border-2 border-white/90 shadow-[0_4px_16px_rgba(0,0,0,0.6)] flex items-center justify-center pointer-events-none will-change-transform">
+          <div class="w-3 h-3 rounded-full bg-white/70"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Hand: Touch Look Area & Quick Turn Buttons -->
+    <div id="touch-look-zone" class="absolute top-16 right-0 bottom-0 w-[55vw] pointer-events-auto touch-none select-none z-10">
+      
+      <!-- Quick Turn Buttons (Right Side) -->
+      <div class="absolute right-3.5 bottom-28 flex flex-col items-end gap-2.5 pointer-events-auto z-20">
+        <button id="btn-turn-left" type="button" class="w-10 h-10 rounded-full bg-surface-container-high/90 hud-blur border border-outline-variant/80 text-on-surface hover:text-primary flex items-center justify-center shadow-lg active:scale-90 transition-all" title="Putar Kiri 45°">
+          <span class="material-symbols-outlined text-[20px]">rotate_left</span>
+        </button>
+        <button id="btn-turn-right" type="button" class="w-10 h-10 rounded-full bg-surface-container-high/90 hud-blur border border-outline-variant/80 text-on-surface hover:text-primary flex items-center justify-center shadow-lg active:scale-90 transition-all" title="Putar Kanan 45°">
+          <span class="material-symbols-outlined text-[20px]">rotate_right</span>
+        </button>
+        <button id="btn-reset-view" type="button" class="w-10 h-10 rounded-full bg-surface-container-high/90 hud-blur border border-outline-variant/80 text-on-surface hover:text-primary flex items-center justify-center shadow-lg active:scale-90 transition-all" title="Ratakan Pandangan">
+          <span class="material-symbols-outlined text-[18px]">visibility</span>
+        </button>
+      </div>
+
+      <!-- Temporary Touch Hint Pill -->
+      <div id="mobile-look-hint" class="absolute bottom-20 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/75 hud-blur border border-white/10 rounded-full text-[10.5px] font-mono text-white/90 whitespace-nowrap shadow-md pointer-events-none transition-opacity duration-700">
+        👆 Usap layar kanan untuk putar pandangan
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= TOP HEADER NAVIGATION ================= -->
+  <header class="absolute top-0 inset-x-0 z-40 p-3 sm:p-5 flex items-center justify-between gap-3 pointer-events-none">
+    
+    <!-- Left: Back Button & Site Identity -->
+    <div class="flex items-center gap-2 sm:gap-3 pointer-events-auto">
+      <a href="index.html" class="flex items-center gap-1.5 px-3 py-2 bg-surface/90 hover:bg-surface-container-high hud-blur border border-outline-variant/60 rounded-lg shadow-md transition-all text-xs font-semibold text-on-surface hover:text-primary">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        <span class="hidden sm:inline">Kembali ke Website</span>
+        <span class="sm:hidden">Kembali</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-2.5 px-3.5 py-2 bg-surface/85 hud-blur border border-outline-variant/50 rounded-lg shadow-md">
+        <img src="./logo-man2p.png" alt="Logo MAN 2 Ponorogo" class="w-6 h-6 object-contain" />
+        <div class="flex flex-col">
+          <span class="text-[11px] font-bold tracking-wider uppercase text-on-surface">Kawasan Beji Sirah Keteng</span>
+          <span class="text-[9.5px] font-mono text-on-surface-variant">Rekonstruksi Spasial Lapangan &amp; 3D Scan</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center/Right: View Mode & Utility Buttons -->
+    <div class="flex items-center gap-2 pointer-events-auto">
+      
+      <!-- View Mode Selector -->
+      <div class="flex items-center bg-surface/90 hud-blur p-1 border border-outline-variant/60 rounded-lg shadow-md">
+        <button id="btn-mode-walk" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary text-white text-[11px] font-semibold tracking-wider transition-all shadow-sm" title="Jelajah Orang Pertama (WASD/Sentuh)">
+          <span class="material-symbols-outlined text-[16px]">directions_walk</span>
+          <span class="hidden sm:inline">Jalan Kaki</span>
+        </button>
+        <button id="btn-mode-drone" class="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-on-surface-variant hover:text-white text-[11px] font-semibold tracking-wider transition-all" title="Pandangan Udara / Drone 360°">
+          <span class="material-symbols-outlined text-[16px]">videocam</span>
+          <span class="hidden sm:inline">Kamera Udara</span>
+        </button>
+      </div>
+
+      <!-- Audio Ambience Toggle -->
+      <button id="btn-toggle-audio" class="p-2 sm:px-3 sm:py-2 bg-surface/90 hover:bg-surface-container-high hud-blur border border-outline-variant/60 rounded-lg shadow-md transition-all text-xs font-semibold text-on-surface-variant hover:text-white flex items-center gap-1.5" title="Suara Alam Sendang (Air & Angin)">
+        <span class="material-symbols-outlined text-[18px]" id="audio-icon">volume_off</span>
+        <span class="hidden lg:inline" id="audio-label">Suara Sendang</span>
+      </button>
+
+      <!-- Hotspots Toggle -->
+      <button id="btn-toggle-hotspots" class="p-2 sm:px-3 sm:py-2 bg-surface/90 hover:bg-surface-container-high hud-blur border border-outline-variant/60 rounded-lg shadow-md transition-all text-xs font-semibold text-primary flex items-center gap-1.5" title="Tampilkan/Sembunyikan Titik Sejarah">
+        <span class="material-symbols-outlined text-[18px]">location_on</span>
+        <span class="hidden lg:inline">Titik Situs</span>
+      </button>
+
+      <!-- Help / Instructions Button -->
+      <button id="btn-open-help" class="p-2 bg-surface/90 hover:bg-surface-container-high hud-blur border border-outline-variant/60 rounded-lg shadow-md transition-all text-on-surface-variant hover:text-white flex items-center justify-center" title="Panduan Kontrol Navigasi">
+        <span class="material-symbols-outlined text-[18px]">help_outline</span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ================= BOTTOM HUD ================= -->
+  <div class="absolute bottom-0 inset-x-0 z-40 p-3 sm:p-5 flex items-end justify-between pointer-events-none">
+    
+    <!-- Left: Location HUD & Model Info -->
+    <div class="pointer-events-auto flex flex-col gap-1.5">
+      <!-- Desktop Full Location Card (Hidden on mobile to preserve screen space for Joystick) -->
+      <div class="hidden sm:block bg-surface/90 hud-blur px-3.5 py-2.5 border border-outline-variant/60 rounded-lg shadow-md max-w-xs sm:max-w-sm">
+        <div class="flex items-center gap-2 mb-1">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-[10px] uppercase tracking-widest font-mono font-bold text-on-surface-variant">ZONASI AKTIF</span>
+        </div>
+        <h3 class="text-xs sm:text-sm font-serif font-bold text-on-surface leading-tight" id="hud-location-title">
+          Pelataran Luar Cagar Budaya Beji Sirah Keteng
+        </h3>
+        <p class="text-[11px] text-on-surface-variant leading-relaxed mt-0.5" id="hud-location-desc">
+          Pintu masuk Gapura Candi Bentar bata merah menghadap pelataran suci monolit Kalamakara, berdampingan dengan waduk danau Sendang Beji.
+        </p>
+      </div>
+
+      <!-- Quick Hint on Desktop Walk Mode -->
+      <div id="desktop-walk-hint" class="hidden sm:flex items-center gap-2 bg-black/60 hud-blur px-3 py-1.5 rounded-md border border-white/10 text-[10.5px] font-mono text-on-surface-variant">
+        <span>Gunakan <strong class="text-white">WASD</strong> jalan • <strong class="text-white">Klik</strong> kunci mouse • <strong class="text-white">Shift</strong> lari santai</span>
+      </div>
+    </div>
+
+    <!-- Right: Mini Radar & Quick Teleport -->
+    <div class="pointer-events-auto flex flex-col items-end gap-2">
+      <!-- Radar Canvas -->
+      <div class="relative shadow-lg">
+        <canvas id="radar-canvas" width="104" height="104" title="Peta Radar Posisi"></canvas>
+        <span class="absolute top-1 left-1/2 -translate-x-1/2 text-[8px] font-mono font-bold text-primary">U</span>
+      </div>
+
+      <!-- Reset / Teleport Buttons -->
+      <div class="flex items-center gap-1.5">
+        <button id="btn-tele-gate" class="px-2.5 py-1.5 bg-surface/90 hover:bg-surface-container-high hud-blur border border-outline-variant/60 rounded-md shadow text-[10px] font-mono text-on-surface-variant hover:text-white flex items-center gap-1 transition-all" title="Ke Gapura Arca">
+          <span class="material-symbols-outlined text-[13px]">door_front</span>
+          <span>Gapura</span>
+        </button>
+        <button id="btn-tele-lake" class="px-2.5 py-1.5 bg-surface/90 hover:bg-surface-container-high hud-blur border border-outline-variant/60 rounded-md shadow text-[10px] font-mono text-on-surface-variant hover:text-white flex items-center gap-1 transition-all" title="Ke Tepi Danau Sendang">
+          <span class="material-symbols-outlined text-[13px]">waves</span>
+          <span>Danau</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= LOADING OVERLAY ================= -->
+  <div id="loading-overlay" class="absolute inset-0 z-50 bg-[#12100e] flex flex-col items-center justify-center p-6 text-center transition-opacity duration-500">
+    <div class="w-16 h-16 relative flex items-center justify-center mb-6">
+      <div class="w-full h-full border-4 border-outline-variant/30 border-t-primary rounded-full animate-spin"></div>
+      <span class="material-symbols-outlined text-primary text-[28px] absolute">nature_people</span>
+    </div>
+
+    <h2 class="text-xl sm:text-2xl font-serif font-bold text-on-surface mb-2 tracking-wide">
+      Menyiapkan Rekonstruksi Spasial Kawasan
+    </h2>
+    <p id="loading-status" class="text-xs sm:text-sm font-mono text-on-surface-variant max-w-md leading-relaxed mb-6">
+      Menata danau sendang, gapura candi bentar, serta menempatkan model 3D fotogrametri...
+    </p>
+
+    <!-- Progress Bar -->
+    <div class="w-64 sm:w-80 h-1.5 bg-surface-container-high rounded-full overflow-hidden border border-outline-variant/40">
+      <div id="loading-bar" class="h-full bg-gradient-to-r from-primary to-accent transition-all duration-300 w-12"></div>
+    </div>
+  </div>
+
+  <!-- ================= INSTRUCTION & WELCOME MODAL ================= -->
+  <div id="welcome-modal" class="absolute inset-0 z-50 bg-black/80 hud-blur flex items-center justify-center p-4 transition-opacity duration-300 hidden">
+    <div class="bg-surface-container border border-outline-variant/80 rounded-xl p-5 sm:p-7 max-w-lg w-full shadow-2xl relative">
+      <button id="btn-close-welcome" class="absolute top-4 right-4 text-on-surface-variant hover:text-white p-1">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-lg bg-primary/20 text-primary flex items-center justify-center border border-primary/40">
+          <span class="material-symbols-outlined text-[24px]">explore</span>
+        </div>
+        <div>
+          <span class="text-[10px] uppercase font-mono tracking-widest text-primary font-bold">Simulasi Virtual Lapangan</span>
+          <h3 class="text-lg font-serif font-bold text-on-surface">Tata Letak Kawasan Beji Sirah Keteng</h3>
+        </div>
+      </div>
+
+      <p class="text-xs sm:text-[13px] text-on-surface-variant leading-relaxed mb-4">
+        Lingkungan 3D ini telah disusun berdasarkan foto dokumentasi tapak asli: danau sendang memanjang di sisi utara, bilik gapura bata merah tempat Arca Kalamakara bertahta di tengah, dan pendopo wisata di sisi barat.
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 text-xs">
+        <!-- Mobile Controls (Featured First) -->
+        <div class="p-3 bg-surface-container-high rounded-lg border-2 border-primary/50 flex flex-col gap-1.5 shadow-sm">
+          <span class="font-bold text-primary flex items-center gap-1.5 text-[12.5px]">
+            <span class="material-symbols-outlined text-[17px] text-accent">smartphone</span> Di Ponsel / Tablet (Layar Sentuh):
+          </span>
+          <ul class="text-on-surface space-y-1.5 font-sans text-[11.5px] leading-relaxed">
+            <li>• <strong>🕹️ Analog Virtual (Kiri)</strong> : Geser untuk berjalan ke segala arah</li>
+            <li>• <strong>🔄 Usap Layar (Kanan)</strong> : Putar arah pandangan 360°</li>
+            <li>• <strong>↶ / ↷ Tombol Putar</strong> : Putar cepat arah 45° secara presisi</li>
+            <li>• <strong>🏃 Tombol Lari</strong> : Tekan untuk beralih jalan / lari cepat</li>
+            <li>• <strong>🚁 Kamera Udara</strong> : Lihat denah kawasan dari ketinggian</li>
+          </ul>
+        </div>
+
+        <!-- PC Controls -->
+        <div class="p-3 bg-surface-container-high rounded-lg border border-outline-variant/40 flex flex-col gap-1.5">
+          <span class="font-bold text-on-surface flex items-center gap-1.5 text-[12.5px]">
+            <span class="material-symbols-outlined text-[17px] text-primary">computer</span> Di Laptop / Komputer:
+          </span>
+          <ul class="text-on-surface-variant space-y-1.5 font-mono text-[11px] leading-relaxed">
+            <li>• <strong>W, A, S, D</strong> : Berjalan (Maju, Mundur, Samping)</li>
+            <li>• <strong>Mouse</strong> : Putar arah pandangan</li>
+            <li>• <strong>Klik Layar</strong> : Kunci kursor kacamata</li>
+            <li>• <strong>Shift</strong> : Lari santai</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end gap-3">
+        <button id="btn-start-explore" class="w-full sm:w-auto px-6 py-2.5 bg-primary hover:bg-primary-container text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-md transition-all flex items-center justify-center gap-2">
+          <span>Mulai Menjelajah</span>
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= HOTSPOT POPUP MODAL ================= -->
+  <div id="hotspot-modal" class="absolute top-20 left-1/2 -translate-x-1/2 z-40 bg-surface-container/95 hud-blur border border-outline-variant/80 rounded-xl p-4 sm:p-5 max-w-sm sm:max-w-md w-[92vw] shadow-2xl transition-all duration-300 hidden">
+    <div class="flex items-start justify-between gap-3 mb-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+        <h4 class="text-sm font-serif font-bold text-on-surface" id="hotspot-title">Nama Objek</h4>
+      </div>
+      <button id="btn-close-hotspot" class="text-on-surface-variant hover:text-white p-0.5">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+    <p class="text-xs text-on-surface-variant leading-relaxed mb-3" id="hotspot-desc">
+      Deskripsi arkeologis dan informasi situs Beji Sirah Keteng.
+    </p>
+    <div class="flex items-center justify-between pt-2 border-t border-outline-variant/40 text-[10px] font-mono text-on-surface-variant">
+      <span id="hotspot-category">Cagar Budaya</span>
+      <span class="text-primary font-semibold">Observasi Spasial Lapangan</span>
+    </div>
+  </div>
+
+
+  <!-- ================= JAVASCRIPT ENGINE ================= -->
+  <script>
+    (function () {
+      'use strict';
+
+      // --- DOM Elements ---
+      const container = document.getElementById('webgl-container');
+      const crosshair = document.getElementById('crosshair');
+      const loadingOverlay = document.getElementById('loading-overlay');
+      const loadingStatus = document.getElementById('loading-status');
+      const loadingBar = document.getElementById('loading-bar');
+      const welcomeModal = document.getElementById('welcome-modal');
+      const btnCloseWelcome = document.getElementById('btn-close-welcome');
+      const btnStartExplore = document.getElementById('btn-start-explore');
+      const btnOpenHelp = document.getElementById('btn-open-help');
+      const btnModeWalk = document.getElementById('btn-mode-walk');
+      const btnModeDrone = document.getElementById('btn-mode-drone');
+      const btnToggleAudio = document.getElementById('btn-toggle-audio');
+      const audioIcon = document.getElementById('audio-icon');
+      const audioLabel = document.getElementById('audio-label');
+      const btnToggleHotspots = document.getElementById('btn-toggle-hotspots');
+      const btnTeleGate = document.getElementById('btn-tele-gate');
+      const btnTeleLake = document.getElementById('btn-tele-lake');
+      const desktopWalkHint = document.getElementById('desktop-walk-hint');
+      const radarCanvas = document.getElementById('radar-canvas');
+      const radarCtx = radarCanvas.getContext('2d');
+
+      const hotspotModal = document.getElementById('hotspot-modal');
+      const btnCloseHotspot = document.getElementById('btn-close-hotspot');
+      const hotspotTitle = document.getElementById('hotspot-title');
+      const hotspotDesc = document.getElementById('hotspot-desc');
+      const hotspotCategory = document.getElementById('hotspot-category');
+
+      // Mobile controller elements
+      const mobileControlsContainer = document.getElementById('mobile-controls-container');
+      const joystickContainer = document.getElementById('joystick-container');
+      const joystickThumb = document.getElementById('joystick-thumb');
+      const btnMobileSprint = document.getElementById('btn-mobile-sprint');
+      const sprintLabel = document.getElementById('sprint-label');
+      const touchLookZone = document.getElementById('touch-look-zone');
+      const btnTurnLeft = document.getElementById('btn-turn-left');
+      const btnTurnRight = document.getElementById('btn-turn-right');
+      const btnResetView = document.getElementById('btn-reset-view');
+      const mobileLookHint = document.getElementById('mobile-look-hint');
+      const joyArrowUp = document.getElementById('joy-arrow-up');
+      const joyArrowDown = document.getElementById('joy-arrow-down');
+      const joyArrowLeft = document.getElementById('joy-arrow-left');
+      const joyArrowRight = document.getElementById('joy-arrow-right');
+
+      // --- Scene Variables ---
+      let scene, camera, renderer, orbitControls;
+      let clock = new THREE.Clock();
+      let isFirstPerson = true;
+
+      function detectMobile() {
+        const uaMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const touchPoints = (navigator.maxTouchPoints > 0) || ('ontouchstart' in window);
+        return uaMobile || (touchPoints && window.innerWidth <= 1024) || window.innerWidth < 820;
+      }
+      let isMobile = detectMobile();
+
+      function syncMobileControlsVisibility() {
+        isMobile = detectMobile();
+        if (isMobile && isFirstPerson) {
+          if (mobileControlsContainer) mobileControlsContainer.classList.remove('hidden');
+          if (desktopWalkHint) desktopWalkHint.classList.add('hidden');
+        } else {
+          if (mobileControlsContainer) mobileControlsContainer.classList.add('hidden');
+          if (desktopWalkHint && isFirstPerson) desktopWalkHint.classList.remove('hidden');
+        }
+      }
+
+      // Model Registry
+      const loadedModels = {
+        bangunan: null,
+        kalamakara: null,
+        watuPawukon: null
+      };
+
+      // Water & Environment components
+      let lakeMesh = null;
+      let waterNormalTex = null;
+      let beacons = [];
+      let showBeacons = true;
+
+      // Sound Synthesizer
+      let audioCtx = null;
+      let isAudioPlaying = false;
+      let waterNoiseNode = null;
+      let windNoiseNode = null;
+
+      // Player Movement Variables
+      const player = {
+        position: new THREE.Vector3(0, 1.65, 18), // Start at front pathway facing Candi Bentar gate
+        velocity: new THREE.Vector3(),
+        direction: new THREE.Vector3(),
+        yaw: 0,
+        pitch: 0,
+        height: 1.65,
+        speed: 5.5,
+        sprintMultiplier: 1.8,
+        isMoving: false,
+        bobTimer: 0
+      };
+
+      const keys = {
+        forward: false,
+        backward: false,
+        left: false,
+        right: false,
+        sprint: false
+      };
+
+      let joystickState = { active: false, x: 0, y: 0, startX: 0, startY: 0 };
+      let touchLookState = { active: false, lastX: 0, lastY: 0 };
+      let isPointerLocked = false;
+
+      // --- 1. PROCEDURAL TEXTURE GENERATORS ---
+      // Red Terracotta Brick Texture (for Candi Bentar Gate and Enclosure Walls)
+      function createRedBrickTexture() {
+        const c = document.createElement('canvas');
+        c.width = 512; c.height = 512;
+        const ctx = c.getContext('2d');
+        // Mortar base
+        ctx.fillStyle = '#6e5f56';
+        ctx.fillRect(0, 0, 512, 512);
+
+        const rows = 16, cols = 8;
+        const h = 512 / rows, w = 512 / cols;
+        for (let r = 0; r < rows; r++) {
+          for (let col = 0; col < cols; col++) {
+            const offset = (r % 2 === 0) ? 0 : w / 2;
+            const x = (col * w + offset) % 512;
+            const y = r * h;
+            // Warm terracotta shades matching photo
+            const red = 150 + Math.floor(Math.random() * 35);
+            const green = 65 + Math.floor(Math.random() * 20);
+            const blue = 45 + Math.floor(Math.random() * 15);
+            ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
+            ctx.fillRect(x + 2, y + 2, w - 4, h - 4);
+
+            // Aged speckles / patina
+            ctx.fillStyle = 'rgba(0,0,0,0.12)';
+            for (let s = 0; s < 15; s++) {
+              ctx.fillRect(x + Math.random() * w, y + Math.random() * h, 2, 2);
+            }
+          }
+        }
+        const tex = new THREE.CanvasTexture(c);
+        tex.wrapS = THREE.RepeatWrapping;
+        tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(4, 4);
+        return tex;
+      }
+
+      // Natural Earthen Soil with Grass Speckles
+      function createEarthGroundTexture() {
+        const c = document.createElement('canvas');
+        c.width = 512; c.height = 512;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#4a4133'; // Dry rural earth
+        ctx.fillRect(0, 0, 512, 512);
+
+        for (let i = 0; i < 35000; i++) {
+          const x = Math.random() * 512;
+          const y = Math.random() * 512;
+          const r = Math.random();
+          if (r > 0.6) ctx.fillStyle = '#5c6e43'; // patches of wild grass
+          else if (r > 0.3) ctx.fillStyle = '#3a3227'; // dark soil
+          else ctx.fillStyle = '#615542'; // dried silt
+          ctx.fillRect(x, y, 2, 2);
+        }
+        const tex = new THREE.CanvasTexture(c);
+        tex.wrapS = THREE.RepeatWrapping;
+        tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(20, 20);
+        return tex;
+      }
+
+      // Interlocking Paving Stone for the Tourist Courtyard
+      function createPavingTexture() {
+        const c = document.createElement('canvas');
+        c.width = 256; c.height = 256;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#78736d';
+        ctx.fillRect(0, 0, 256, 256);
+
+        // Hex / block paving pattern
+        const step = 32;
+        for (let x = 0; x < 256; x += step) {
+          for (let y = 0; y < 256; y += step) {
+            const shade = 135 + Math.floor(Math.random() * 25);
+            ctx.fillStyle = `rgb(${shade}, ${shade - 3}, ${shade - 6})`;
+            ctx.fillRect(x + 1, y + 1, step - 2, step - 2);
+          }
+        }
+        const tex = new THREE.CanvasTexture(c);
+        tex.wrapS = THREE.RepeatWrapping;
+        tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(8, 8);
+        return tex;
+      }
+
+      // Water Normal Canvas for Calm Lake Ripples
+      function createWaterNormalCanvas() {
+        const c = document.createElement('canvas');
+        c.width = 256; c.height = 256;
+        const ctx = c.getContext('2d');
+        const img = ctx.createImageData(256, 256);
+        for (let i = 0; i < img.data.length; i += 4) {
+          const x = (i / 4) % 256;
+          const y = Math.floor((i / 4) / 256);
+          img.data[i] = 128 + Math.sin(x * 0.12) * 35;
+          img.data[i + 1] = 128 + Math.cos(y * 0.12) * 35;
+          img.data[i + 2] = 255;
+          img.data[i + 3] = 255;
+        }
+        ctx.putImageData(img, 0, 0);
+        const tex = new THREE.CanvasTexture(c);
+        tex.wrapS = THREE.RepeatWrapping;
+        tex.wrapT = THREE.RepeatWrapping;
+        tex.repeat.set(8, 5);
+        return tex;
+      }
+
+      // --- 2. THREE.JS INITIALIZATION ---
+      function initThree() {
+        scene = new THREE.Scene();
+        // Gentle countryside atmospheric fog (keeps sky visible and horizons soft)
+        scene.fog = new THREE.FogExp2(0xcfe0ec, 0.0065);
+
+        camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 800);
+        camera.position.copy(player.position);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.15;
+
+        container.appendChild(renderer.domElement);
+
+        // OrbitControls (Used in Aerial / Drone Mode)
+        orbitControls = new THREE.OrbitControls(camera, renderer.domElement);
+        orbitControls.enableDamping = true;
+        orbitControls.dampingFactor = 0.05;
+        orbitControls.maxPolarAngle = Math.PI / 2 - 0.03;
+        orbitControls.minDistance = 6;
+        orbitControls.maxDistance = 90;
+        orbitControls.enabled = false;
+
+        setupLighting();
+        buildSkyDome();
+
+        // Build the accurate spatial environment based on real photos
+        buildAccurateEnvironment();
+
+        // Load and place 3D photogrammetry models into their true archaeological spots
+        loadAllModels();
+
+        // Hotspots
+        setupHotspotBeacons();
+
+        // Controls
+        setupMovementControls();
+
+        window.addEventListener('resize', onWindowResize);
+        animate();
+      }
+
+      // --- 3. LIGHTING RIG ---
+      function setupLighting() {
+        const hemiLight = new THREE.HemisphereLight(0xbfe0fa, 0x5a4835, 0.95);
+        hemiLight.position.set(0, 50, 0);
+        scene.add(hemiLight);
+
+        // Sunlight casting soft shadows
+        const sunLight = new THREE.DirectionalLight(0xfffaec, 1.9);
+        sunLight.position.set(30, 45, 25);
+        sunLight.castShadow = true;
+        sunLight.shadow.mapSize.width = 2048;
+        sunLight.shadow.mapSize.height = 2048;
+        sunLight.shadow.camera.near = 1;
+        sunLight.shadow.camera.far = 140;
+        const d = 45;
+        sunLight.shadow.camera.left = -d;
+        sunLight.shadow.camera.right = d;
+        sunLight.shadow.camera.top = d;
+        sunLight.shadow.camera.bottom = -d;
+        sunLight.shadow.bias = -0.0003;
+        scene.add(sunLight);
+
+        const skyFill = new THREE.DirectionalLight(0x7ea7c7, 0.5);
+        skyFill.position.set(-25, 20, -25);
+        scene.add(skyFill);
+      }
+
+      // --- 4. SKY DOME ---
+      function buildSkyDome() {
+        const skyGeo = new THREE.SphereGeometry(380, 32, 24);
+        const skyMat = new THREE.ShaderMaterial({
+          uniforms: {
+            topColor: { value: new THREE.Color(0x3282c4) },
+            bottomColor: { value: new THREE.Color(0xd7e7f2) },
+            offset: { value: 18 },
+            exponent: { value: 0.55 }
+          },
+          vertexShader: `
+            varying vec3 vWorldPosition;
+            void main() {
+              vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+              vWorldPosition = worldPosition.xyz;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+          `,
+          fragmentShader: `
+            uniform vec3 topColor;
+            uniform vec3 bottomColor;
+            uniform float offset;
+            uniform float exponent;
+            varying vec3 vWorldPosition;
+            void main() {
+              float h = normalize(vWorldPosition + offset).y;
+              gl_FragColor = vec4(mix(bottomColor, topColor, max(pow(max(h, 0.0), exponent), 0.0)), 1.0);
+            }
+          `,
+          side: THREE.BackSide
+        });
+        const sky = new THREE.Mesh(skyGeo, skyMat);
+        scene.add(sky);
+      }
+
+      // --- 5. BUILD ACCURATE REAL-WORLD ENVIRONMENT ---
+      function buildAccurateEnvironment() {
+        const envGroup = new THREE.Group();
+
+        const earthTex = createEarthGroundTexture();
+        const brickTex = createRedBrickTexture();
+        const pavingTex = createPavingTexture();
+        waterNormalTex = createWaterNormalCanvas();
+
+        // ==========================================
+        // A. MAIN GROUND TERRAIN
+        // ==========================================
+        const groundGeo = new THREE.PlaneGeometry(160, 160);
+        const groundMat = new THREE.MeshStandardMaterial({
+          map: earthTex,
+          roughness: 0.95,
+          metalness: 0.05
+        });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = 0;
+        ground.receiveShadow = true;
+        envGroup.add(ground);
+
+        // ==========================================
+        // B. SENDANG BEJI (ELONGATED LAKE / RESERVOIR IN THE NORTH)
+        // Dimensions: ~72m long x 28m wide, recessed with boulder embankment
+        // ==========================================
+        const lakeCenterZ = -28;
+        const lakeWidth = 72;
+        const lakeLength = 28;
+
+        // Lake Water Plane
+        const waterGeo = new THREE.PlaneGeometry(lakeWidth, lakeLength, 32, 16);
+        const lakeMat = new THREE.MeshStandardMaterial({
+          color: 0x1d5c52, // Deep calm mossy spring green as seen in photos
+          roughness: 0.15,
+          metalness: 0.2,
+          transparent: true,
+          opacity: 0.88,
+          normalMap: waterNormalTex
+        });
+        lakeMesh = new THREE.Mesh(waterGeo, lakeMat);
+        lakeMesh.rotation.x = -Math.PI / 2;
+        lakeMesh.position.set(0, -0.45, lakeCenterZ);
+        envGroup.add(lakeMesh);
+
+        // Lake Bottom
+        const lakeBedGeo = new THREE.PlaneGeometry(lakeWidth, lakeLength);
+        const lakeBedMat = new THREE.MeshStandardMaterial({ color: 0x16241f, roughness: 1.0 });
+        const lakeBed = new THREE.Mesh(lakeBedGeo, lakeBedMat);
+        lakeBed.rotation.x = -Math.PI / 2;
+        lakeBed.position.set(0, -1.8, lakeCenterZ);
+        envGroup.add(lakeBed);
+
+        // Stone Embankment (Tanggul Batu Kali) around Lake
+        const stoneMat = new THREE.MeshStandardMaterial({ color: 0x4a443d, roughness: 0.95 });
+        // South embankment along the road/shore
+        const southTanggulGeo = new THREE.BoxGeometry(lakeWidth + 4, 1.2, 3.0);
+        const southTanggul = new THREE.Mesh(southTanggulGeo, stoneMat);
+        southTanggul.position.set(0, 0.2, lakeCenterZ + lakeLength / 2 + 1.2);
+        southTanggul.receiveShadow = true;
+        envGroup.add(southTanggul);
+
+        // North far embankment
+        const northTanggulGeo = new THREE.BoxGeometry(lakeWidth + 4, 1.2, 3.0);
+        const northTanggul = new THREE.Mesh(northTanggulGeo, stoneMat);
+        northTanggul.position.set(0, 0.2, lakeCenterZ - lakeLength / 2 - 1.2);
+        northTanggul.receiveShadow = true;
+        envGroup.add(northTanggul);
+
+        // East & West embankments
+        const eastTanggulGeo = new THREE.BoxGeometry(3.0, 1.2, lakeLength + 4);
+        const eastTanggul = new THREE.Mesh(eastTanggulGeo, stoneMat);
+        eastTanggul.position.set(lakeWidth / 2 + 1.2, 0.2, lakeCenterZ);
+        eastTanggul.receiveShadow = true;
+        envGroup.add(eastTanggul);
+
+        const westTanggul = eastTanggul.clone();
+        westTanggul.position.x = -lakeWidth / 2 - 1.2;
+        envGroup.add(westTanggul);
+
+        // Ancient Brick Arch Culvert (Terowongan Gorong Kuno) at the base of the South embankment
+        const culvertArchGeo = new THREE.CylinderGeometry(1.1, 1.1, 2.2, 16, 1, false, 0, Math.PI);
+        const culvertMat = new THREE.MeshStandardMaterial({ color: 0x383028, roughness: 0.95 });
+        const culvert = new THREE.Mesh(culvertArchGeo, culvertMat);
+        culvert.rotation.x = Math.PI / 2;
+        culvert.position.set(2, 0.1, lakeCenterZ + lakeLength / 2);
+        envGroup.add(culvert);
+
+        // ==========================================
+        // C. ZONA SAKRAL: GAPURA CANDI BENTAR & BILIK BATA MERAH
+        // Center position: X: 0, Z: 2 to 9
+        // ==========================================
+        const brickMat = new THREE.MeshStandardMaterial({
+          map: brickTex,
+          roughness: 0.88,
+          metalness: 0.08
+        });
+
+        // 1. GAPURA CANDI BENTAR (Twin Stepped Terracotta Brick Split Gate)
+        // Left Tower (Candi Bentar Barat)
+        const gateLeft = buildCandiBentarTower(brickMat);
+        gateLeft.position.set(-2.0, 0, 7.5);
+        envGroup.add(gateLeft);
+
+        // Right Tower (Candi Bentar Timur)
+        const gateRight = buildCandiBentarTower(brickMat, true);
+        gateRight.position.set(2.0, 0, 7.5);
+        envGroup.add(gateRight);
+
+        // Wooden picket gate between the split towers
+        const woodGateMat = new THREE.MeshStandardMaterial({ color: 0x6e563d, roughness: 0.9 });
+        for (let p = -1.4; p <= 1.4; p += 0.35) {
+          const picketGeo = new THREE.BoxGeometry(0.18, 1.4, 0.06);
+          const picket = new THREE.Mesh(picketGeo, woodGateMat);
+          picket.position.set(p, 0.7, 7.5);
+          picket.castShadow = true;
+          envGroup.add(picket);
+        }
+
+        // Stepped brick plinth below gate
+        const gateStepGeo = new THREE.BoxGeometry(7.5, 0.25, 2.2);
+        const gateStep = new THREE.Mesh(gateStepGeo, brickMat);
+        gateStep.position.set(0, 0.125, 7.5);
+        gateStep.receiveShadow = true;
+        envGroup.add(gateStep);
+
+        // 2. ENCLOSURE WALL (Tembok Kelir Bata Merah) enclosing the sacred shrine
+        // Wall height: 1.8m
+        const wallMat = brickMat;
+        // East wall
+        const eastWallGeo = new THREE.BoxGeometry(0.4, 1.8, 8.0);
+        const eastWall = new THREE.Mesh(eastWallGeo, wallMat);
+        eastWall.position.set(4.0, 0.9, 3.5);
+        eastWall.castShadow = true;
+        eastWall.receiveShadow = true;
+        envGroup.add(eastWall);
+
+        // West wall
+        const westWall = eastWall.clone();
+        westWall.position.x = -4.0;
+        envGroup.add(westWall);
+
+        // North wall (Rear wall behind the Kalamakara altar)
+        const northWallGeo = new THREE.BoxGeometry(8.4, 2.2, 0.4);
+        const northWall = new THREE.Mesh(northWallGeo, wallMat);
+        northWall.position.set(0, 1.1, -0.5);
+        northWall.castShadow = true;
+        northWall.receiveShadow = true;
+        envGroup.add(northWall);
+
+        // Triangular pattern air vents (lubang angin bata) on north wall
+        const ventMat = new THREE.MeshBasicMaterial({ color: 0x1a1614 });
+        for (let vx = -2.5; vx <= 2.5; vx += 0.7) {
+          const vy = 1.4 + Math.sin(vx * 1.2) * 0.25;
+          const ventGeo = new THREE.BoxGeometry(0.18, 0.18, 0.45);
+          const vent = new THREE.Mesh(ventGeo, ventMat);
+          vent.position.set(vx, vy, -0.5);
+          envGroup.add(vent);
+        }
+
+        // 3. CUNGKUP ATAP PELINDUNG ARCA (Roof over the sacred shrine)
+        const roofWoodMat = new THREE.MeshStandardMaterial({ color: 0x3d2c1d, roughness: 0.9 });
+        const roofTileMat = new THREE.MeshStandardMaterial({ color: 0x8a4529, roughness: 0.85 }); // terracotta clay roof tiles
+        // 4 corner wooden pillars
+        const pillarGeo = new THREE.CylinderGeometry(0.12, 0.14, 3.2, 8);
+        const pillarCoords = [[-3.6, 1.6, 7.0], [3.6, 1.6, 7.0], [-3.6, 1.6, 0.0], [3.6, 1.6, 0.0]];
+        pillarCoords.forEach(pc => {
+          const pil = new THREE.Mesh(pillarGeo, roofWoodMat);
+          pil.position.set(pc[0], pc[1], pc[2]);
+          pil.castShadow = true;
+          envGroup.add(pil);
+        });
+
+        // Hip roof geometry
+        const roofGeo = new THREE.ConeGeometry(5.8, 2.2, 4);
+        const roof = new THREE.Mesh(roofGeo, roofTileMat);
+        roof.rotation.y = Math.PI / 4;
+        roof.position.set(0, 3.8, 3.5);
+        roof.scale.set(1.1, 0.9, 1.3);
+        roof.castShadow = true;
+        envGroup.add(roof);
+
+        // Elevated stone altar terrace inside the shrine where Kalamakara rests
+        const altarBaseGeo = new THREE.BoxGeometry(4.2, 0.45, 3.8);
+        const altarBaseMat = new THREE.MeshStandardMaterial({ color: 0x5a5349, roughness: 0.9 });
+        const altarBase = new THREE.Mesh(altarBaseGeo, altarBaseMat);
+        altarBase.position.set(0, 0.225, 2.0);
+        altarBase.castShadow = true;
+        altarBase.receiveShadow = true;
+        envGroup.add(altarBase);
+
+        // Stone steps leading up to altar
+        const step1 = new THREE.Mesh(new THREE.BoxGeometry(4.6, 0.2, 1.0), altarBaseMat);
+        step1.position.set(0, 0.1, 4.3);
+        envGroup.add(step1);
+
+        // ==========================================
+        // D. ZONA WISATA (BARAT): PELATARAN & KOLAM PEMANDIAN
+        // Location: X: -16 to -32, Z: 0 to 14
+        // ==========================================
+        // Paved tourist courtyard
+        const touristPlazaGeo = new THREE.PlaneGeometry(22, 20);
+        const touristPlazaMat = new THREE.MeshStandardMaterial({
+          map: pavingTex,
+          roughness: 0.85
+        });
+        const touristPlaza = new THREE.Mesh(touristPlazaGeo, touristPlazaMat);
+        touristPlaza.rotation.x = -Math.PI / 2;
+        touristPlaza.position.set(-22, 0.05, 5);
+        touristPlaza.receiveShadow = true;
+        envGroup.add(touristPlaza);
+
+        // Rectangular modern bathing pool (Kolam Pemandian Wisata Beji)
+        // Size: 16m x 8m, concrete curb + red brick balustrade facing the lake
+        const poolCurbGeo = new THREE.BoxGeometry(16.5, 0.5, 8.5);
+        const poolCurbMat = new THREE.MeshStandardMaterial({ color: 0x524c44, roughness: 0.9 });
+        const poolCurb = new THREE.Mesh(poolCurbGeo, poolCurbMat);
+        poolCurb.position.set(-22, 0.25, -3.5);
+        poolCurb.receiveShadow = true;
+        envGroup.add(poolCurb);
+
+        // Swimming pool water plane
+        const poolWaterGeo = new THREE.PlaneGeometry(15.5, 7.5);
+        const poolWaterMat = new THREE.MeshStandardMaterial({
+          color: 0x1a7f8a,
+          roughness: 0.1,
+          metalness: 0.2,
+          transparent: true,
+          opacity: 0.85
+        });
+        const poolWater = new THREE.Mesh(poolWaterGeo, poolWaterMat);
+        poolWater.rotation.x = -Math.PI / 2;
+        poolWater.position.set(-22, 0.15, -3.5);
+        envGroup.add(poolWater);
+
+        // Red brick balustrade pillars along the pool (matching photo)
+        const pillarRedGeo = new THREE.BoxGeometry(0.7, 1.3, 0.7);
+        for (let bx = -29; bx <= -15; bx += 2.8) {
+          const bp = new THREE.Mesh(pillarRedGeo, brickMat);
+          bp.position.set(bx, 0.9, 0.6);
+          bp.castShadow = true;
+          envGroup.add(bp);
+        }
+
+        // ==========================================
+        // E. REALISTIC PROPORTIONAL TREES (NOT CARTOON SPHERES!)
+        // Slender tall trunks (8-12m) with natural leafy canopies
+        // Placed along embankments and borders, keeping views open
+        // ==========================================
+        buildRealisticTrees(envGroup);
+
+        scene.add(envGroup);
+      }
+
+      // Helper to build realistic stepped Candi Bentar Gate Tower
+      function buildCandiBentarTower(mat, isMirrored = false) {
+        const tower = new THREE.Group();
+        // Base tier
+        const b1 = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.9, 1.4), mat);
+        b1.position.y = 0.45;
+        b1.castShadow = true;
+        tower.add(b1);
+
+        // Mid section with circular porthole vent (matching photo!)
+        const b2 = new THREE.Mesh(new THREE.BoxGeometry(1.4, 1.8, 1.2), mat);
+        b2.position.y = 1.8;
+        b2.castShadow = true;
+        tower.add(b2);
+
+        // Circular porthole cutout effect (stone ring)
+        const portholeGeo = new THREE.TorusGeometry(0.3, 0.08, 12, 24);
+        const portholeMat = new THREE.MeshStandardMaterial({ color: 0x3d352d, roughness: 0.9 });
+        const porthole = new THREE.Mesh(portholeGeo, portholeMat);
+        porthole.position.set(isMirrored ? -0.2 : 0.2, 1.6, 0.61);
+        tower.add(porthole);
+
+        // Stepped upper tiers (Candi Bentar stepped crown)
+        const tiers = [
+          { w: 1.2, h: 0.5, y: 2.95 },
+          { w: 1.0, h: 0.5, y: 3.45 },
+          { w: 0.8, h: 0.6, y: 4.0 },
+          { w: 0.55, h: 0.7, y: 4.65 }
+        ];
+        tiers.forEach(t => {
+          const m = new THREE.Mesh(new THREE.BoxGeometry(t.w, t.h, t.w * 0.9), mat);
+          m.position.y = t.y;
+          m.castShadow = true;
+          tower.add(m);
+        });
+
+        // Top spire
+        const topGeo = new THREE.ConeGeometry(0.28, 0.6, 4);
+        const top = new THREE.Mesh(topGeo, mat);
+        top.rotation.y = Math.PI / 4;
+        top.position.y = 5.25;
+        tower.add(top);
+
+        return tower;
+      }
+
+      // Helper to create realistically proportioned rural trees
+      function buildRealisticTrees(group) {
+        // Natural positions around lake banks and outer borders
+        const treeCoords = [
+          // Along North lake bank
+          [-32, 0, -42], [-18, 0, -44], [0, 0, -45], [20, 0, -43], [35, 0, -41],
+          // Along East shore & road
+          [40, 0, -28], [38, 0, -12], [32, 0, 5], [26, 0, 18], [22, 0, 28],
+          // Along West tourism side
+          [-38, 0, -22], [-40, 0, -8], [-36, 0, 14], [-30, 0, 24],
+          // South border (behind player spawn)
+          [-14, 0, 32], [0, 0, 34], [14, 0, 32]
+        ];
+
+        const trunkMat = new THREE.MeshStandardMaterial({ color: 0x3b3024, roughness: 0.95 });
+        const leafColors = [0x304c26, 0x3d5c2e, 0x486b36, 0x2b4221];
+
+        treeCoords.forEach((tc, idx) => {
+          const tree = new THREE.Group();
+
+          // Height between 9m and 13m (tall and slender!)
+          const treeHeight = 9.5 + (idx % 4) * 1.1;
+          const trunkHeight = treeHeight * 0.65; // Trunk takes 65% of height, clear walking space underneath!
+
+          // Slender tapered trunk
+          const trunkGeo = new THREE.CylinderGeometry(0.22, 0.42, trunkHeight, 7);
+          const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+          trunk.position.y = trunkHeight / 2;
+          trunk.castShadow = true;
+          tree.add(trunk);
+
+          // Canopy leaves made of multiple lightweight, varied ellipsoids (natural look)
+          const leafMat = new THREE.MeshStandardMaterial({
+            color: leafColors[idx % leafColors.length],
+            roughness: 0.88,
+            metalness: 0.05
+          });
+
+          // Branch clusters
+          const clusterCount = 3 + (idx % 3);
+          for (let c = 0; c < clusterCount; c++) {
+            const radX = 2.2 + Math.random() * 0.8;
+            const radY = 1.8 + Math.random() * 0.8;
+            const radZ = 2.2 + Math.random() * 0.8;
+            const canopyGeo = new THREE.DodecahedronGeometry(radX, 1);
+            const canopy = new THREE.Mesh(canopyGeo, leafMat);
+            canopy.scale.set(1.0, radY / radX, radZ / radX);
+            canopy.position.set(
+              (Math.random() - 0.5) * 1.8,
+              trunkHeight + (c * 1.1) + Math.random() * 0.6,
+              (Math.random() - 0.5) * 1.8
+            );
+            canopy.castShadow = true;
+            tree.add(canopy);
+          }
+
+          tree.position.set(tc[0], tc[1], tc[2]);
+          group.add(tree);
+        });
+      }
+
+      // --- 6. MODEL LOADER (TRUE SPATIAL PLACEMENT) ---
+      function loadAllModels() {
+        const gltfLoader = new THREE.GLTFLoader();
+
+        let loadedCount = 0;
+        const totalModels = 3;
+
+        function updateProgress(modelName) {
+          loadedCount++;
+          const percent = Math.round((loadedCount / totalModels) * 100);
+          loadingBar.style.width = percent + '%';
+          loadingStatus.textContent = `Memuat model cagar budaya (${loadedCount}/${totalModels}): ${modelName}...`;
+
+          if (loadedCount >= totalModels) {
+            setTimeout(() => {
+              loadingOverlay.style.opacity = '0';
+              setTimeout(() => {
+                loadingOverlay.classList.add('hidden');
+                welcomeModal.classList.remove('hidden');
+                syncMobileControlsVisibility();
+              }, 500);
+            }, 400);
+          }
+        }
+
+        // 1. BANGUNAN WISATA (`bangunan sirah keteng.glb`)
+        // Placed at the Tourist Pavilion Terrace on the West
+        gltfLoader.load(
+          './bangunan%20sirah%20keteng.glb',
+          function (gltf) {
+            const model = gltf.scene;
+            loadedModels.bangunan = model;
+
+            model.traverse((child) => {
+              if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                if (child.material) child.material.roughness = 0.85;
+              }
+            });
+
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+
+            // Fit nicely on the tourist plaza (~11m span)
+            const maxDim = Math.max(size.x, size.z) || 1;
+            const targetScale = 11.5 / maxDim;
+            model.scale.set(targetScale, targetScale, targetScale);
+
+            const scaledBox = new THREE.Box3().setFromObject(model);
+            // Positioned at X: -22, Z: 5 (on the paved west terrace)
+            model.position.set(-22 - center.x * targetScale, -scaledBox.min.y + 0.05, 5 - center.z * targetScale);
+
+            scene.add(model);
+            updateProgress('Pendopo Wisata');
+          },
+          undefined,
+          function (err) {
+            console.warn('Gagal memuat bangunan.glb:', err);
+            updateProgress('Pendopo Wisata (cadangan aktif)');
+          }
+        );
+
+        // 2. ARCA KALAMAKARA (`Kalmakara.glb`)
+        // Placed inside the Sacred Shrine Altar (Cungkup) facing the gate!
+        gltfLoader.load(
+          './Kalmakara.glb',
+          function (gltf) {
+            const model = gltf.scene;
+            loadedModels.kalamakara = model;
+
+            model.traverse((child) => {
+              if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                if (child.material) child.material.roughness = 0.82;
+              }
+            });
+
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+
+            // Real Kalamakara head & altar height: ~2.1m
+            const maxDim = Math.max(size.x, size.y, size.z) || 1;
+            const scale = 2.2 / maxDim;
+            model.scale.set(scale, scale, scale);
+
+            const scaledBox = new THREE.Box3().setFromObject(model);
+            // Centered on the stone altar inside the brick enclosure (X: 0, Z: 1.8)
+            model.position.set(0 - center.x * scale, 0.45 - scaledBox.min.y, 1.8 - center.z * scale);
+            // Facing forward (towards south gate)
+            model.rotation.y = 0;
+
+            scene.add(model);
+            updateProgress('Monolit Kalamakara');
+          },
+          undefined,
+          function (err) {
+            console.warn('Gagal memuat Kalmakara.glb:', err);
+            updateProgress('Monolit Kalamakara (cadangan aktif)');
+          }
+        );
+
+        // 3. WATU PAWUKON (`9_25_2026 (1).glb`)
+        // Placed directly in front/beside Kalamakara on the altar terrace (matching real photo!)
+        gltfLoader.load(
+          './9_25_2026%20(1).glb',
+          function (gltf) {
+            const model = gltf.scene;
+            loadedModels.watuPawukon = model;
+
+            model.traverse((child) => {
+              if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                if (child.material) child.material.roughness = 0.85;
+              }
+            });
+
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+
+            const maxDim = Math.max(size.x, size.y, size.z) || 1;
+            const scale = 1.35 / maxDim;
+            model.scale.set(scale, scale, scale);
+
+            const scaledBox = new THREE.Box3().setFromObject(model);
+            // Positioned right in front of the Kalamakara altar base (X: 0.9, Z: 3.2)
+            model.position.set(0.9 - center.x * scale, 0.45 - scaledBox.min.y, 3.2 - center.z * scale);
+            model.rotation.y = -Math.PI / 6;
+
+            scene.add(model);
+            updateProgress('Watu Pawukon');
+          },
+          undefined,
+          function (err) {
+            console.warn('Gagal memuat Watu Pawukon.glb:', err);
+            updateProgress('Watu Pawukon (cadangan aktif)');
+          }
+        );
+      }
+
+      // --- 7. ACCURATE HOTSPOT BEACONS ---
+      const hotspotData = [
+        {
+          id: 'kalamakara',
+          title: 'Monolit Arca Kepala Raksasa (Kalamakara)',
+          desc: 'Arca monolit andesit monumental bertahta di dalam bilik cungkup cagar budaya. Difungsikan sebagai jaladwara (pancuran tirta suci) pelindung mata air Beji.',
+          category: 'Cagar Budaya Inti • Abad XIII M',
+          pos: new THREE.Vector3(0, 2.4, 1.8)
+        },
+        {
+          id: 'gapura',
+          title: 'Gapura Candi Bentar & Tembok Kelir',
+          desc: 'Pintu gerbang terbelah bata merah gaya Jawa Klasik yang membatasi pelataran luar profan dengan zona sakral tempat bersemayamnya monolit Kalamakara.',
+          category: 'Arsitektur Gapura Majapahitan',
+          pos: new THREE.Vector3(0, 3.2, 7.5)
+        },
+        {
+          id: 'watu-pawukon',
+          title: 'Monolit Watu Pawukon / Dakon',
+          desc: 'Batu andesit berpetak-petak simbol perhitungan kalender wuku dan pranata mangsa leluhur, diletakkan berdampingan di altar arca Kalamakara.',
+          category: 'Epigrafi & Arkeoastronomi',
+          pos: new THREE.Vector3(0.9, 1.5, 3.2)
+        },
+        {
+          id: 'danau-beji',
+          title: 'Waduk Danau Sendang Beji',
+          desc: 'Danau penampung air alami seluas ~1 hektar yang dikelilingi tanggul batu kali. Menjadi sumber irigasi agraris dan spot rekreasi/pemancingan warga.',
+          category: 'Bentang Air & Hidrologi Sendang',
+          pos: new THREE.Vector3(0, 1.4, -22)
+        },
+        {
+          id: 'pendopo-wisata',
+          title: 'Pendopo Wisata & Kolam Pemandian',
+          desc: 'Fasilitas rekreasi warga di pelataran barat yang menaungi kolam pemandian berdinding bata cor, menghadap langsung ke panorama danau Beji.',
+          category: 'Fasilitas Wisata & Budaya',
+          pos: new THREE.Vector3(-22, 2.8, 5)
+        }
+      ];
+
+      function setupHotspotBeacons() {
+        hotspotData.forEach(item => {
+          const beaconGroup = new THREE.Group();
+          beaconGroup.position.copy(item.pos);
+
+          // Glowing core
+          const sphereGeo = new THREE.SphereGeometry(0.24, 16, 16);
+          const sphereMat = new THREE.MeshBasicMaterial({ color: 0xd97706 });
+          const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+          beaconGroup.add(sphere);
+
+          // Pulsing halo ring
+          const ringGeo = new THREE.RingGeometry(0.32, 0.5, 24);
+          const ringMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, side: THREE.DoubleSide, transparent: true, opacity: 0.75 });
+          const ring = new THREE.Mesh(ringGeo, ringMat);
+          ring.rotation.x = Math.PI / 2;
+          beaconGroup.add(ring);
+
+          beaconGroup.userData = {
+            id: item.id,
+            title: item.title,
+            desc: item.desc,
+            category: item.category,
+            ring: ring
+          };
+
+          beacons.push(beaconGroup);
+          scene.add(beaconGroup);
+        });
+      }
+
+      // --- 8. MOVEMENT & CONTROLLER LOGIC ---
+      function setupMovementControls() {
+        // Keyboard controls (PC)
+        window.addEventListener('keydown', (e) => {
+          switch (e.code) {
+            case 'KeyW': case 'ArrowUp': keys.forward = true; break;
+            case 'KeyS': case 'ArrowDown': keys.backward = true; break;
+            case 'KeyA': case 'ArrowLeft': keys.left = true; break;
+            case 'KeyD': case 'ArrowRight': keys.right = true; break;
+            case 'ShiftLeft': case 'ShiftRight': keys.sprint = true; break;
+          }
+        });
+
+        window.addEventListener('keyup', (e) => {
+          switch (e.code) {
+            case 'KeyW': case 'ArrowUp': keys.forward = false; break;
+            case 'KeyS': case 'ArrowDown': keys.backward = false; break;
+            case 'KeyA': case 'ArrowLeft': keys.left = false; break;
+            case 'KeyD': case 'ArrowRight': keys.right = false; break;
+            case 'ShiftLeft': case 'ShiftRight': keys.sprint = false; break;
+          }
+        });
+
+        // Pointer Lock (Click canvas to lock mouse on PC)
+        container.addEventListener('click', () => {
+          if (isFirstPerson && !isMobile && !isPointerLocked) {
+            container.requestPointerLock();
+          }
+        });
+
+        document.addEventListener('pointerlockchange', () => {
+          isPointerLocked = document.pointerLockElement === container;
+          if (isPointerLocked) {
+            crosshair.classList.remove('hidden');
+            crosshair.style.opacity = '1';
+            desktopWalkHint.classList.add('opacity-40');
+          } else {
+            crosshair.style.opacity = '0';
+            desktopWalkHint.classList.remove('opacity-40');
+          }
+        });
+
+        // Mouse look during pointer lock
+        document.addEventListener('mousemove', (e) => {
+          if (isFirstPerson && isPointerLocked) {
+            const sens = 0.0022;
+            player.yaw -= e.movementX * sens;
+            player.pitch -= e.movementY * sens;
+            player.pitch = Math.max(-Math.PI / 2.3, Math.min(Math.PI / 2.3, player.pitch));
+          }
+        });
+
+        // Mobile Virtual Controls Setup
+        syncMobileControlsVisibility();
+
+        // 1. Virtual Joystick Logic
+        let joystickTouchId = null;
+        let isJoystickActive = false;
+
+        function updateJoystick(clientX, clientY) {
+          if (!joystickContainer) return;
+          const rect = joystickContainer.getBoundingClientRect();
+          const centerX = rect.left + rect.width / 2;
+          const centerY = rect.top + rect.height / 2;
+
+          let dx = clientX - centerX;
+          let dy = clientY - centerY;
+          const maxRadius = 38;
+          const dist = Math.hypot(dx, dy);
+
+          if (dist > maxRadius) {
+            dx = (dx / dist) * maxRadius;
+            dy = (dy / dist) * maxRadius;
+          }
+
+          if (joystickThumb) {
+            joystickThumb.style.transform = `translate(${dx}px, ${dy}px)`;
+          }
+
+          if (dist > 3) {
+            joystickState.active = true;
+            joystickState.x = dx / maxRadius;
+            joystickState.y = dy / maxRadius;
+          } else {
+            joystickState.active = false;
+            joystickState.x = 0;
+            joystickState.y = 0;
+          }
+
+          // Visual feedback on arrows
+          if (joyArrowUp) joyArrowUp.style.color = joystickState.y < -0.3 ? '#f59e0b' : '';
+          if (joyArrowDown) joyArrowDown.style.color = joystickState.y > 0.3 ? '#f59e0b' : '';
+          if (joyArrowLeft) joyArrowLeft.style.color = joystickState.x < -0.3 ? '#f59e0b' : '';
+          if (joyArrowRight) joyArrowRight.style.color = joystickState.x > 0.3 ? '#f59e0b' : '';
+        }
+
+        function resetJoystick() {
+          isJoystickActive = false;
+          joystickTouchId = null;
+          if (joystickThumb) {
+            joystickThumb.style.transition = 'transform 0.15s ease-out';
+            joystickThumb.style.transform = 'translate(0px, 0px)';
+            setTimeout(() => { if (joystickThumb) joystickThumb.style.transition = ''; }, 160);
+          }
+          joystickState.active = false;
+          joystickState.x = 0;
+          joystickState.y = 0;
+
+          if (joyArrowUp) joyArrowUp.style.color = '';
+          if (joyArrowDown) joyArrowDown.style.color = '';
+          if (joyArrowLeft) joyArrowLeft.style.color = '';
+          if (joyArrowRight) joyArrowRight.style.color = '';
+        }
+
+        if (joystickContainer) {
+          // Touch events on joystick
+          joystickContainer.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const t = e.changedTouches[0];
+            joystickTouchId = t.identifier;
+            isJoystickActive = true;
+            if (joystickThumb) joystickThumb.style.transition = 'none';
+            updateJoystick(t.clientX, t.clientY);
+          }, { passive: false });
+
+          // Fallback pointer/mouse for DevTools mobile emulation
+          joystickContainer.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch') return;
+            e.preventDefault();
+            e.stopPropagation();
+            isJoystickActive = true;
+            if (joystickThumb) joystickThumb.style.transition = 'none';
+            updateJoystick(e.clientX, e.clientY);
+          });
+        }
+
+        window.addEventListener('touchmove', (e) => {
+          if (!isJoystickActive || joystickTouchId === null) return;
+          for (let i = 0; i < e.changedTouches.length; i++) {
+            const t = e.changedTouches[i];
+            if (t.identifier === joystickTouchId) {
+              e.preventDefault();
+              updateJoystick(t.clientX, t.clientY);
+              break;
+            }
+          }
+        }, { passive: false });
+
+        window.addEventListener('touchend', (e) => {
+          if (!isJoystickActive) return;
+          for (let i = 0; i < e.changedTouches.length; i++) {
+            if (e.changedTouches[i].identifier === joystickTouchId) {
+              resetJoystick();
+              break;
+            }
+          }
+        });
+
+        window.addEventListener('touchcancel', (e) => {
+          if (isJoystickActive) resetJoystick();
+        });
+
+        window.addEventListener('pointermove', (e) => {
+          if (!isJoystickActive || joystickTouchId !== null) return;
+          if (e.pointerType === 'touch') return;
+          e.preventDefault();
+          updateJoystick(e.clientX, e.clientY);
+        });
+
+        window.addEventListener('pointerup', (e) => {
+          if (isJoystickActive && joystickTouchId === null) resetJoystick();
+        });
+        window.addEventListener('pointercancel', (e) => {
+          if (isJoystickActive && joystickTouchId === null) resetJoystick();
+        });
+
+        // 2. Sprint Toggle Button
+        if (btnMobileSprint) {
+          btnMobileSprint.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            keys.sprint = !keys.sprint;
+            if (keys.sprint) {
+              btnMobileSprint.className = 'px-3.5 py-1.5 rounded-full bg-accent text-white font-bold border-2 border-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.5)] text-[11px] font-mono flex items-center gap-1.5 active:scale-95 transition-all';
+              if (sprintLabel) sprintLabel.textContent = 'Berlari (Cepat)';
+            } else {
+              btnMobileSprint.className = 'px-3.5 py-1.5 rounded-full bg-surface-container-high/90 hud-blur border border-outline-variant/80 text-on-surface-variant text-[11px] font-semibold tracking-wide flex items-center gap-1.5 shadow-lg active:scale-95 transition-all';
+              if (sprintLabel) sprintLabel.textContent = 'Lari Cepat';
+            }
+          });
+        }
+
+        // 3. Right Touch Zone (Looking around)
+        let touchLookId = null;
+        let isPointerLooking = false;
+
+        function hideLookHint() {
+          if (mobileLookHint && !mobileLookHint.classList.contains('hidden')) {
+            mobileLookHint.style.opacity = '0';
+            setTimeout(() => { if (mobileLookHint) mobileLookHint.classList.add('hidden'); }, 700);
+          }
+        }
+
+        if (touchLookZone) {
+          touchLookZone.addEventListener('touchstart', (e) => {
+            if (e.target.closest('button')) return;
+            const t = e.changedTouches[0];
+            touchLookId = t.identifier;
+            touchLookState.active = true;
+            touchLookState.lastX = t.clientX;
+            touchLookState.lastY = t.clientY;
+            hideLookHint();
+          }, { passive: true });
+
+          touchLookZone.addEventListener('touchmove', (e) => {
+            if (!touchLookState.active || !isFirstPerson) return;
+            for (let i = 0; i < e.changedTouches.length; i++) {
+              const t = e.changedTouches[i];
+              if (t.identifier === touchLookId) {
+                const dx = t.clientX - touchLookState.lastX;
+                const dy = t.clientY - touchLookState.lastY;
+                touchLookState.lastX = t.clientX;
+                touchLookState.lastY = t.clientY;
+
+                const touchSens = 0.0036;
+                player.yaw -= dx * touchSens;
+                player.pitch -= dy * touchSens;
+                player.pitch = Math.max(-Math.PI / 2.3, Math.min(Math.PI / 2.3, player.pitch));
+                break;
+              }
+            }
+          }, { passive: true });
+
+          const endTouchLook = (e) => {
+            for (let i = 0; i < e.changedTouches.length; i++) {
+              if (e.changedTouches[i].identifier === touchLookId) {
+                touchLookState.active = false;
+                touchLookId = null;
+                break;
+              }
+            }
+          };
+          touchLookZone.addEventListener('touchend', endTouchLook, { passive: true });
+          touchLookZone.addEventListener('touchcancel', endTouchLook, { passive: true });
+
+          // Pointer/Mouse drag fallback for look zone
+          touchLookZone.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'touch') return;
+            if (e.target.closest('button')) return;
+            isPointerLooking = true;
+            touchLookState.lastX = e.clientX;
+            touchLookState.lastY = e.clientY;
+            hideLookHint();
+          });
+
+          window.addEventListener('pointermove', (e) => {
+            if (!isPointerLooking || !isFirstPerson || touchLookId !== null) return;
+            if (e.pointerType === 'touch') return;
+            const dx = e.clientX - touchLookState.lastX;
+            const dy = e.clientY - touchLookState.lastY;
+            touchLookState.lastX = e.clientX;
+            touchLookState.lastY = e.clientY;
+
+            const sens = 0.0035;
+            player.yaw -= dx * sens;
+            player.pitch -= dy * sens;
+            player.pitch = Math.max(-Math.PI / 2.3, Math.min(Math.PI / 2.3, player.pitch));
+          });
+
+          window.addEventListener('pointerup', () => { isPointerLooking = false; });
+          window.addEventListener('pointercancel', () => { isPointerLooking = false; });
+        }
+
+        // 4. Quick Turn Buttons (45° Turn Left / Right & Reset View)
+        if (btnTurnLeft) {
+          btnTurnLeft.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            player.yaw += Math.PI / 4;
+            hideLookHint();
+          });
+        }
+
+        if (btnTurnRight) {
+          btnTurnRight.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            player.yaw -= Math.PI / 4;
+            hideLookHint();
+          });
+        }
+
+        if (btnResetView) {
+          btnResetView.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            player.pitch = 0;
+            hideLookHint();
+          });
+        }
+
+        setTimeout(hideLookHint, 6000);
+      }
+
+      // --- 9. AUDIO AMBIENCE (Web Audio API Synthesizer) ---
+      function initWebAudio() {
+        if (audioCtx) return;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+
+        const bufferSize = audioCtx.sampleRate * 2;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          output[i] = Math.random() * 2 - 1;
+        }
+
+        // Water Stream Synth
+        const whiteNoise = audioCtx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+        whiteNoise.loop = true;
+
+        const waterFilter = audioCtx.createBiquadFilter();
+        waterFilter.type = 'bandpass';
+        waterFilter.frequency.value = 480;
+        waterFilter.Q.value = 1.3;
+
+        const waterGain = audioCtx.createGain();
+        waterGain.gain.value = 0.15;
+
+        whiteNoise.connect(waterFilter);
+        waterFilter.connect(waterGain);
+        waterGain.connect(audioCtx.destination);
+        whiteNoise.start();
+        waterNoiseNode = waterGain;
+
+        // Soft Countryside Wind Synth
+        const windNoise = audioCtx.createBufferSource();
+        windNoise.buffer = noiseBuffer;
+        windNoise.loop = true;
+
+        const windFilter = audioCtx.createBiquadFilter();
+        windFilter.type = 'lowpass';
+        windFilter.frequency.value = 240;
+
+        const windGain = audioCtx.createGain();
+        windGain.gain.value = 0.07;
+
+        windNoise.connect(windFilter);
+        windFilter.connect(windGain);
+        windGain.connect(audioCtx.destination);
+        windNoise.start();
+        windNoiseNode = windGain;
+
+        isAudioPlaying = true;
+        updateAudioButton();
+      }
+
+      function toggleAudio() {
+        if (!audioCtx) {
+          initWebAudio();
+          return;
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+          isAudioPlaying = true;
+        } else if (audioCtx.state === 'running') {
+          audioCtx.suspend();
+          isAudioPlaying = false;
+        }
+        updateAudioButton();
+      }
+
+      function updateAudioButton() {
+        if (isAudioPlaying) {
+          audioIcon.textContent = 'volume_up';
+          btnToggleAudio.classList.remove('text-on-surface-variant');
+          btnToggleAudio.classList.add('text-primary');
+          if (audioLabel) audioLabel.textContent = 'Suara: Aktif';
+        } else {
+          audioIcon.textContent = 'volume_off';
+          btnToggleAudio.classList.add('text-on-surface-variant');
+          btnToggleAudio.classList.remove('text-primary');
+          if (audioLabel) audioLabel.textContent = 'Suara: Hening';
+        }
+      }
+
+      // --- 10. UPDATE LOOP ---
+      function updatePlayer(dt) {
+        if (!isFirstPerson) return;
+
+        let moveX = 0;
+        let moveZ = 0;
+
+        if (keys.forward) moveZ -= 1;
+        if (keys.backward) moveZ += 1;
+        if (keys.left) moveX -= 1;
+        if (keys.right) moveX += 1;
+
+        if (joystickState.active) {
+          moveX += joystickState.x;
+          moveZ += joystickState.y;
+        }
+
+        const len = Math.sqrt(moveX * moveX + moveZ * moveZ);
+        if (len > 0.01) {
+          moveX /= len;
+          moveZ /= len;
+          player.isMoving = true;
+        } else {
+          player.isMoving = false;
+        }
+
+        let speed = player.speed;
+        if (keys.sprint) speed *= player.sprintMultiplier;
+
+        const forward = new THREE.Vector3(-Math.sin(player.yaw), 0, -Math.cos(player.yaw));
+        const right = new THREE.Vector3(Math.cos(player.yaw), 0, -Math.sin(player.yaw));
+
+        const moveVec = new THREE.Vector3();
+        moveVec.addScaledVector(forward, -moveZ);
+        moveVec.addScaledVector(right, moveX);
+
+        player.position.addScaledVector(moveVec, speed * dt);
+
+        // Keep inside 55m boundary radius of Beji Sirah Keteng
+        const maxDist = 55;
+        const currentDist = Math.sqrt(player.position.x * player.position.x + player.position.z * player.position.z);
+        if (currentDist > maxDist) {
+          player.position.x = (player.position.x / currentDist) * maxDist;
+          player.position.z = (player.position.z / currentDist) * maxDist;
+        }
+
+        // Prevent walking deep into the water lake (soft collision at lake edge Z: -13.5)
+        if (player.position.z < -13.2 && Math.abs(player.position.x) < 35) {
+          player.position.z = -13.2;
+        }
+
+        // Head bobbing
+        if (player.isMoving) {
+          player.bobTimer += dt * (keys.sprint ? 14 : 9);
+        } else {
+          player.bobTimer = 0;
+        }
+        const bobOffset = Math.sin(player.bobTimer) * 0.035;
+
+        camera.position.x = player.position.x;
+        camera.position.y = player.height + bobOffset;
+        camera.position.z = player.position.z;
+
+        const euler = new THREE.Euler(player.pitch, player.yaw, 0, 'YXZ');
+        camera.quaternion.setFromEuler(euler);
+      }
+
+      function updateHotspots(time) {
+        let nearestDist = Infinity;
+        let nearestBeacon = null;
+
+        beacons.forEach(b => {
+          b.visible = showBeacons;
+          if (!showBeacons) return;
+
+          const pulse = 1 + Math.sin(time * 3 + b.userData.id.length) * 0.15;
+          b.scale.set(pulse, pulse, pulse);
+          b.userData.ring.rotation.z += 0.015;
+
+          const dist = camera.position.distanceTo(b.position);
+          if (dist < nearestDist) {
+            nearestDist = dist;
+            nearestBeacon = b;
+          }
+        });
+
+        // Show popup if near (< 4.2m)
+        if (nearestBeacon && nearestDist < 4.2 && isFirstPerson) {
+          hotspotTitle.textContent = nearestBeacon.userData.title;
+          hotspotDesc.textContent = nearestBeacon.userData.desc;
+          hotspotCategory.textContent = nearestBeacon.userData.category;
+          hotspotModal.classList.remove('hidden');
+        }
+      }
+
+      // Render Accurate Minimap Radar
+      function updateRadar() {
+        radarCtx.clearRect(0, 0, 104, 104);
+
+        const centerX = 52, centerY = 52;
+        const scale = 0.85; // 55m radius fits inside
+
+        // Radar background ring
+        radarCtx.strokeStyle = 'rgba(133, 83, 42, 0.45)';
+        radarCtx.lineWidth = 1;
+        radarCtx.beginPath();
+        radarCtx.arc(centerX, centerY, 48, 0, Math.PI * 2);
+        radarCtx.stroke();
+
+        // Crosshairs
+        radarCtx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        radarCtx.beginPath();
+        radarCtx.moveTo(centerX, 4); radarCtx.lineTo(centerX, 100);
+        radarCtx.moveTo(4, centerY); radarCtx.lineTo(100, centerY);
+        radarCtx.stroke();
+
+        // Sendang Beji Elongated Lake (North)
+        radarCtx.fillStyle = 'rgba(29, 92, 82, 0.65)';
+        const lakeW = 60 * scale;
+        const lakeH = 24 * scale;
+        radarCtx.fillRect(centerX - lakeW / 2, centerY - 28 * scale - lakeH / 2, lakeW, lakeH);
+
+        // Candi Bentar Gate & Sacred Shrine (Center)
+        radarCtx.fillStyle = 'rgba(165, 75, 45, 0.7)';
+        radarCtx.fillRect(centerX - 4 * scale, centerY + 2 * scale, 8 * scale, 7 * scale);
+
+        // Tourism Pavilion (West)
+        radarCtx.fillStyle = 'rgba(110, 91, 71, 0.6)';
+        radarCtx.fillRect(centerX - 28 * scale, centerY + 1 * scale, 12 * scale, 9 * scale);
+
+        // Beacon dots
+        beacons.forEach(b => {
+          const bx = centerX + b.position.x * scale;
+          const by = centerY + b.position.z * scale;
+          radarCtx.fillStyle = '#f59e0b';
+          radarCtx.beginPath();
+          radarCtx.arc(bx, by, 2.5, 0, Math.PI * 2);
+          radarCtx.fill();
+        });
+
+        // Player cone & dot
+        const px = centerX + camera.position.x * scale;
+        const py = centerY + camera.position.z * scale;
+
+        radarCtx.fillStyle = 'rgba(2, 132, 199, 0.35)';
+        radarCtx.beginPath();
+        radarCtx.moveTo(px, py);
+        const lookAngle = -player.yaw - Math.PI / 2;
+        radarCtx.arc(px, py, 14, lookAngle - 0.5, lookAngle + 0.5);
+        radarCtx.closePath();
+        radarCtx.fill();
+
+        radarCtx.fillStyle = '#0284c7';
+        radarCtx.beginPath();
+        radarCtx.arc(px, py, 3.5, 0, Math.PI * 2);
+        radarCtx.fill();
+        radarCtx.strokeStyle = '#ffffff';
+        radarCtx.lineWidth = 1.5;
+        radarCtx.stroke();
+      }
+
+      // --- 11. ANIMATION LOOP ---
+      function animate() {
+        requestAnimationFrame(animate);
+
+        const dt = Math.min(clock.getDelta(), 0.1);
+        const time = clock.getElapsedTime();
+
+        if (isFirstPerson) {
+          updatePlayer(dt);
+        } else {
+          orbitControls.update();
+        }
+
+        // Animate lake water normal map
+        if (lakeMesh && waterNormalTex) {
+          waterNormalTex.offset.x = (time * 0.02) % 1;
+          waterNormalTex.offset.y = (time * 0.015) % 1;
+        }
+
+        updateHotspots(time);
+        updateRadar();
+
+        renderer.render(scene, camera);
+      }
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        syncMobileControlsVisibility();
+      }
+
+      // --- 12. UI BUTTON INTERACTIONS ---
+      btnModeWalk.addEventListener('click', () => {
+        isFirstPerson = true;
+        orbitControls.enabled = false;
+        btnModeWalk.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary text-white text-[11px] font-semibold tracking-wider transition-all shadow-sm';
+        btnModeDrone.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-on-surface-variant hover:text-white text-[11px] font-semibold tracking-wider transition-all';
+        syncMobileControlsVisibility();
+        camera.position.set(player.position.x, player.height, player.position.z);
+      });
+
+      btnModeDrone.addEventListener('click', () => {
+        isFirstPerson = false;
+        orbitControls.enabled = true;
+        if (document.exitPointerLock) document.exitPointerLock();
+
+        btnModeDrone.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-accent text-white text-[11px] font-semibold tracking-wider transition-all shadow-sm';
+        btnModeWalk.className = 'flex items-center gap-1.5 px-3 py-1.5 rounded-md text-on-surface-variant hover:text-white text-[11px] font-semibold tracking-wider transition-all';
+        desktopWalkHint.classList.add('hidden');
+        if (mobileControlsContainer) mobileControlsContainer.classList.add('hidden');
+
+        // Elevated aerial sweeping view over the entire site
+        camera.position.set(0, 32, 45);
+        orbitControls.target.set(0, 0, -8);
+        orbitControls.update();
+      });
+
+      // Teleport to Candi Bentar Gate
+      btnTeleGate.addEventListener('click', () => {
+        player.position.set(0, player.height, 12);
+        player.yaw = 0;
+        player.pitch = 0;
+        if (!isFirstPerson) {
+          camera.position.set(0, 15, 22);
+          orbitControls.target.set(0, 1.5, 6);
+          orbitControls.update();
+        }
+      });
+
+      // Teleport to Lake Shore (Sendang Beji)
+      btnTeleLake.addEventListener('click', () => {
+        player.position.set(0, player.height, -10);
+        player.yaw = 0; // facing North towards lake
+        player.pitch = 0;
+        if (!isFirstPerson) {
+          camera.position.set(0, 24, -2);
+          orbitControls.target.set(0, 0, -28);
+          orbitControls.update();
+        }
+      });
+
+      btnToggleAudio.addEventListener('click', toggleAudio);
+
+      btnToggleHotspots.addEventListener('click', () => {
+        showBeacons = !showBeacons;
+        if (showBeacons) {
+          btnToggleHotspots.classList.remove('text-on-surface-variant');
+          btnToggleHotspots.classList.add('text-primary');
+        } else {
+          btnToggleHotspots.classList.add('text-on-surface-variant');
+          btnToggleHotspots.classList.remove('text-primary');
+          hotspotModal.classList.add('hidden');
+        }
+      });
+
+      btnCloseWelcome.addEventListener('click', () => {
+        welcomeModal.classList.add('hidden');
+        syncMobileControlsVisibility();
+      });
+      btnStartExplore.addEventListener('click', () => {
+        welcomeModal.classList.add('hidden');
+        syncMobileControlsVisibility();
+        if (!isMobile) {
+          container.requestPointerLock();
+        }
+        if (!audioCtx) initWebAudio();
+      });
+
+      btnOpenHelp.addEventListener('click', () => {
+        welcomeModal.classList.remove('hidden');
+      });
+
+      btnCloseHotspot.addEventListener('click', () => {
+        hotspotModal.classList.add('hidden');
+      });
+
+      // Start
+      initThree();
+
+    })();
+  </script>
+</body>
+</html>

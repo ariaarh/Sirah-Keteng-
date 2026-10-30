@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="web_standard" name="shell-type" />
+  <title>03. Lini Masa Sejarah (Tahun 1000 - Sekarang) | Beji Sirah Keteng</title>
+  
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet" />
+  
+  <!-- Three.js + GLTFLoader + OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-tint": "#835425",
+            "secondary-container": "#ff5a55",
+            "tertiary-fixed": "#ffddba",
+            "primary-fixed": "#ffdcc1",
+            "on-secondary-fixed": "#410003",
+            "primary-container": "#8b5a2b",
+            "surface-dim": "#e2d8d3",
+            "surface-variant": "#ebe0db",
+            "secondary": "#b52426",
+            "on-tertiary-fixed-variant": "#5f401a",
+            "outline": "#837469",
+            "on-primary-fixed": "#2e1500",
+            "tertiary": "#664620",
+            "on-surface": "#1f1b18",
+            "outline-variant": "#d5c3b6",
+            "on-secondary-container": "#600008",
+            "on-tertiary": "#ffffff",
+            "surface": "#fff8f5",
+            "inverse-primary": "#f9ba82",
+            "surface-bright": "#fff8f5",
+            "on-surface-variant": "#51443a",
+            "inverse-surface": "#352f2c",
+            "on-error": "#ffffff",
+            "secondary-fixed": "#ffdad6",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#f6ece7",
+            "surface-container-high": "#f0e6e1",
+            "primary": "#6f4315",
+            "on-primary-fixed-variant": "#683d0f",
+            "primary-fixed-dim": "#f9ba82",
+            "on-primary-container": "#ffddc2",
+            "secondary-fixed-dim": "#ffb3ad",
+            "error": "#ba1a1a",
+            "tertiary-fixed-dim": "#ecbe8e",
+            "surface-container-highest": "#ebe0db",
+            "on-secondary-fixed-variant": "#920212",
+            "inverse-on-surface": "#f9efea",
+            "on-tertiary-container": "#ffddbb",
+            "on-secondary": "#ffffff",
+            "surface-container-low": "#fcf2ec",
+            "on-primary": "#ffffff",
+            "error-container": "#ffdad6",
+            "background": "#fff8f5",
+            "on-tertiary-fixed": "#2b1700",
+            "tertiary-container": "#815e35",
+            "on-error-container": "#93000a",
+            "on-background": "#1f1b18"
+          },
+          borderRadius: {
+            "DEFAULT": "0px",
+            "none": "0px",
+            "sm": "0px",
+            "md": "0px",
+            "lg": "0px",
+            "xl": "0px",
+            "full": "9999px"
+          },
+          spacing: {
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-2xl": "4rem",
+            "space-3xl": "6rem",
+            "gutter": "1.5rem",
+            "margin": "4rem"
+          },
+          fontFamily: {
+            "serif": ["Playfair Display", "serif"],
+            "sans": ["Plus Jakarta Sans", "sans-serif"],
+            "mono": ["Courier Prime", "monospace", "ui-monospace"]
+          }
+        }
+      }
+    };
+  </script>
+  
+  <style>
+    @layer base {
+      html {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-text-size-adjust: 100%;
+        touch-action: manipulation;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      button, a {
+        touch-action: manipulation;
+      }
+    }
+    .text-shadow-epigraph {
+      text-shadow: 0 2px 8px rgba(111, 67, 21, 0.15), 0 1px 1px rgba(0, 0, 0, 0.05);
+    }
+    .stone-grid-bg {
+      background-size: 32px 32px;
+      background-image: radial-gradient(#1f1b18 1px, transparent 1px);
+    }
+    /* Timeline Image Hover Zoom & 3D Shadow Depth */
+    .timeline-img-zoom {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease !important;
+      will-change: transform, filter;
+    }
+    .group:hover .timeline-img-zoom {
+      transform: scale(1.06) !important;
+    }
+    .timeline-img-tone {
+      filter: brightness(0.97) contrast(1.07) saturate(1.05);
+    }
+    .timeline-frame-shadow {
+      box-shadow: 0 16px 36px -6px rgba(43, 38, 35, 0.22), 0 6px 16px -4px rgba(43, 38, 35, 0.12) !important;
+      transition: box-shadow 0.5s ease-out, transform 0.5s ease-out !important;
+    }
+    .group:hover .timeline-frame-shadow {
+      box-shadow: 0 24px 50px -8px rgba(43, 38, 35, 0.32), 0 10px 24px -4px rgba(43, 38, 35, 0.18) !important;
+    }
+    .timeline-detached-shadow {
+      box-shadow: 8px 12px 24px -4px rgba(43, 38, 35, 0.18), 0 2px 8px -2px rgba(43, 38, 35, 0.08) !important;
+      transition: transform 0.5s ease-out, box-shadow 0.5s ease-out !important;
+    }
+    .group:hover .timeline-detached-shadow {
+      box-shadow: 12px 20px 36px -4px rgba(43, 38, 35, 0.28), 0 4px 12px -2px rgba(43, 38, 35, 0.12) !important;
+    }
+  </style>
+</head>
+
+<body class="bg-surface font-sans text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen flex flex-col justify-between">
+
+  <!-- Header / Navigation Vitrine Plinth -->
+  <header class="fixed top-0 inset-x-0 z-50 bg-surface/92 backdrop-blur-md border-b border-white/80 shadow-[0_1px_8px_rgba(43,38,35,0.04)]">
+    <div class="min-h-16 sm:min-h-20 xl:min-h-[84px] py-2 max-w-[1440px] mx-auto px-3 sm:px-6 xl:px-4 2xl:px-margin flex items-center justify-between gap-1 sm:gap-2 xl:gap-3">
+      <!-- Site Brand Emblem & Title -->
+      <a href="index.html" class="flex items-center gap-2 group shrink-0">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 border border-primary-container/40 bg-surface-container/80 flex items-center justify-center p-0.5 shadow-xs group-hover:border-primary group-hover:shadow-sm transition-all overflow-hidden shrink-0">
+          <img src="./logo-man2p.png" alt="Logo MAN 2 Ponorogo" class="w-full h-full object-contain drop-shadow-xs" />
+        </div>
+        <div class="flex flex-col">
+          <span class="font-serif text-[12px] sm:text-sm lg:text-[13px] xl:text-[13.5px] tracking-wide text-on-surface uppercase font-bold text-shadow-epigraph leading-tight">BEJI SIRAH KETENG</span>
+          <span class="hidden sm:block text-[8px] sm:text-[9px] lg:text-[8.5px] xl:text-[9px] tracking-widest text-on-surface-variant uppercase font-medium leading-normal">Arsip Digital &amp; Eksplorasi 3D</span>
+        </div>
+      </a>
+
+      <!-- Navigation Bar (Exhibition Sections) -->
+      <nav class="hidden xl:flex items-stretch gap-1 p-1 bg-surface-container-low/90 backdrop-blur-sm border border-white/70 shadow-xs">
+        <a href="index.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors rounded-[2px] leading-tight min-h-[46px]">
+          01. Pengantar 3D
+        </a>
+        <a href="elemen-kalamakara.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors rounded-[2px] leading-tight min-h-[46px]">
+          02. Elemen Kalamakara
+        </a>
+        <a href="lini-masa-sejarah.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider font-semibold bg-primary-container text-white shadow-xs rounded-[2px] leading-tight min-h-[46px]">
+          03. Lini Masa Sejarah
+        </a>
+        <a href="cerita-rakyat.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors rounded-[2px] leading-tight min-h-[46px]">
+          04. Cerita Rakyat (3 Versi)
+        </a>
+        <a href="monolit-utama.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors rounded-[2px] leading-tight min-h-[46px]">
+          05. Monolit Utama
+        </a>
+        <a href="galeri-dokumentasi.html" class="flex flex-col justify-center items-center text-center px-2 py-1 text-[10.5px] 2xl:text-[11px] uppercase tracking-wider text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors rounded-[2px] leading-tight min-h-[46px]">
+          06. Galeri Dokumentasi
+        </a>
+      </nav>
+
+      <!-- Meta Utilities: Audio Guide, Language, Coordinates, Profile, Mobile Menu -->
+      <div class="flex items-center gap-1.5 sm:gap-2 lg:gap-space-md shrink-0">
+        <div id="btn-audio-guide" class="btn-audio-guide hidden md:flex items-center gap-space-xs px-space-sm py-1 bg-surface-container-low/90 backdrop-blur-sm border border-white/70 text-on-surface-variant cursor-pointer hover:bg-surface-container transition-colors shadow-xs" title="Putar Pemandu Audio Kuratorial (3 Rekaman Berurutan)">
+          <span class="material-symbols-outlined text-[16px] text-secondary">volume_up</span>
+          <span class="text-[11px] uppercase tracking-wider text-primary font-semibold">Pemandu Audio</span>
+          <span class="inline-block w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+        </div>
+
+        <a href="penerjemah-bisindo.html" id="btn-bisindo-link" class="w-8 h-8 sm:w-8 sm:h-8 border border-outline-variant/60 bg-surface-container-low flex items-center justify-center text-primary hover:bg-surface-container transition-colors shadow-xs shrink-0" title="Penerjemah Bahasa Isyarat 3D (BISINDO) untuk Aksesibilitas Disabilitas Rungu" aria-label="Penerjemah Bahasa Isyarat 3D (BISINDO)">
+          <span class="material-symbols-outlined text-[17px] sm:text-[18px]">sign_language</span>
+        </a>
+
+        <div id="lang-switcher" class="flex items-center text-[10px] sm:text-[11px] tracking-wider uppercase text-on-surface-variant bg-surface-container-low/90 backdrop-blur-sm border border-white/70 px-2 sm:px-space-sm py-1 shadow-xs select-none">
+          <button id="lang-btn-id" type="button" class="text-primary font-bold cursor-default transition-colors" title="Bahasa Indonesia">ID</button>
+          <span class="mx-1 text-outline-variant">/</span>
+          <button id="lang-btn-jv" type="button" class="text-on-surface-variant hover:text-on-surface cursor-pointer transition-colors" title="Basa Jawa">JV</button>
+        </div>
+
+        <div class="hidden 2xl:flex flex-col text-right">
+          <span class="text-[10px] text-on-surface-variant font-mono">07°58'48" S 111°29'22" E</span>
+          <span class="text-[10px] text-primary uppercase font-semibold">Sambit, Ponorogo</span>
+        </div>
+
+        <button id="btn-profile-modal" type="button" class="w-8 h-8 sm:w-8 sm:h-8 rounded-full bg-primary flex items-center justify-center shadow-xs cursor-pointer hover:bg-primary-container transition-colors shrink-0" title="Informasi Kredit, Hak Cipta & Peta Lokasi" aria-label="Informasi Kredit, Hak Cipta & Peta Lokasi">
+          <span class="material-symbols-outlined text-white text-[16px] sm:text-[18px]">person</span>
+        </button>
+
+        <button id="btn-mobile-menu-toggle" type="button" class="xl:hidden w-8 h-8 sm:w-8 sm:h-8 flex items-center justify-center bg-surface-container-low border border-outline-variant/60 text-primary hover:bg-surface-container transition-colors shadow-xs cursor-pointer shrink-0" aria-label="Buka Menu Navigasi" title="Navigasi Menu Pameran">
+          <span class="material-symbols-outlined text-[18px] sm:text-[20px]">menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Showcase Container -->
+  <main class="w-full pt-20 xl:pt-24 bg-surface flex-1">
+    <div class="flex flex-col w-full bg-surface-container-lowest text-on-surface relative overflow-hidden">
+      <!-- Subtle Technical Cartesian Grid & Background Watermark -->
+      <div class="absolute inset-0 pointer-events-none opacity-[0.035] stone-grid-bg"></div>
+
+      <!-- Top Hero / Editorial Header -->
+      <section class="w-full max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-margin pt-space-xl pb-space-2xl relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-end">
+          <div class="lg:col-span-8 flex flex-col">
+            <div class="flex items-center gap-space-sm mb-space-sm">
+              <span class="inline-block w-2.5 h-2.5 bg-secondary"></span>
+              <span class="text-[11px] uppercase tracking-widest text-primary font-bold">Katalog Kronik Sejarah • Reg. Prasasti D 33 / D 172</span>
+              <span class="text-outline-variant">/</span>
+              <span class="text-[11px] font-mono text-on-surface-variant">GEO-STRATA: 07°58'S 111°29'E • KRAJAN, BEDINGIN, SAMBIT</span>
+            </div>
+            <h1 class="text-4xl sm:text-5xl text-on-surface font-serif tracking-tight uppercase leading-tight font-bold">
+              KRONIK PERADABAN <br/>
+              <span class="italic font-normal text-primary">BEJI SIRAH KETENG</span>
+            </h1>
+            <div class="mt-space-lg flex flex-col md:flex-row gap-space-lg items-start">
+              <div class="w-16 h-[2px] bg-secondary mt-3 hidden md:block"></div>
+              <p class="text-[15px] text-on-surface-variant max-w-2xl leading-relaxed">
+                Dari penerbitan Prasasti Sirah Keting (1204 M) oleh Prabu Sri Jayawarsa Digjaya Sastra Prabu (trah Dinasti Isyana Medang), jejak petirtaan suci berhulu mata air alami di Bhumi Wengker, dinamika Babad Ponorogo era Adipati Suryangalam vs Batara Katong, era keemasan wisata rakyat abad ke-20, temuan bata merah raksasa 2016, hingga preservasi digital fotogrametri 3D September 2026 oleh peneliti MAN 2 Ponorogo.
+              </p>
+            </div>
+          </div>
+
+          <!-- Quick Stats & Archaeological Telemetry -->
+          <div class="lg:col-span-4 flex flex-col justify-end">
+            <div class="bg-surface-container-low p-space-lg border border-outline-variant/40 shadow-xs relative overflow-hidden">
+              <div class="flex items-center justify-between pb-space-sm mb-space-sm border-b border-outline-variant/30">
+                <span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-medium">Rentang Stratigrafi</span>
+                <span class="text-sm font-mono text-secondary font-bold">822+ TAHUN DOKUMENTATIF</span>
+              </div>
+              <div class="grid grid-cols-2 gap-space-md">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant uppercase block">Piagam Tertua</span>
+                  <span class="text-base text-on-surface font-bold font-mono">1204 M</span>
+                  <span class="text-[11px] text-primary block mt-0.5">Prasasti Sirah Keting</span>
+                </div>
+                <div>
+                  <span class="text-[10px] text-on-surface-variant uppercase block">Preservasi Terkini</span>
+                  <span class="text-base text-secondary font-bold font-mono">September 2026</span>
+                  <span class="text-[11px] text-primary block mt-0.5">Riset MAN 2 Ponorogo</span>
+                </div>
+              </div>
+              <div class="mt-space-md pt-space-sm border-t border-outline-variant/20 flex items-center justify-between text-[10px] text-on-surface-variant">
+                <span class="flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 bg-primary"></span> 5 Fase Kronologi Faktual
+                </span>
+                <span class="font-mono text-primary font-bold">NARASUMBER: PAK JARNO</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Interactive Timeline Control Bar (Sticky Quick Epoch Navigation) -->
+      <section class="w-full bg-surface-container-low/95 border-y border-outline-variant/40 shadow-xs sticky top-16 sm:top-20 z-40 backdrop-blur-md">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-margin py-2 sm:py-space-sm flex items-center justify-between overflow-x-auto gap-2 sm:gap-space-md no-scrollbar touch-pan-x" style="-webkit-overflow-scrolling: touch;">
+          <div class="flex items-center gap-space-xs text-[11px] uppercase tracking-widest text-primary shrink-0 font-bold">
+            <span class="material-symbols-outlined text-[16px] text-secondary">explore</span>
+            <span>NAVIGASI ERA:</span>
+          </div>
+          <div class="flex items-center gap-space-xs shrink-0 text-[11px]">
+            <a href="#fase-1" class="px-3 py-1.5 uppercase tracking-wider text-on-surface hover:bg-surface-container-highest transition-colors flex items-center gap-2 border border-transparent hover:border-outline-variant/40">
+              <span class="w-1.5 h-1.5 bg-secondary"></span> 1204 M <span class="text-on-surface-variant hidden md:inline">• Prasasti Sirah Keting</span>
+            </a>
+            <a href="#fase-2" class="px-3 py-1.5 uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors flex items-center gap-2 border border-transparent hover:border-outline-variant/40">
+              <span class="w-1.5 h-1.5 bg-primary-container"></span> Abad XV–XVI <span class="text-on-surface-variant hidden md:inline">• Babad Ponorogo</span>
+            </a>
+            <a href="#fase-3" class="px-3 py-1.5 uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors flex items-center gap-2 border border-transparent hover:border-outline-variant/40">
+              <span class="w-1.5 h-1.5 bg-outline"></span> 1971–1980-an <span class="text-on-surface-variant hidden md:inline">• Plesengan &amp; Wisata</span>
+            </a>
+            <a href="#fase-4" class="px-3 py-1.5 uppercase tracking-wider text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-colors flex items-center gap-2 border border-transparent hover:border-outline-variant/40">
+              <span class="w-1.5 h-1.5 bg-outline"></span> 2011–2016 M <span class="text-on-surface-variant hidden md:inline">• Ekskavasi Bata Kuno</span>
+            </a>
+            <a href="#fase-5" class="px-3 py-1.5 uppercase tracking-wider text-secondary font-bold hover:bg-surface-container-highest transition-colors flex items-center gap-2 border border-secondary/40 bg-secondary/5">
+              <span class="w-1.5 h-1.5 bg-secondary animate-ping"></span> 2026 M <span class="text-on-surface-variant hidden md:inline">• Preservasi 3D</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Main Timeline Chronological Spine -->
+      <section class="w-full max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-margin py-space-3xl relative z-10">
+        
+        <!-- Central Measuring Spine (Desktop Archaeological Metrology Axis) -->
+        <div class="hidden lg:block absolute left-1/2 top-space-3xl bottom-space-3xl -translate-x-1/2 w-px bg-outline-variant/60 pointer-events-none">
+          <div class="sticky top-44 flex flex-col items-center gap-40">
+            <span class="bg-surface px-1.5 py-0.5 text-[9px] font-mono text-outline tracking-wider -rotate-90 border border-outline-variant/40">1204 M</span>
+            <span class="bg-surface px-1.5 py-0.5 text-[9px] font-mono text-outline tracking-wider -rotate-90 border border-outline-variant/40">1500 M</span>
+            <span class="bg-surface px-1.5 py-0.5 text-[9px] font-mono text-outline tracking-wider -rotate-90 border border-outline-variant/40">1971 M</span>
+            <span class="bg-surface px-1.5 py-0.5 text-[9px] font-mono text-outline tracking-wider -rotate-90 border border-outline-variant/40">2016 M</span>
+            <span class="bg-surface px-1.5 py-0.5 text-[9px] font-mono text-secondary tracking-wider -rotate-90 font-bold border border-secondary">2026 M</span>
+          </div>
+        </div>
+
+        <!-- Timeline Entries Container -->
+        <div class="flex flex-col gap-space-3xl">
+
+          <!-- ========================================== -->
+          <!-- ========================================== -->
+          <!-- FASE I: 1204 M (1126 SAKA) -->
+          <!-- ========================================== -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center relative scroll-mt-36" id="fase-1">
+            <!-- Center Dot Marker for Desktop -->
+            <div class="hidden lg:flex absolute left-1/2 -translate-x-1/2 top-8 w-6 h-6 bg-surface items-center justify-center shadow-xs z-20 border border-outline-variant/50">
+              <span class="w-2.5 h-2.5 bg-secondary"></span>
+            </div>
+
+            <!-- Narrative Column (Left) -->
+            <div class="lg:col-span-5 flex flex-col">
+              <div class="flex items-center gap-space-sm mb-space-xs">
+                <span class="px-space-sm py-0.5 bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest border border-primary/20">
+                  Fase I • Piagam Prasasti Sirah Keting
+                </span>
+                <span class="text-[11px] font-mono text-secondary font-bold">1126 Saka (1204 M)</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl text-on-surface font-serif font-bold mb-space-sm leading-tight">
+                Penerbitan Prasasti Sirah Keting &amp; Hak Sima Swatantra
+              </h2>
+              <div class="w-12 h-[2px] bg-primary mb-space-md"></div>
+              <p class="text-[14px] text-on-surface-variant mb-space-md leading-relaxed">
+                Tahun 1126 Saka (1204 Masehi), Raja <strong class="text-on-surface font-serif">Prabu Sri Jayawarsa Digjaya Sastra Prabu</strong> menerbitkan piagam batu Prasasti Sirah Keting. Piagam ini menetapkan anugerah status <em class="italic font-serif text-on-surface">Sima Swatantra</em> (daerah perdikan otonom bebas pungutan pajak kerajaan) serta hak-hak istimewa kepada tokoh lokal bernama <strong class="text-on-surface">Marjaya</strong> (bergelar <em class="italic text-on-surface">atapatigh</em>) atas kesetiaan dan pengabdiannya.
+              </p>
+              <p class="text-[14px] text-on-surface-variant mb-space-lg leading-relaxed">
+                Prabu Sri Jayawarsa adalah cucu kandung Raja Dharmawangsa Teguh (Medang Mataram Kuno di Jawa Timur), trah Dinasti Isyana (Mpu Sindok), serta berkerabat dengan Prabu Airlangga. Beliau memerintah wilayah Madiun, Ponorogo, dan sekitarnya secara berdampingan damai dengan Kerajaan Kediri era Raja Kameswara. Nama asli situs ini sebagaimana terpahat dalam prasasti adalah <strong class="text-primary font-serif">"Sirah Keting"</strong>.
+              </p>
+              <div class="bg-surface-container-low p-space-md border border-outline-variant/40 shadow-xs flex items-start gap-space-sm">
+                <span class="material-symbols-outlined text-secondary text-[20px] mt-0.5">verified</span>
+                <div class="flex flex-col">
+                  <span class="text-sm text-on-surface font-bold">Arsip Museum Nasional No. Reg. D 33 / D 172</span>
+                  <span class="text-[12px] text-on-surface-variant leading-normal">Prasasti batu beraksara dan berbahasa Jawa Kuno ditemukan di area Beji menyatu dengan reruntuhan candi, kini tersimpan di Museum Nasional Jakarta.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hidden lg:block lg:col-span-2"></div>
+
+            <!-- Visual Column with Offset Framing (Right) -->
+            <div class="lg:col-span-5 relative">
+              <div class="relative w-full aspect-[4/3] max-w-lg mx-auto group cursor-pointer">
+                <!-- Underneath Media Layer -->
+                <div class="absolute inset-0 bg-surface-container timeline-frame-shadow overflow-hidden border border-outline-variant/60">
+                  <img class="w-full h-full object-cover object-center timeline-img-zoom timeline-img-tone" 
+                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuDl1Wvzgyb2ncxgCFMhQzfB2mXp0Eh6jsjvNAhim6CepwgNYts9OgN_yPXeQOyt1I7pQjUwXlTH-Sis7LWoEzOP2-S4gq0E6iJm5bqDse6Q-8RZ7R2Fr4cLsTw38EbkFqPIUcQOlu1-pmQO0nEye67t2Kiu5GpxBTXfidS75AeE14FNKWYWvS5JfxCjWW6QgX48OvlIYov5EXAedOVQCtkwksQT25OFIwu5vPiwJlYQHGH-fbGbKTAz" 
+                       alt="Situs Prasasti Sirah Keting 1204 Masehi di Beji Sirah Keteng" />
+                  <!-- Vignette & Shadow Scrim -->
+                  <div class="absolute inset-0 ring-1 ring-inset ring-black/20 shadow-[inset_0_0_35px_rgba(20,16,14,0.4)] pointer-events-none"></div>
+                  <div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/25 to-transparent pointer-events-none"></div>
+                  <div class="absolute bottom-3 left-4 flex items-center gap-1.5 text-[10px] text-white font-mono pointer-events-none">
+                    <span class="inline-block w-8 h-[2px] bg-secondary"></span>
+                    <span>PIAGAM SIMA: 1126 SAKA</span>
+                  </div>
+                </div>
+                <!-- Detached Frame -->
+                <div class="absolute -top-3 -right-3 w-full h-full pointer-events-none border border-primary-container/60 timeline-detached-shadow flex flex-col justify-between p-3">
+                  <div class="flex justify-between items-start">
+                    <span class="w-2.5 h-2.5 bg-primary"></span>
+                    <span class="bg-surface px-2 py-0.5 text-[9px] font-mono text-primary font-bold shadow-xs">EPOCH.01 // PRASASTI 1204 M</span>
+                  </div>
+                  <div class="flex justify-between items-end">
+                    <span class="text-[9px] font-mono text-outline-variant tracking-wider bg-surface/90 px-1 border border-outline-variant/30">MUSEUM NASIONAL D 33</span>
+                    <span class="w-2.5 h-2.5 bg-secondary"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- FASE II: ABAD XV - XVI M -->
+          <!-- ========================================== -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center relative scroll-mt-36" id="fase-2">
+            <!-- Center Dot Marker for Desktop -->
+            <div class="hidden lg:flex absolute left-1/2 -translate-x-1/2 top-8 w-6 h-6 bg-surface items-center justify-center shadow-xs z-20 border border-outline-variant/50">
+              <span class="w-2.5 h-2.5 bg-primary-container"></span>
+            </div>
+
+            <!-- Visual Column with Offset Framing (Left on Desktop) -->
+            <div class="order-2 lg:order-1 lg:col-span-5 relative">
+              <div class="relative w-full aspect-[4/3] max-w-lg mx-auto group cursor-pointer">
+                <div class="absolute inset-0 bg-surface-container timeline-frame-shadow overflow-hidden border border-outline-variant/60">
+                  <img class="w-full h-full object-cover object-center timeline-img-zoom timeline-img-tone" 
+                       src="./dokumentasi/foto/halaman%203/Pertarungan%20Suryangalam%20%26%20Asal-Usul%20Nama%20Sirah%20Keteng.png" 
+                       alt="Pertarungan Suryangalam &amp; Asal-Usul Nama Sirah Keteng" />
+                  <!-- Vignette & Shadow Scrim -->
+                  <div class="absolute inset-0 ring-1 ring-inset ring-black/20 shadow-[inset_0_0_35px_rgba(20,16,14,0.4)] pointer-events-none"></div>
+                  <div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/25 to-transparent pointer-events-none"></div>
+                  <div class="absolute bottom-3 right-4 text-[10px] text-white font-mono bg-on-surface/90 px-2 py-0.5 pointer-events-none shadow-xs">
+                    KORPUS SEJARAH: BABAD PONOROGO
+                  </div>
+                </div>
+                <!-- Detached Frame -->
+                <div class="absolute -bottom-3 -left-3 w-full h-full pointer-events-none border border-secondary/60 timeline-detached-shadow flex flex-col justify-between p-3">
+                  <div class="flex justify-between items-start">
+                    <span class="bg-surface px-2 py-0.5 text-[9px] font-mono text-secondary font-bold shadow-xs">EPOCH.02 // BABAD PONOROGO</span>
+                    <span class="w-2.5 h-2.5 bg-secondary"></span>
+                  </div>
+                  <div class="flex justify-between items-end">
+                    <span class="w-2.5 h-2.5 bg-primary"></span>
+                    <span class="text-[9px] font-mono text-outline-variant tracking-wider bg-surface/90 px-1 border border-outline-variant/30">TOPONIMI SIRAH KETENG</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hidden lg:block lg:col-span-2 order-2"></div>
+
+            <!-- Narrative Column (Right on Desktop) -->
+            <div class="order-1 lg:order-3 lg:col-span-5 flex flex-col">
+              <div class="flex items-center gap-space-sm mb-space-xs">
+                <span class="px-space-sm py-0.5 bg-surface-variant text-on-surface text-[10px] font-bold uppercase tracking-widest border border-outline-variant/30">
+                  Fase II • Dinamika Babad Ponorogo
+                </span>
+                <span class="text-[11px] font-mono text-primary font-bold">Abad XV – XVI M</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl text-on-surface font-serif font-bold mb-space-sm leading-tight">
+                Pertarungan Suryangalam &amp; Asal-Usul Nama Sirah Keteng
+              </h2>
+              <div class="w-12 h-[2px] bg-secondary mb-space-md"></div>
+              <p class="text-[14px] text-on-surface-variant mb-space-md leading-relaxed">
+                Transkrip Babad Ponorogo mencatat pertempuran sengit antara tokoh legendaris <strong class="text-on-surface font-serif">Suryangalam (Ki Ageng Gribig)</strong> melawan <strong class="text-on-surface font-serif">Raden Batara Katong</strong> yang didampingi Patih Seloaji dan Ki Ageng Mirah. Terdesak di perbukitan Bancingan (yang melahirkan toponimi <em>Belik Bacin</em> karena air belik berbau anyir darah), pertarungan berlanjut ke arah selatan hingga ke bawah naungan pohon beringin raksasa petirtaan Beji.
+              </p>
+              <p class="text-[14px] text-on-surface-variant mb-space-lg leading-relaxed">
+                Di lokasi inilah leher Suryangalam tertebas senjata pusaka hingga kepalanya terpenggal dan jatuh ke dalam air sendang Beji. Kepala yang terendam menimbulkan aroma busuk menyengat (<em>ledeng-ledeng</em>), melahirkan toponimi lisan <strong class="text-primary font-serif">"Sirah Keteng"</strong> (kepala yang terpenggal). Sementara itu, tubuh tanpa kepala (<em>gembung</em>) dikisahkan tetap berdiri dan terus berlari menuju Gunung Dlokor (Tladan, Mlarak) menghadap danyang leluhur Nyi Kurek.
+              </p>
+              <div class="grid grid-cols-2 gap-space-sm bg-surface-container-low p-space-md border border-outline-variant/40 shadow-xs">
+                <div>
+                  <span class="text-[10px] text-on-surface-variant uppercase block font-medium">Narasumber Lisan</span>
+                  <span class="text-sm text-on-surface font-mono font-bold">Pak Jarno (Kamituwa / Purna Pamong)</span>
+                </div>
+                <div>
+                  <span class="text-[10px] text-on-surface-variant uppercase block font-medium">Toponimi Terkait</span>
+                  <span class="text-sm text-primary font-bold">Belik Bacin &amp; Gn. Dlokor</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- FASE III: 1971 - 1980-AN -->
+          <!-- ========================================== -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center relative scroll-mt-36" id="fase-3">
+            <!-- Center Dot Marker for Desktop -->
+            <div class="hidden lg:flex absolute left-1/2 -translate-x-1/2 top-8 w-6 h-6 bg-surface items-center justify-center shadow-xs z-20 border border-outline-variant/50">
+              <span class="w-2.5 h-2.5 bg-tertiary"></span>
+            </div>
+
+            <!-- Narrative Column (Left) -->
+            <div class="lg:col-span-5 flex flex-col">
+              <div class="flex items-center gap-space-sm mb-space-xs">
+                <span class="px-space-sm py-0.5 bg-surface-variant text-on-surface text-[10px] font-bold uppercase tracking-widest border border-outline-variant/30">
+                  Fase III • Pembangunan Plesengan &amp; Wisata Rakyat
+                </span>
+                <span class="text-[11px] font-mono text-outline font-bold">1971 – 1980-an</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl text-on-surface font-serif font-bold mb-space-sm leading-tight">
+                Tanggul Batu 1971 &amp; Masa Keemasan Destinasi Beji
+              </h2>
+              <div class="w-12 h-[2px] bg-primary mb-space-md"></div>
+              <p class="text-[14px] text-on-surface-variant mb-space-md leading-relaxed">
+                Pada tahun <strong class="text-on-surface font-mono">1971</strong>, pemerintah desa bersama masyarakat Bedingin melakukan penataan fisik pertama dengan memasang plesteran tanggul batu keliling (<em>plesengan</em>) di dinding kolam sendang Beji secara bertahap untuk menjaga debit air alami dan mencegah abrasi tanah pematang.
+              </p>
+              <p class="text-[14px] text-on-surface-variant mb-space-lg leading-relaxed">
+                Periode 1970 hingga 1980-an menjadi era keemasan Beji Sirah Keteng sebagai pusat destinasi wisata rakyat, rekreasi keluarga, pemandian alam terbuka, dan kolam renang favorit warga. Lapangan situs Beji juga tercatat pernah menjadi lokasi kegiatan budayawan nasional <strong class="text-on-surface font-serif">Emha Ainun Nadjib (Cak Nun)</strong> dan seniman komedian <strong class="text-on-surface font-serif">Tukul Arwana</strong>. Pasca 1980-an, keterbatasan dana perawatan desa membuat sarana fisik mulai aus dan pengunjung berangsur menurun.
+              </p>
+              <div class="p-space-md bg-surface-container border border-outline-variant/40 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                <div class="flex items-center gap-space-sm">
+                  <span class="material-symbols-outlined text-primary text-[24px]">villa</span>
+                  <div class="flex flex-col">
+                    <span class="text-sm text-on-surface font-bold">Fasilitas Bangunan Wisata</span>
+                    <span class="text-[12px] text-on-surface-variant">Model 3D fasilitas pariwisata kawasan sendang</span>
+                  </div>
+                </div>
+                <button id="btn-fase3-launch-3d" type="button" class="shrink-0 px-3 py-1.5 bg-secondary text-white text-[11px] font-bold uppercase tracking-wider hover:bg-secondary/90 transition-all flex items-center gap-1.5 cursor-pointer shadow-xs">
+                  <span class="material-symbols-outlined text-[15px]">view_in_ar</span>
+                  <span id="btn-fase3-launch-text">LIHAT 3D</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="hidden lg:block lg:col-span-2"></div>
+
+            <!-- Visual Column with Offset Framing (Right) -->
+            <div class="lg:col-span-5 relative">
+              <div class="relative w-full aspect-[4/3] max-w-lg mx-auto group cursor-pointer" id="fase3-media-wrapper">
+                
+                <!-- 2D Archival Photo Container -->
+                <div id="fase3-photo-container" class="absolute inset-0 bg-surface-container timeline-frame-shadow overflow-hidden border border-outline-variant/60 transition-opacity duration-300">
+                  <img class="w-full h-full object-cover object-center timeline-img-zoom timeline-img-tone" 
+                       src="./dokumentasi/foto/halaman%203/Tanggul%20Batu%201971%20%26%20Masa%20Keemasan%20Destinasi%20Beji.png" 
+                       alt="Tanggul Batu 1971 &amp; Masa Keemasan Destinasi Beji" />
+                  <!-- Vignette & Shadow Scrim -->
+                  <div class="absolute inset-0 ring-1 ring-inset ring-black/20 shadow-[inset_0_0_35px_rgba(20,16,14,0.4)] pointer-events-none"></div>
+                  <div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/25 to-transparent pointer-events-none"></div>
+                  <div class="absolute bottom-3 left-4 text-[10px] text-white font-mono pointer-events-none">
+                    MEMORI KOLEKTIF: ERA KEEMASAN WISATA 1970–1980-AN
+                  </div>
+                </div>
+
+                <!-- 3D Three.js WebGL Mount for bangunan sirah keteng.glb -->
+                <div id="fase3-3d-canvas-mount" class="hidden absolute inset-0 z-10 w-full h-full bg-[#1b1715] cursor-grab active:cursor-grabbing border border-outline-variant/60 timeline-frame-shadow"></div>
+
+                <!-- 3D Loading Overlay -->
+                <div id="fase3-3d-loading" class="hidden absolute inset-0 z-20 flex flex-col items-center justify-center bg-surface/92 backdrop-blur-sm transition-opacity duration-300">
+                  <div class="w-10 h-10 border-4 border-outline-variant/40 border-t-secondary rounded-full animate-spin"></div>
+                  <p id="fase3-loading-text" class="mt-3 text-[11px] font-mono text-primary font-bold tracking-wider">Memuat 3D Bangunan Wisata...</p>
+                </div>
+
+                <!-- 3D Mini Viewport HUD Controls (Visible in 3D Mode) -->
+                <div id="fase3-3d-controls-hud" class="hidden absolute top-3 right-3 z-30 flex flex-col gap-1 pointer-events-auto">
+                  <button id="fase3-btn-toggle-rotate" type="button" class="p-1.5 bg-surface/90 hover:bg-surface text-on-surface hover:text-primary backdrop-blur-sm border border-outline-variant/50 shadow-xs transition-colors cursor-pointer" title="Jeda/Mulai Rotasi Otomatis">
+                    <span class="material-symbols-outlined text-[16px]" id="fase3-rotate-icon">sync</span>
+                  </button>
+                  <button id="fase3-btn-reset-view" type="button" class="p-1.5 bg-surface/90 hover:bg-surface text-on-surface hover:text-primary backdrop-blur-sm border border-outline-variant/50 shadow-xs transition-colors cursor-pointer" title="Reset Sudut Pandang">
+                    <span class="material-symbols-outlined text-[16px]">restart_alt</span>
+                  </button>
+                  <button id="fase3-btn-toggle-wireframe" type="button" class="p-1.5 bg-surface/90 hover:bg-surface text-on-surface hover:text-primary backdrop-blur-sm border border-outline-variant/50 shadow-xs transition-colors cursor-pointer" title="Mode Poligon / Wireframe">
+                    <span class="material-symbols-outlined text-[16px]">grid_4x4</span>
+                  </button>
+                </div>
+
+                <!-- 3D Gesture Hint (Floating at bottom center) -->
+                <div id="fase3-3d-hint" class="hidden absolute bottom-12 left-1/2 -translate-x-1/2 z-20 px-3 py-1 bg-surface/95 backdrop-blur-md border border-outline-variant/40 shadow-md text-[10px] font-mono text-primary font-bold flex items-center gap-1.5 pointer-events-none whitespace-nowrap">
+                  <span class="material-symbols-outlined text-[14px] text-secondary">3d_rotation</span>
+                  <span>Tahan &amp; Putar 360° • Scroll Zoom</span>
+                </div>
+
+                <!-- Toggle Mode Button & Badges (Top Left) -->
+                <div class="absolute top-3 left-3 z-30 flex flex-col gap-1 pointer-events-auto">
+                  <button id="fase3-btn-mode-toggle" type="button" class="group flex items-center gap-1.5 bg-surface/95 hover:bg-secondary text-on-surface hover:text-white px-2.5 py-1 font-mono text-[9.5px] tracking-wider uppercase font-bold shadow-md border border-primary-container/40 transition-all cursor-pointer">
+                    <span class="material-symbols-outlined text-[15px] text-secondary group-hover:text-white transition-colors" id="fase3-mode-icon">view_in_ar</span>
+                    <span id="fase3-mode-text">BUKA 3D BANGUNAN WISATA</span>
+                    <span id="fase3-ping-dot" class="flex h-1.5 w-1.5 relative">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-secondary group-hover:bg-white"></span>
+                    </span>
+                  </button>
+                  <div class="flex items-center gap-1">
+                    <span id="fase3-badge-view" class="bg-surface/90 backdrop-blur-sm text-on-surface-variant px-2 py-0.5 text-[8.5px] font-mono font-bold shadow-xs border border-outline-variant/30">
+                      MODE FOTO MEMORI
+                    </span>
+                    <span id="fase3-badge-model" class="hidden bg-secondary text-white px-2 py-0.5 text-[8.5px] font-mono font-bold shadow-xs">
+                      bangunan sirah keteng.glb
+                    </span>
+                  </div>
+                </div>
+
+                <!-- 3D Active Bottom Caption -->
+                <div id="fase3-3d-caption" class="hidden absolute bottom-3 left-4 right-4 z-20 pointer-events-none text-white">
+                  <div class="flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="text-[9px] uppercase font-mono text-amber-200 font-bold">DIGITAL TWIN 3D: BANGUNAN PARIWISATA MODERN</span>
+                  </div>
+                </div>
+
+                <!-- Detached Frame -->
+                <div class="absolute -top-3 -right-3 w-full h-full pointer-events-none border border-tertiary/60 timeline-detached-shadow flex flex-col justify-between p-3 z-0">
+                  <div class="flex justify-between items-start">
+                    <span class="w-2.5 h-2.5 bg-tertiary"></span>
+                    <span class="bg-surface px-2 py-0.5 text-[9px] font-mono text-tertiary font-bold shadow-xs">EPOCH.03 // PLESENGAN 1971</span>
+                  </div>
+                  <div class="flex justify-between items-end">
+                    <span class="text-[9px] font-mono text-outline-variant tracking-wider bg-surface/90 px-1 border border-outline-variant/30">KRAJAN, BEDINGIN</span>
+                    <span class="w-2.5 h-2.5 bg-tertiary"></span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- FASE IV: 2011 - 2016 M -->
+          <!-- ========================================== -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center relative scroll-mt-36" id="fase-4">
+            <!-- Center Dot Marker for Desktop -->
+            <div class="hidden lg:flex absolute left-1/2 -translate-x-1/2 top-8 w-6 h-6 bg-surface items-center justify-center shadow-xs z-20 border border-outline-variant/50">
+              <span class="w-2.5 h-2.5 bg-outline"></span>
+            </div>
+
+            <!-- Visual Column with Offset Framing (Left) -->
+            <div class="order-2 lg:order-1 lg:col-span-5 relative">
+              <div class="relative w-full aspect-[4/3] max-w-lg mx-auto group cursor-pointer">
+                <div class="absolute inset-0 bg-surface-container timeline-frame-shadow overflow-hidden border border-outline-variant/60">
+                  <img class="w-full h-full object-cover object-center timeline-img-zoom timeline-img-tone" 
+                       src="./dokumentasi/foto/halaman%203/Pengerukan%202016%20%26%20Temuan%20Bata%20Merah%20Raksasa%20Kuno.png" 
+                       alt="Pengerukan 2016 &amp; Temuan Bata Merah Raksasa Kuno" />
+                  <!-- Vignette & Shadow Scrim -->
+                  <div class="absolute inset-0 ring-1 ring-inset ring-black/20 shadow-[inset_0_0_35px_rgba(20,16,14,0.4)] pointer-events-none"></div>
+                  <div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/25 to-transparent pointer-events-none"></div>
+                  <div class="absolute top-4 left-4 font-mono font-bold text-[10px] text-secondary bg-surface/95 px-2 py-0.5 shadow-xs uppercase tracking-wider border border-secondary/30 pointer-events-none">
+                    TEMUAN LAPANGAN: PENGERUKAN 2016
+                  </div>
+                </div>
+                <!-- Detached Frame -->
+                <div class="absolute -bottom-3 -left-3 w-full h-full pointer-events-none border border-outline/70 timeline-detached-shadow flex flex-col justify-between p-3">
+                  <div class="flex justify-between items-start">
+                    <span class="bg-surface px-2 py-0.5 text-[9px] font-mono text-outline font-bold shadow-xs">EPOCH.04 // EKSKAVASI 2016</span>
+                    <span class="w-2.5 h-2.5 bg-outline"></span>
+                  </div>
+                  <div class="flex justify-between items-end">
+                    <span class="w-2.5 h-2.5 bg-outline"></span>
+                    <span class="text-[9px] font-mono text-outline tracking-wider bg-surface/90 px-1 border border-outline-variant/30">FONDASI BATA KUNO</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="hidden lg:block lg:col-span-2 order-2"></div>
+
+            <!-- Narrative Column (Right) -->
+            <div class="order-1 lg:order-3 lg:col-span-5 flex flex-col">
+              <div class="flex items-center gap-space-sm mb-space-xs">
+                <span class="px-space-sm py-0.5 bg-surface-variant text-on-surface text-[10px] font-bold uppercase tracking-widest border border-outline-variant/30">
+                  Fase IV • Renovasi Kolam &amp; Ekskavasi Bata Kuno
+                </span>
+                <span class="text-[11px] font-mono text-outline font-bold">2011 – 2016 M</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl text-on-surface font-serif font-bold mb-space-sm leading-tight">
+                Pengerukan 2016 &amp; Temuan Bata Merah Raksasa Kuno
+              </h2>
+              <div class="w-12 h-[2px] bg-outline mb-space-md"></div>
+              <p class="text-[14px] text-on-surface-variant mb-space-md leading-relaxed">
+                Pada kurun waktu sekitar tahun <strong class="text-on-surface font-mono">2011</strong>, proyek renovasi plesengan dinding kolam Beji dilaksanakan untuk kali terakhir sebelum dinding penahan kembali rapuh dimakan usia dan tekanan rembesan air mata air alami.
+              </p>
+              <p class="text-[14px] text-on-surface-variant mb-space-lg leading-relaxed">
+                Penemuan arkeologis penting terjadi pada tahun <strong class="text-primary font-bold font-mono">2016</strong> saat pengerukan intensif endapan lumpur dasar kolam pemancingan Beji dilakukan. Penggalian tersebut menyingkap sebaran lapisan pondasi dan bongkahan <strong class="text-on-surface">batu bata merah kuno berdimensi sangat besar</strong> tepat di depan arca Kalamakara. Temuan fisik ini membuktikan adanya struktur bangunan candi atau petirtaan masa klasik Jawa yang terpendam di bawah air.
+              </p>
+              <div class="p-space-md bg-surface-container-low border border-outline-variant/40 shadow-xs relative">
+                <div class="flex items-start gap-space-sm">
+                  <span class="material-symbols-outlined text-secondary text-[22px] mt-0.5">architecture</span>
+                  <div class="flex flex-col">
+                    <span class="text-sm text-on-surface font-bold">Verifikasi Arkeologis Lapangan</span>
+                    <span class="text-[12px] text-on-surface-variant leading-relaxed mt-0.5">
+                      Bata merah tebal masif di dasar kolam menjadi bukti material bahwa arca Kalamakara bukan artefak terisolasi, melainkan bagian dari kesatuan kompleks candi/petirtaan air purbakala.
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- FASE V: SEPTEMBER 2026 -->
+          <!-- ========================================== -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center relative scroll-mt-36" id="fase-5">
+            <!-- Center Dot Marker for Desktop -->
+            <div class="hidden lg:flex absolute left-1/2 -translate-x-1/2 top-8 w-6 h-6 bg-secondary items-center justify-center shadow-md z-20">
+              <span class="w-2.5 h-2.5 bg-white"></span>
+            </div>
+
+            <!-- Narrative Column (Left) -->
+            <div class="lg:col-span-5 flex flex-col">
+              <div class="flex items-center gap-space-sm mb-space-xs">
+                <span class="px-space-sm py-0.5 bg-secondary text-white text-[10px] font-bold uppercase tracking-widest">
+                  Fase V • Dokumentasi &amp; Preservasi Digital
+                </span>
+                <span class="text-[11px] font-mono text-secondary font-bold">SEPTEMBER 2026</span>
+              </div>
+              <h2 class="text-2xl sm:text-3xl text-on-surface font-serif font-bold mb-space-sm leading-tight">
+                Digitalisasi Fotogrametri 3D Riset MAN 2 Ponorogo
+              </h2>
+              <div class="w-12 h-[2px] bg-secondary mb-space-md"></div>
+              <p class="text-[14px] text-on-surface-variant mb-space-md leading-relaxed">
+                Menyikapi ancaman degradasi fisik batuan andesit, rusaknya plesengan kolam, dan belum adanya dokumentasi tertulis resmi di tingkat desa, tim peneliti muda <strong class="text-on-surface font-semibold">MAN 2 Ponorogo</strong> (Annisa Tri Yulianti, Auliya Fathiyyatul Maghfiroh, dan Ilham Rofi Anugrah) didampingi Reno Prasnianggara Al Risky serta dibimbing oleh guru sejarah Wiretno, S.Hum, Gr melaksanakan penelitian komprehensif pada September 2026.
+              </p>
+              <p class="text-[14px] text-on-surface-variant mb-space-lg leading-relaxed">
+                Riset ini merekam wawancara sejarah lisan narasumber kunci <strong class="text-on-surface font-serif">Pak Jarno</strong> (purna tugas pamong / kamituwa Desa Bedingin 2024), mengklarifikasi mitos fiktif yang beredar, memetakan hidrologi terowongan air alami sejauh ±7 km menuju Kedung Lesung Rengnanom, serta membangun model 3D fotogrametri digital twin berpresisi tinggi arca Kalamakara yang dapat diakses publik luas.
+              </p>
+              <div class="flex flex-wrap items-center gap-space-md">
+                <a href="index.html#viewport-wrapper" class="px-space-lg py-3 bg-primary-container text-white text-[12px] uppercase tracking-wider font-bold shadow-md hover:bg-primary transition-colors flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[18px]">view_in_ar</span>
+                  BUKA MODEL 3D KALA
+                </a>
+                <div class="flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+                  <span class="text-[11px] uppercase tracking-wider text-secondary font-bold">
+                    PRESERVASI DIGITAL MAN 2 PONOROGO
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hidden lg:block lg:col-span-2"></div>
+
+            <!-- Visual Column with Offset Framing (Right) -->
+            <div class="lg:col-span-5 relative">
+              <div class="relative w-full aspect-[4/3] max-w-lg mx-auto group cursor-pointer">
+                <div class="absolute inset-0 bg-surface-container timeline-frame-shadow overflow-hidden border border-outline-variant/60">
+                  <img class="w-full h-full object-cover object-center timeline-img-zoom timeline-img-tone" 
+                       src="./dokumentasi/foto/halaman%203/Digitalisasi%20Fotogrametri%203D%20Riset%20MAN%202%20Ponorogo.png" 
+                       alt="Digitalisasi Fotogrametri 3D Riset MAN 2 Ponorogo" />
+                  <!-- Vignette & Shadow Scrim -->
+                  <div class="absolute inset-0 ring-1 ring-inset ring-black/20 shadow-[inset_0_0_35px_rgba(20,16,14,0.4)] pointer-events-none"></div>
+                  <div class="absolute inset-0 bg-gradient-to-t from-on-surface/90 via-on-surface/25 to-transparent pointer-events-none"></div>
+                  <div class="absolute top-3 right-3 flex items-center gap-1.5 bg-surface/90 backdrop-blur px-2 py-1 text-[10px] font-mono text-secondary font-bold shadow-xs border border-secondary/30 pointer-events-none">
+                    <span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
+                    <span>PHOTOGRAMMETRY LIVE</span>
+                  </div>
+                  <div class="absolute bottom-3 left-4 text-[10px] text-white font-mono pointer-events-none">
+                    MAN 2 PONOROGO // KORPUS DIGITAL 2026
+                  </div>
+                </div>
+                <!-- Detached Frame -->
+                <div class="absolute -top-3 -right-3 w-full h-full pointer-events-none border-2 border-secondary timeline-detached-shadow flex flex-col justify-between p-3">
+                  <div class="flex justify-between items-start">
+                    <span class="w-3 h-3 bg-secondary"></span>
+                    <span class="bg-secondary text-white px-2 py-0.5 text-[9px] font-mono uppercase font-bold shadow-xs">SEPTEMBER 2026</span>
+                  </div>
+                  <div class="flex justify-between items-end">
+                    <span class="text-[9px] font-mono text-secondary tracking-wider bg-surface px-1 font-bold border border-secondary/30">BEDINGIN, SAMBIT</span>
+                    <span class="w-3 h-3 bg-secondary"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Comparative Stratigraphy Matrix (Archaeological Data Visualization) -->
+      <section class="w-full bg-surface-container py-space-2xl border-t border-outline-variant/30 relative z-10">
+        <div class="max-w-[1440px] mx-auto px-6 sm:px-12 lg:px-margin">
+          
+          <div class="flex flex-col md:flex-row md:items-end justify-between mb-space-xl gap-space-md">
+            <div>
+              <span class="text-[10px] uppercase tracking-widest text-primary font-bold block mb-1">
+                Tabel Komparasi Stratigrafi Faktual
+              </span>
+              <h2 class="text-2xl sm:text-3xl text-on-surface font-serif font-bold">
+                Karakteristik Tipologi Sepanjang Zaman
+              </h2>
+            </div>
+            <p class="text-[13px] text-on-surface-variant max-w-md leading-relaxed">
+              Rentang transformasi peradaban Beji Sirah Keteng dari piagam batu 1204 M, toponimi babad, era plesengan dan wisata rakyat, temuan bata merah kuno, hingga korpus fotogrametri digital 2026.
+            </p>
+          </div>
+
+          <!-- Exhibition Data Grid: 5 Epoch Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-space-md">
+            
+            <!-- Era 1 -->
+            <div class="bg-surface p-space-lg border border-outline-variant/40 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden group">
+              <div class="w-full h-1 bg-primary absolute top-0 left-0"></div>
+              <div>
+                <span class="text-[10px] font-mono text-primary font-bold">1204 M (1126 Saka)</span>
+                <h3 class="text-base text-on-surface font-serif font-bold mt-1">Prasasti Sirah Keting</h3>
+                <p class="text-[12px] text-on-surface-variant mt-2 leading-relaxed">
+                  Prabu Sri Jayawarsa (trah Isyana Medang) menetapkan Sima Swatantra otonom bebas pajak kepada Marjaya.
+                </p>
+              </div>
+              <div class="mt-space-lg pt-space-sm border-t border-outline-variant/20 text-[10px]">
+                <span class="text-outline uppercase block font-medium">Material Kunci:</span>
+                <span class="text-on-surface font-mono font-bold">Andesit Kawi (Reg. D 33)</span>
+              </div>
+            </div>
+
+            <!-- Era 2 -->
+            <div class="bg-surface p-space-lg border border-outline-variant/40 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden group">
+              <div class="w-full h-1 bg-secondary absolute top-0 left-0"></div>
+              <div>
+                <span class="text-[10px] font-mono text-secondary font-bold">Abad XV – XVI M</span>
+                <h3 class="text-base text-on-surface font-serif font-bold mt-1">Babad Ponorogo</h3>
+                <p class="text-[12px] text-on-surface-variant mt-2 leading-relaxed">
+                  Duel Suryangalam vs Batara Katong, toponimi Sirah Keteng dari kepala terputus di Beji &amp; tubuh ke Gn. Dlokor.
+                </p>
+              </div>
+              <div class="mt-space-lg pt-space-sm border-t border-outline-variant/20 text-[10px]">
+                <span class="text-outline uppercase block font-medium">Material Kunci:</span>
+                <span class="text-secondary font-mono font-bold">Memori Lisan &amp; Toponimi</span>
+              </div>
+            </div>
+
+            <!-- Era 3 -->
+            <div class="bg-surface p-space-lg border border-outline-variant/40 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden group">
+              <div class="w-full h-1 bg-tertiary absolute top-0 left-0"></div>
+              <div>
+                <span class="text-[10px] font-mono text-tertiary font-bold">1971 – 1980-an</span>
+                <h3 class="text-base text-on-surface font-serif font-bold mt-1">Plesengan &amp; Wisata</h3>
+                <p class="text-[12px] text-on-surface-variant mt-2 leading-relaxed">
+                  Pemasangan tanggul semen 1971, puncak era destinasi pemandian umum, kunjungan Cak Nun &amp; Tukul Arwana.
+                </p>
+              </div>
+              <div class="mt-space-lg pt-space-sm border-t border-outline-variant/20 text-[10px]">
+                <span class="text-outline uppercase block font-medium">Material Kunci:</span>
+                <span class="text-on-surface font-mono font-bold">Plesengan Semen &amp; Sendang</span>
+              </div>
+            </div>
+
+            <!-- Era 4 -->
+            <div class="bg-surface p-space-lg border border-outline-variant/40 shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden group">
+              <div class="w-full h-1 bg-outline absolute top-0 left-0"></div>
+              <div>
+                <span class="text-[10px] font-mono text-outline font-bold">2011 – 2016 M</span>
+                <h3 class="text-base text-on-surface font-serif font-bold mt-1">Temuan Bata Klasik</h3>
+                <p class="text-[12px] text-on-surface-variant mt-2 leading-relaxed">
+                  Renovasi 2011 &amp; pengerukan kolam 2016 menyingkap sebaran bata merah raksasa pondasi candi di dasar sendang.
+                </p>
+              </div>
+              <div class="mt-space-lg pt-space-sm border-t border-outline-variant/20 text-[10px]">
+                <span class="text-outline uppercase block font-medium">Material Kunci:</span>
+                <span class="text-on-surface font-mono font-bold">Bata Kuno Masif Berukuran Besar</span>
+              </div>
+            </div>
+
+            <!-- Era 5 -->
+            <div class="bg-surface p-space-lg border border-secondary shadow-xs flex flex-col justify-between hover:shadow-md transition-shadow relative overflow-hidden group bg-surface-container-lowest">
+              <div class="w-full h-1 bg-secondary absolute top-0 left-0"></div>
+              <div>
+                <span class="text-[10px] font-mono text-secondary font-bold">September 2026</span>
+                <h3 class="text-base text-on-surface font-serif font-bold mt-1">Preservasi 3D MAN 2</h3>
+                <p class="text-[12px] text-on-surface-variant mt-2 leading-relaxed">
+                  Riset digitalisasi terpadu MAN 2 Ponorogo, fotogrametri 3D interaktif, verifikasi hidrologi 7 km, arsip desa.
+                </p>
+              </div>
+              <div class="mt-space-lg pt-space-sm border-t border-outline-variant/20 text-[10px]">
+                <span class="text-secondary uppercase block font-bold">Preservasi:</span>
+                <span class="text-secondary font-mono font-bold">3D Digital Twin &amp; Dokumen Ilmiah</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- Next Step Navigation Plinth -->
+      <section class="w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-margin py-space-lg sm:py-space-xl relative z-10">
+        <div class="bg-surface-container-high p-4 sm:p-6 lg:p-space-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 md:gap-space-lg border border-outline-variant/40 shadow-xs">
+          <div class="flex items-start sm:items-center gap-3 sm:gap-space-md">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-secondary text-white flex items-center justify-center shrink-0 shadow-xs">
+              <span class="material-symbols-outlined text-[22px] sm:text-[28px]">museum</span>
+            </div>
+            <div>
+              <span class="text-[10px] uppercase tracking-widest text-primary font-bold block mb-0.5">Eksplorasi Tahap Lanjutan</span>
+              <h4 class="text-base sm:text-lg text-on-surface font-serif font-bold">Lanjutkan Menjelajahi Cerita Rakyat (3 Versi)</h4>
+              <p class="text-[12.5px] sm:text-[13px] text-on-surface-variant leading-relaxed">Telusuri folklor lisan Kamituwa Jarno, versi Babad Ponorogo, dan narasi tutur masyarakat.</p>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-space-sm w-full md:w-auto shrink-0">
+            <a href="elemen-kalamakara.html" class="w-full sm:w-auto text-center px-4 py-2.5 bg-surface text-primary border border-outline-variant/60 font-semibold text-[11px] uppercase tracking-wider hover:bg-surface-container transition-colors shadow-xs">
+              ← 02. Elemen Kalamakara
+            </a>
+            <a href="cerita-rakyat.html" class="w-full sm:w-auto text-center px-4 py-2.5 bg-primary-container text-white font-semibold text-[11px] uppercase tracking-wider hover:bg-primary transition-colors shadow-xs">
+              04. Cerita Rakyat (3 Versi) →
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Museum Footer -->
+  <footer class="w-full bg-surface-container-low border-t border-outline-variant/40 shadow-[0_-1px_8px_rgba(43,38,35,0.03)]">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-margin py-space-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg">
+      <div class="flex flex-col gap-space-xs">
+        <div class="flex flex-wrap items-center gap-space-sm">
+          <span class="inline-block w-2 h-2 bg-secondary"></span>
+          <span class="text-[12px] uppercase tracking-widest text-on-surface font-bold">Situs Cagar Budaya Beji Sirah Keteng</span>
+        </div>
+        <p class="text-[13px] text-on-surface-variant max-w-xl leading-relaxed">
+          Dokumentasi fotogrametri 3D, rekaman lisan, dan eksplorasi visual situs megalitikum dan petirtaan Beji Sirah Keteng oleh Tim Riset MAN 2 Ponorogo.
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-space-xl">
+        <div class="flex flex-col items-start md:items-end">
+          <span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">Metode Preservasi</span>
+          <span class="text-base font-serif text-primary font-bold">Fotogrametri 3D Lapangan</span>
+        </div>
+        <div class="h-8 w-[1px] bg-outline-variant hidden md:block"></div>
+        <div class="flex flex-wrap items-center gap-space-xs">
+          <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">Grid:</span>
+          <span class="text-[11px] text-primary font-mono bg-surface px-space-sm py-1 border border-outline-variant/40">E: 552140 N: 9130280 UTM-49S</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-surface-container py-space-sm border-t border-outline-variant/20">
+      <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-margin flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px] text-on-surface-variant">
+        <span>&copy; 2026 MAN 2 Ponorogo. Tim Riset Fotogrametri &amp; Arsip Digital Beji Sirah Keteng.</span>
+        <span class="flex items-center gap-space-xs">
+          <span class="w-2 h-2 bg-primary"></span>
+          <span>Arsip Terbuka Riset Terkurasi</span>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Smooth Scroll Script for Sticky Navigation -->
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          e.preventDefault();
+          targetElement.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  </script>
+  <!-- ==================== 3D FOTOGRAMETRI BANGUNAN WISATA (FASE III) ==================== -->
+  <script>
+    (function () {
+      const container = document.getElementById('fase3-3d-canvas-mount');
+      const photoView = document.getElementById('fase3-photo-container');
+      const loadingOverlay = document.getElementById('fase3-3d-loading');
+      const loadingText = document.getElementById('fase3-loading-text');
+      const controlsHud = document.getElementById('fase3-3d-controls-hud');
+      const gestureHint = document.getElementById('fase3-3d-hint');
+      const caption3d = document.getElementById('fase3-3d-caption');
+      const btnToggle = document.getElementById('fase3-btn-mode-toggle');
+      const btnLaunch = document.getElementById('btn-fase3-launch-3d');
+      const btnLaunchText = document.getElementById('btn-fase3-launch-text');
+      const modeText = document.getElementById('fase3-mode-text');
+      const modeIcon = document.getElementById('fase3-mode-icon');
+      const badgeView = document.getElementById('fase3-badge-view');
+      const badgeModel = document.getElementById('fase3-badge-model');
+
+      const btnRotate = document.getElementById('fase3-btn-toggle-rotate');
+      const rotateIcon = document.getElementById('fase3-rotate-icon');
+      const btnReset = document.getElementById('fase3-btn-reset-view');
+      const btnWireframe = document.getElementById('fase3-btn-toggle-wireframe');
+
+      let is3dActive = false;
+      let scene, camera, renderer, controls;
+      let isInitialized = false;
+      let loadedModel = null;
+      let isWireframe = false;
+      let autoRotate = true;
+
+      function init3D() {
+        if (isInitialized) return;
+        isInitialized = true;
+
+        const width = container.clientWidth || 480;
+        const height = container.clientHeight || 360;
+
+        scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x1b1715, 0.04);
+
+        camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+        camera.position.set(0, 1.2, 5.0);
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+        renderer.setSize(width, height);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.15;
+
+        container.appendChild(renderer.domElement);
+
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.06;
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 1.2;
+        controls.minDistance = 1.5;
+        controls.maxDistance = 12.0;
+        controls.maxPolarAngle = Math.PI / 2 + 0.1;
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0xfff3e8, 1.4);
+        scene.add(ambientLight);
+
+        const dirLight = new THREE.DirectionalLight(0xfff8ee, 2.2);
+        dirLight.position.set(5, 7, 5);
+        dirLight.castShadow = true;
+        scene.add(dirLight);
+
+        const rimLight = new THREE.DirectionalLight(0xc49a6c, 1.3);
+        rimLight.position.set(-5, -1, -4);
+        scene.add(rimLight);
+
+        const fillLight = new THREE.PointLight(0x8b5a2b, 1.2, 10);
+        fillLight.position.set(0, -1, 3);
+        scene.add(fillLight);
+
+        // Ground shadow receiver plane
+        const groundGeo = new THREE.PlaneGeometry(16, 16);
+        const groundMat = new THREE.ShadowMaterial({ opacity: 0.25 });
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2;
+        ground.position.y = -1.2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Resize Observer
+        const resizeObserver = new ResizeObserver(() => {
+          if (!container.clientWidth || !container.clientHeight) return;
+          camera.aspect = container.clientWidth / container.clientHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(container.clientWidth, container.clientHeight);
+        });
+        resizeObserver.observe(container);
+
+        // Animation Loop
+        function animate() {
+          requestAnimationFrame(animate);
+          controls.update();
+          renderer.render(scene, camera);
+        }
+        animate();
+
+        loadModel();
+      }
+
+      function loadModel() {
+        loadingOverlay.classList.remove('hidden');
+        loadingText.textContent = 'Mengunduh 3D Bangunan Wisata...';
+
+        const loader = new THREE.GLTFLoader();
+        loader.load(
+          './bangunan%20sirah%20keteng.glb',
+          function (gltf) {
+            loadedModel = gltf.scene;
+
+            loadedModel.traverse(function (child) {
+              if (child.isMesh) {
+                child.castShadow = true;
+                child.receiveShadow = true;
+                if (child.material) {
+                  child.material.roughness = THREE.MathUtils.clamp(child.material.roughness || 0.85, 0.7, 1.0);
+                  child.material.wireframe = isWireframe;
+                }
+              }
+            });
+
+            // Center and scale model
+            const box = new THREE.Box3().setFromObject(loadedModel);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z) || 1;
+            const targetScale = 3.0 / maxDim;
+
+            loadedModel.scale.set(targetScale, targetScale, targetScale);
+            loadedModel.position.x = -center.x * targetScale;
+            loadedModel.position.y = -center.y * targetScale;
+            loadedModel.position.z = -center.z * targetScale;
+
+            scene.add(loadedModel);
+
+            loadingOverlay.classList.add('hidden');
+            gestureHint.classList.remove('hidden');
+            setTimeout(() => {
+              gestureHint.classList.add('opacity-0', 'transition-opacity', 'duration-1000');
+            }, 3500);
+
+            camera.position.set(0, 0.8, 4.5);
+            controls.target.set(0, 0, 0);
+            controls.update();
+          },
+          function (xhr) {
+            if (xhr.lengthComputable && xhr.total > 0) {
+              const percent = Math.round((xhr.loaded / xhr.total) * 100);
+              loadingText.textContent = `Mengunduh 3D: ${percent}% (${(xhr.loaded / (1024 * 1024)).toFixed(1)} MB)`;
+            } else {
+              loadingText.textContent = `Memproses geometri 3D (${(xhr.loaded / (1024 * 1024)).toFixed(1)} MB)...`;
+            }
+          },
+          function (error) {
+            console.error('Gagal memuat bangunan sirah keteng.glb:', error);
+            loadingText.textContent = 'Gagal memuat model 3D (CORS file:///)';
+          }
+        );
+      }
+
+      function setMode(enable3D) {
+        is3dActive = enable3D;
+        if (is3dActive) {
+          photoView.classList.add('hidden');
+          container.classList.remove('hidden');
+          controlsHud.classList.remove('hidden');
+          caption3d.classList.remove('hidden');
+          badgeModel.classList.remove('hidden');
+
+          modeText.textContent = 'KEMBALI KE FOTO ARSIP';
+          modeIcon.textContent = 'photo_camera';
+          badgeView.textContent = 'MODE 3D AKTIF';
+          if (btnLaunchText) btnLaunchText.textContent = 'KEMBALI KE FOTO';
+
+          if (!isInitialized) {
+            init3D();
+          }
+        } else {
+          photoView.classList.remove('hidden');
+          container.classList.add('hidden');
+          controlsHud.classList.add('hidden');
+          caption3d.classList.add('hidden');
+          badgeModel.classList.add('hidden');
+
+          modeText.textContent = 'BUKA 3D BANGUNAN WISATA';
+          modeIcon.textContent = 'view_in_ar';
+          badgeView.textContent = 'MODE FOTO MEMORI';
+          if (btnLaunchText) btnLaunchText.textContent = 'LIHAT 3D';
+        }
+      }
+
+      btnToggle?.addEventListener('click', () => setMode(!is3dActive));
+      btnLaunch?.addEventListener('click', () => {
+        setMode(!is3dActive);
+        document.getElementById('fase3-media-wrapper')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+
+      btnRotate?.addEventListener('click', () => {
+        if (!controls) return;
+        autoRotate = !autoRotate;
+        controls.autoRotate = autoRotate;
+        rotateIcon.classList.toggle('text-secondary', autoRotate);
+      });
+
+      btnReset?.addEventListener('click', () => {
+        if (!camera || !controls) return;
+        camera.position.set(0, 0.8, 4.5);
+        controls.target.set(0, 0, 0);
+        controls.update();
+      });
+
+      btnWireframe?.addEventListener('click', () => {
+        if (!loadedModel) return;
+        isWireframe = !isWireframe;
+        loadedModel.traverse(child => {
+          if (child.isMesh && child.material) {
+            child.material.wireframe = isWireframe;
+          }
+        });
+        btnWireframe.classList.toggle('bg-primary', isWireframe);
+        btnWireframe.classList.toggle('text-white', isWireframe);
+      });
+    })();
+  </script>
+  <script src="./lang.js"></script>
+</body>
+</html>
