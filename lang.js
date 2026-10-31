@@ -200,9 +200,7 @@
     { id: 'Buka Cerita Rakyat (3 Versi) →', jv: 'Bukak Crita Rakyat (3 Rumpun) →' },
     { id: 'Putar Pak Jarno', jv: 'Muter Pak Jarno' },
     { id: 'Kidung & Aura ✨', jv: 'Kidung & Aura ✨' },
-    { id: 'Monolit Utama: Kajian Litologi, Konservasi & Aksesibilitas 3D', jv: 'Sela Monolit Utama: Kajian Litologi, Pangreksa & Aksesibilitas 3D' },
-    { id: 'Penerjemah Bahasa Isyarat 3D (BISINDO)', jv: 'Panyalin Basa Isyarat 3D (BISINDO)' },
-    { id: 'Buka Penerjemah 3D BISINDO →', jv: 'Bukak Panyalin 3D BISINDO →' },
+    { id: 'Monolit Utama: Kajian Litologi, Konservasi & Rekonstruksi 3D', jv: 'Sela Monolit Utama: Kajian Litologi, Pangreksa & Rekonstruksi 3D' },
     { id: 'Buka Mode Walkthrough 3D →', jv: 'Bukak Modhe Walkthrough 3D →' },
     { id: 'Aktifkan Aura ✨', jv: 'Uripaken Aura ✨' },
     { id: 'Galeri Dokumentasi Lapangan & Catatan Konservasi Hidrologis', jv: 'Galeri Dokumèn Lapangan & Cathetan Pangreksa Toya' },
@@ -216,7 +214,7 @@
     { id: '01 → 02 • ANATOMI KALAMAKARA', jv: '01 → 02 • WUJUD TATAH KALAMAKARA' },
     { id: '02 → 03 • LINI MASA 1204 M – 2026', jv: '02 → 03 • LAMPAHING SEJARAH 1204 M – 2026' },
     { id: '03 → 04 • TUTUR LISAN & FOLKLOR', jv: '03 → 04 • CRITA TUTUR & FOLKLOR' },
-    { id: '04 → 05 • LITOLOGI & INKLUSIVITAS 3D', jv: '04 → 05 • KAJIAN SELA & INKLUSIVITAS 3D' },
+    { id: '04 → 05 • LITOLOGI & REKONSTRUKSI 3D', jv: '04 → 05 • KAJIAN SELA & REKONSTRUKSI 3D' },
     { id: '05 → 06 • GALERI 38 FOTO & 2 VIDEO', jv: '05 → 06 • GALERI 38 FOTO & 2 VIDEO' }
   ];
 
@@ -646,14 +644,6 @@
               </div>
               <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" id="drawer-audio-dot"></span>
             </button>
-
-            <a href="penerjemah-bisindo.html" id="drawer-btn-bisindo" class="w-full py-2.5 px-3 bg-surface-container-low hover:bg-surface-container border border-outline-variant/40 text-on-surface text-[11px] font-semibold flex items-center justify-between transition-colors text-left shadow-xs cursor-pointer">
-              <div class="flex items-center gap-2.5">
-                <span class="material-symbols-outlined text-primary text-[18px]">sign_language</span>
-                <span>Penerjemah 3D BISINDO</span>
-              </div>
-              <span class="text-[9px] font-mono px-1.5 py-0.5 bg-primary/10 text-primary border border-primary/20 uppercase tracking-wider">Aksesibel</span>
-            </a>
 
             <button id="drawer-btn-credit" type="button" class="w-full py-2.5 px-3 bg-surface-container-low hover:bg-surface-container border border-outline-variant/40 text-on-surface text-[11px] font-semibold flex items-center gap-2.5 transition-colors text-left shadow-xs cursor-pointer">
               <span class="material-symbols-outlined text-primary text-[18px]">verified_user</span>
